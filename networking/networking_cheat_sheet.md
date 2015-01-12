@@ -1,5 +1,5 @@
-		Networking Cheat Sheet
-		======================
+	Networking Cheat Sheet
+	======================
 
 ## IP 
 
