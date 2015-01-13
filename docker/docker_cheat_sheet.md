@@ -14,26 +14,19 @@ Docker
 		* run
 			* distributed applications
 
-* Docker Platform is made up by
-	* Docker Engine
-		* a portable 
-		* lightweight 
-		* runtime
-	* a packaging tool
-	* and Docker Hub 
-		* a cloud service for 
-			* sharing Images of dockerized applications
-			* automating workflows
-
-* With Docker you can do things like
+* With Docker you can: 
 	* run applications that have been previously dockerized
-		* in comlpete isolation
-			* more or less as it would be run in a virtual machine
-	* setuplessly link Docker containers
+		* in comlpete isolation (a.k.a. "Container")
+			* more or less as it would happen with a VM
+		* withouth the burden of sysop
+			* at some extent
+	* be sure that container will be the same regardless of the environment they are run in
+		* because they can be created as instances of immutable "Images"
+	* setuplessly link containers
 		* i.e.
 			* run container#1 with a web appication
 			* run container#2 with the db needed by the web app
-		* applications should be built to work together.
+		* applications should be built to work together (a.k.a. "dockerization")
 	* extend available images in order to create new immutable images 
 		* share it across you team
 			* in order to have a standard environment
@@ -45,6 +38,17 @@ Docker
 		* including your dockerized app in it
 		* share the image
 		* create a container in prod from the same image
+
+* Docker Platform is made up by
+	* Docker Engine
+		* a portable 
+		* lightweight 
+		* runtime
+	* Packaging Tool
+	* Docker Hub 
+		* a cloud service for 
+			* sharing Images of dockerized applications
+			* automating workflows
 
 * Run on
 	* Modern Linux
@@ -67,16 +71,25 @@ Docker
 	* uses
 		* resource isolation features of Linux kernel
 			* to
-				* allow independent "containers" to run within a single Linux instance
+				* allow independent containers to run within a single Linux instance
 		* union mount to provide the Union File System
 
+* Docker runs processes in isolated containers. 
+	* When an operator executes docker run, she starts a process with 
+		* its own file system
+		* its own networking
+		* its own isolated process tree 
+	* The Image which starts the process may 
+		* define defaults 
+			* related to the binary to run 
+			* the networking to expose
+			* ...
+		* can be usually overridden when container is started.
 
-
-
-
-### Trusted / Automated Builds ###
-
-Automated Builds are a special feature of Docker Hub which allow you to use Docker Hub's build clusters to automatically create images from a specified Dockerfile and a GitHub or Bitbucket repo.
+* By default container's file system persists after the container exits. 
+	* Easier debugging 
+	* Data are retained.
+	* It consume some space if you are not aware of it.
 
 ### Docker Hub ###
 
@@ -98,153 +111,114 @@ Automated Builds are a special feature of Docker Hub which allow you to use Dock
 		* https://github.com/docker/docker-registry - current
 		* https://github.com/docker/distribution - forthcoming
 
-## Install on Ubuntu 14.04 ##
+### Trusted / Automated Builds ###
 
-This is to set the docker repo in ubuntu
+Automated Builds are a special feature of Docker Hub which allow you to use Docker Hub's build clusters to automatically create images from a specified Dockerfile and a GitHub or Bitbucket repo.
 
-	$ wget https://get.docker.com/ubuntu/ --output-document=./check-docker.sh
-	$ chmod u+x check-docker.sh
-	$ sudo ./check-docker.sh
+## Closer Look
 
-This is to update Ubuntu
+### Docker Engine ###
 
-	$ sudo apt-get update
-	$ sudo apt-get -y install lxc-docker
+	/var/lib/docker/containers
+	└── <full-container-id>
+	    ├── 1ee8a5d778cba1738b636183a1e2470fe2699af3a127f50cd012f08dcd47cf4e-json.log
+	    ├── config.json
+	    ├── hostconfig.json
+	    ├── hostname
+	    ├── hosts
+	    └── resolv.conf
 
-This is to try Docker
+A full-container-id is the real name of a container.
+It is shortened to the first 12 chars when reported by tools. i.e.
 
-	$ sudo docker run -i -t ubuntu /bin/bash
+	full-container-id: 1ee8a5d778cba1738b636183a1e2470fe2699af3a127f50cd012f08dcd47cf4e
+	     container-id: 1ee8a5d778cb<------------------ removed ----------------------->
 
-If it works well it should output something like that.
+	/var/lib/docker/vfs/dir
+		├── <volume-id>
+		├── <volume-id>
+		├── <volume-id>
+		└── <volume-id>
 
-	$ sudo docker run -i -t ubuntu /bin/bash
-	Unable to find image 'ubuntu:latest' locally
-	ubuntu:latest: The image you are pulling has been verified
-	511136ea3c5a: Pull complete 
-	3b363fd9d7da: Pull complete 
-	607c5d1cca71: Pull complete 
-	f62feddc05dc: Pull complete 
-	8eaa4ff06b53: Pull complete 
-	Status: Downloaded newer image for ubuntu:latest
-	root@953fa5507b96:/#
+### Images ###
 
-Try a couple of commands and exit.
+* Docker images are the basis of containers
+* If an image isn't already present on the host then it'll be downloaded from a registry
+	* by default the Docker Hub Registry
+* Docker stores downloaded images on the Docker host
 
-	root@953fa5507b96:/# whoami
-	root
-	root@953fa5507b96:/# hostname
-	953fa5507b96
-	root@953fa5507b96:/# exit
+* Creating new images
+	* workflow #1: Start from existing image
+	* workflow #2: Define a new image through a Dockerfile
 
-If we go on like that, all docker commands should be issued through 'sudo'.
+### Networking ###
 
-	# Add the docker group if it doesn't already exist.
-	$ sudo groupadd docker
+By default, every time a container is restarted, it binds to different host ports.
 
-	# Add the connected user "${USER}" to the docker group.
-	# You may have to logout and log back in again.
-	$ sudo gpasswd -a ${USER} docker
+### Container Linking ###
 
-	# Restart the Docker daemon.
-	# If you are in Ubuntu 14.04, use docker.io instead of docker
-	$ sudo service docker restart
-	$ sudo service docker.io restart
+Docker creates these env variables in the "source" container for each "linked" container.
 
+	<alias>_NAME=/<this_name>/<alias>
+	<alias>_PORT_<exposed_port>_<protocol>=<protocol>://<linked_container_ip_address>:<port>
+	<alias>_PORT_<exposed_port>_<protocol>_ADDR=<linked_container_ip_address>
+	<alias>_PORT_<exposed_port>_<protocol>_PORT=<actual_port>
+	<alias>_PORT_<exposed_port>_<protocol>_PROTO=<protocol>
 
+/etc/hosts is also changed
 
+	<this_container_ip>       <this_container_id>
+	<linked_container_ip>     <linked_container_alias>
 
+### Volumes ###
 
+* Primary ways you can manage data in Docker
+	* Data volumes
+		* A specially-designated directory within one or more containers that bypasses the Union File System 
+		* to provide several useful features for persistent or shared data:
+			* Data volumes can be shared and reused between containers
+			* Changes to a data volume are made directly
+			* Changes to a data volume will not be included when you update an image
+			* Volumes persist until no containers use them
+		* Can be...
+			* a new directory in the container
+			* mapped to a directory in the host
+			* mapped to a file in the host
+	* Data volume containers
 
-## Best practices & pattern ##
+* Volumes 
+	* decouple 
+		* the life of the data being stored in them 
+		* from the life of the container that created them. 
+	* so you can 
+		* docker rm my_container and your data will not be removed.
 
-### Be repeatable ###
-
-Main goal is to be able to create the very same container whenever you need it.
-
-### Be portable ###
-
-Main goal is to be able to run the very same container on different platforms.
-
-### Don't boot init ###
-
-* Containers model processes not machines
-* The goal is that you only run one process per container 
-* So an init or supervisor is not needed. 
-* If the processes dies inside a container then the container dies
-* Instead of restarting the process just restart the same container or a new container
-
-### Don't upgrade in builds ###
-
-* Updates will be baked into the based images you don't need to apt-get upgrade your containers.
-* If there are security updates that a base image needs, 
-let upstream know so that they can update it for everyone and ensure that your builds are consistent again.
-* so 
-	* best case you run an upgrade in a build and it works. 
-	* worse case a pkg tries to mount, etc and it fails. 
-* you should bake security fixes into the base images and rebuild on top of them so that the end result is consistent. 
-* The end goal is that the image i build today is the same image that will be built tomorrow unless i explicitly say other wise.
-
-### Use small base images ###
-
-Some images are more bloated than others. I suggest using debian:jessie as your base.
-
-### Use specific tags ###
-
-#### Use specific tags when specifying FROM images ####
-
-This is important for your base images. 
-Your FROM should always contain the full repository and tag for the base image that you are depending on. 
-FROM debian:jessie not just FROM debian
-
-#### Use specific tags for your images ####
-
-Unless you are experimenting with docker you should always pass the -t option to docker build so that the resulting image is tagged. 
-A simple human readable tag will help you manage what each image was created for.
-
-	docker build -t="crosbymichael/sentry" .
-
-Always pass -t to tag the resulting image.
-
-### Use the cache ###
-
-Keep common instructions at the top of the Dockerfile to utilize the cache.
-
-Each instruction in a Dockerfile commits the change into a new image which will then be used as the base of the next instruction. 
-If an image exists with the same parent and instruction ( except for ADD ) docker will use the image instead of executing the instruction, i.e. the cache.
-
-### EXPOSE-ing ports ### 
-
-Images should able to run on any host and as many times as needed. 
-With Dockerfiles you have the ability to map the private and public ports, 
-however, you should never map the public port in a Dockerfile. 
-By mapping to the public port on your host you will only be able to have one instance of your dockerized app running.
-
-	# private and public mapping
-	EXPOSE 80:8080
-
-	# private only
-	EXPOSE 80
-
-If the consumer of the image cares what public port the container maps to they will pass the -p option when running 
-the image, otherwise, docker will automatically assign a port for the container.
-
-Never map the public port in a Dockerfile.
-
-### CMD and ENTRYPOINT syntax ###
-
-Always use the array syntax.
-
-### Log to stdout ###
-
-The docker logs command looks inside the container and returns its standard output.
-So, log to stdout to make logs available to the client.
+* A volume can be created in 
+	* two ways
+		* Specifying VOLUME /some/dir in a Dockerfile
+		* Specying it as part of your run command as docker run -v /some/dir
+	* Either way, 
+		* It tells Docker to create a directory on the host, 
+		* within the docker root path (by default /var/lib/docker), 
+		* and mount it to the path you've specified (/some/dir above). 
+	* When you remove the container using this volume, the volume itself continues to live on.
 
 
 
 
 
 
-## Commands ##
+
+
+
+
+
+
+
+
+
+
+## Docker CLI ##
 
 ### docker run ###
 
@@ -364,58 +338,7 @@ Prints help for the given command
 
 
 
-
-## Networking ##
-
-By default, every time a container is restarted, it binds to different host ports.
-
-
-
-
-
-
-## Images ##
-
-* Docker images are the basis of containers
-* If an image isn't already present on the host then it'll be downloaded from a registry
-	* by default the Docker Hub Registry
-* Docker stores downloaded images on the Docker host
-
-* Creating new images
-	* workflow #1: Start from existing image
-	* workflow #2: Define a new image through a Dockerfile
-
-## New Image From Existing One ##
-
-To update an image we first need to create a container from the image we'd like to update.
-
-	$ sudo docker run -t -i training/sinatra /bin/bash
-	root@0b2616b0e5a8:/#
-
-Inside our running container let's modify whatever we want.
-
-	# gem install ...
-	# apt-get install ...
-	# vi newscript.sh
-
-Once this has completed let's exit our container using the exit command.
-
-Execute this command
-
-	$ sudo docker commit -m=<comment> -a=<author> <host_hash> <image_name>:<image_version>
-
-i.e.
-
-	$ sudo docker commit -m="Added json gem" -a="Kate Smith" 0b2616b0e5a8 ouruser/sinatra:v2
-
-## Building an image from a Dockerfile ##
-
-	$ mkdir <image_folder>
-	$ cd <image_folder>
-	$ touch Dockerfile
-	$ sudo docker build -t="<image>" . #i.e. sudo docker build -t="ouruser/sinatra:v2" .
-
-### Dockerfile Syntax ###
+### Dockerfile ###
 
 	# comment
 	<INSTRUCTION> <statement>
@@ -482,9 +405,7 @@ ONBUILD                           No            Adds to the image a trigger inst
 
 * FROM
 
-	FROM		
-
-# i.e. ubuntu:14.04
+	FROM		# i.e. ubuntu:14.04
 
 	RUN 		<commands>	# i.e. apt-get update && apt-get install -y ruby ruby-dev
 					# multiple 'RUN' lines could be used for complex provisioning
@@ -493,88 +414,324 @@ ONBUILD                           No            Adds to the image a trigger inst
 
 
 
-## Link ##
 
-Docker creates these env variables in the "source" container for each "linked" container.
+## Best practices & pattern ##
 
-	<alias>_NAME=/<this_name>/<alias>
-	<alias>_PORT_<exposed_port>_<protocol>=<protocol>://<linked_container_ip_address>:<port>
-	<alias>_PORT_<exposed_port>_<protocol>_ADDR=<linked_container_ip_address>
-	<alias>_PORT_<exposed_port>_<protocol>_PORT=<actual_port>
-	<alias>_PORT_<exposed_port>_<protocol>_PROTO=<protocol>
+### Be repeatable ###
 
-/etc/hosts is also changed
+Main goal is to be able to create the very same container whenever you need it.
 
-	<this_container_ip>       <this_container_id>
-	<linked_container_ip>     <linked_container_alias>
+### Be portable ###
+
+Main goal is to be able to run the very same container on different platforms.
+
+### Don't boot init ###
+
+* Containers model processes not machines
+* The goal is that you only run one process per container 
+* So an init or supervisor is not needed. 
+* If the processes dies inside a container then the container dies
+* Instead of restarting the process just restart the same container or a new container
+
+### Don't upgrade in builds ###
+
+* Updates will be baked into the based images you don't need to apt-get upgrade your containers.
+* If there are security updates that a base image needs, 
+let upstream know so that they can update it for everyone and ensure that your builds are consistent again.
+* so 
+	* best case you run an upgrade in a build and it works. 
+	* worse case a pkg tries to mount, etc and it fails. 
+* you should bake security fixes into the base images and rebuild on top of them so that the end result is consistent. 
+* The end goal is that the image i build today is the same image that will be built tomorrow unless i explicitly say other wise.
+
+### Use small base images ###
+
+Some images are more bloated than others. I suggest using debian:jessie as your base.
+
+### Use specific tags ###
+
+#### Use specific tags when specifying FROM images ####
+
+This is important for your base images. 
+Your FROM should always contain the full repository and tag for the base image that you are depending on. 
+FROM debian:jessie not just FROM debian
+
+#### Use specific tags for your images ####
+
+Unless you are experimenting with docker you should always pass the -t option to docker build so that the resulting image is tagged. 
+A simple human readable tag will help you manage what each image was created for.
+
+	docker build -t="crosbymichael/sentry" .
+
+Always pass -t to tag the resulting image.
+
+### Use the cache ###
+
+Keep common instructions at the top of the Dockerfile to utilize the cache.
+
+Each instruction in a Dockerfile commits the change into a new image which will then be used as the base of the next instruction. 
+If an image exists with the same parent and instruction ( except for ADD ) docker will use the image instead of executing the instruction, i.e. the cache.
+
+### EXPOSE-ing ports ###
+
+Images should able to run on any host and as many times as needed. 
+With Dockerfiles you have the ability to map the private and public ports, 
+however, you should never map the public port in a Dockerfile. 
+By mapping to the public port on your host you will only be able to have one instance of your dockerized app running.
+
+	# private and public mapping
+	EXPOSE 80:8080
+
+	# private only
+	EXPOSE 80
+
+If the consumer of the image cares what public port the container maps to they will pass the -p option when running 
+the image, otherwise, docker will automatically assign a port for the container.
+
+Never map the public port in a Dockerfile.
+
+### CMD and ENTRYPOINT syntax ###
+
+Always use the array syntax.
+
+### Log to stdout ###
+
+The docker logs command looks inside the container and returns its standard output.
+So, log to stdout to make logs available to the client.
 
 
 
 
-## Managing Data in Containers ##
 
-* Primary ways you can manage data in Docker
-	* Data volumes
-		* A specially-designated directory within one or more containers that bypasses the Union File System 
-		* to provide several useful features for persistent or shared data:
-			* Data volumes can be shared and reused between containers
-			* Changes to a data volume are made directly
-			* Changes to a data volume will not be included when you update an image
-			* Volumes persist until no containers use them
-		* Can be...
-			* a new directory in the container
-			* mapped to a directory in the host
-			* mapped to a file in the host
-	* Data volume containers
 
-* Volumes 
-	* decouple 
-		* the life of the data being stored in them 
-		* from the life of the container that created them. 
-	* so you can 
-		* docker rm my_container and your data will not be removed.
 
-* A volume can be created in 
-	* two ways
-		* Specifying VOLUME /some/dir in a Dockerfile
-		* Specying it as part of your run command as docker run -v /some/dir
-	* Either way, 
-		* It tells Docker to create a directory on the host, 
-		* within the docker root path (by default /var/lib/docker), 
-		* and mount it to the path you've specified (/some/dir above). 
-	* When you remove the container using this volume, the volume itself continues to live on.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Examples ##
 
-### Running an ephemereal Postgres DB ###
+### Build An Image Step By Step ###
+#### or How you can create a reusable Docker image ####
+
+#### Goal ####
+
+To create an image performing common operations.
+
+#### Instructions ####
+
+The goal is to build a dockerized image of postgresql-client, the CLI Postgres client, that will allow us to interact with a container running postgres.
+
+Let's start a container based on ubuntu
+
+	$ docker run -it ubuntu:14.04 
+
+Once inside the container let's check psql is not installed.
+
+	# psql -V
+
+let's run apt-get. We don't need to use sudo becasue we're root.
+
+	# apt-get install postgresql-client
+
+psql is now available
+
+	# psql -V
+
+exit form the container
+
+	# exit
+
+check the name of the container
+
+	# docker ps -a
+
+in my case the name is "focused_mccharty"
+
+	$ docker commit -m="Added psql" -a="Daniele" focused_mccharty mine/psql:0.1
+
+check that the new image is available
+
+	$ docker images
+
+try to run a temprary container running psql with
+
+	$ docker run -ti --rm mine/psql:0.1
+
+you will be able to run that whenever you want without the need to reintall psql
+
+#### Conclusion ####
+
+Images are a good way to have a reproducibile, disposable application based on a container.
+
+
+### Container private data ###
+
+#### Goal
+
+To show where a container puts its private data
+
+#### Instructions
+
+Just check what is inside Docker's system directories
+
+	$ sudo tree -L 3 /var/lib/docker/containers; \
+	sudo tree -L 3 /var/lib/docker/volumes; \
+	sudo tree -L 3 /var/lib/docker/vfs 
+
+The result depends on if and how you previously run docker. This time on my machine the folders are empty. 
+
+	/var/lib/docker/containers
+
+	0 directories, 0 files
+	/var/lib/docker/volumes
+
+	0 directories, 0 files
+	/var/lib/docker/vfs
+	└── dir
+
+	1 directory, 0 files
 
 Run a postgres instance with
 
 	docker run --rm --name mypg -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD=pwd postgres:9.4.0
 
-Connect with a client and execute...
+While container is running check again for the folders.
 
-	create table People (
-		name varchar(128)
-	);
+	/var/lib/docker/containers
+	└── 6e556aa9af283a15f0960352bf4277eec74722d03a3aca37722e9976145589c0
+	    ├── 6e556aa9af283a15f0960352bf4277eec74722d03a3aca37722e9976145589c0-json.log
+	    ├── config.json
+	    ├── hostconfig.json
+	    ├── hostname
+	    ├── hosts
+	    └── resolv.conf
+
+	1 directory, 6 files
+	/var/lib/docker/volumes
+	└── 605d94e8be0d21fb3b8816b2dcf10dcc714ccb90f1d964f1c75bc9dc322c608d
+	    └── config.json
+
+	1 directory, 1 file
+	/var/lib/docker/vfs
+	└── dir
+	    └── 605d94e8be0d21fb3b8816b2dcf10dcc714ccb90f1d964f1c75bc9dc322c608d
+		├── base
+		├── global
+		├── pg_clog
+		├── pg_dynshmem
+		├── pg_hba.conf
+		├── pg_ident.conf
+		├── pg_logical
+		├── pg_multixact
+		├── pg_notify
+		├── pg_replslot
+		├── pg_serial
+		├── pg_snapshots
+		├── pg_stat
+		├── pg_stat_tmp
+		├── pg_subtrans
+		├── pg_tblspc
+		├── pg_twophase
+		├── PG_VERSION
+		├── pg_xlog
+		├── postgresql.auto.conf
+		├── postgresql.conf
+		├── postmaster.opts
+		└── postmaster.pid
+
+Stop the container <CTRL+C>
+
+Check again in the folders.
+
+	/var/lib/docker/containers
+
+	0 directories, 0 files
+	/var/lib/docker/volumes
+
+	0 directories, 0 files
+	/var/lib/docker/vfs
+	└── dir
+
+	1 directory, 0 files
+
+#### Conclusion
+
+run --rm allows to play around with a container removing all its data when it terminates.
+
+
+### Running an ephemereal Postgres DB ###
+####or... What it means for containers to be ephemereal####
+
+#### Goal
+
+To show what are the implications for containers to be ephemeral
+
+#### Instructions
+
+Start a Postgres instance with
+
+	$ docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=pwd postgres:9.4.0
+
+Docker outputs the new container id
+
+	9b204a60da31a39dc1cb6b4ad944aa75ecb53e6bd069dfe726e604bf3ec37715
+
+Check the IP of the new container. You can use the first 12 chars as name.
+
+	$ docker inspect 9b204a60da31 | grep -i ipaddress
+	"IPAddress": "172.17.0.11",
+
+Connect to the DB with a new container that runs plsql 
+
+	$ docker run -ti --rm mine/psql:0.1 psql -h 172.17.0.11 -p 5432 -U postgres postgres
+
+a client and execute...
+
+	postgres=# create table people (name varchar(128));
+	postgres=# insert into People(name) values('susie'),('vivianne'),('axelle');
+	postgres=# select * from people;
+
+The SELECT returns the expected values. 
+
+Stop the postgres container
+
+	$ docker stop 9b204a60da31
+
+#### Conclusions ####
+
+Now, repeat the process and you'll find that the modifications on the Db have not been kept. This is because run always create a new container. If you to restart the same container with restart, it will start at different address, but the data will still be there. Data are actually removed in only two ways:
 	
-	insert into People(name) values('Marco');
-	insert into People(name) values('Jean');
-	insert into People(name) values('Nikita');
-
-	select * from TEST;
-
-The SELECT return the expected values.
-Stop and restart the container, the values are gone.
+* docker run --rm
+	* when the container exits
+* docker rm -v <container>
 
 ### Running an persistent Postgres DB ###
+####or... How do I separate the life of data folder from life of containers?####
+
+#### Goal ####
+Understand how one can remove container keeping its data. Or for instance keep the database data and upgrade from postgres 9:3 to postgres 9:4.
+
+
+#### Instrutions ####
+If you check the *postgres* Image  [instructions](https://registry.hub.docker.com/_/postgres/) you will see that the image has been configured to store data in */var/lib/postgresql/data/*.
 
 If you check with 
 
-	docker inspect 
+	$ docker inspect <postgresql-container>  | grep -n 3 -i volumes 
 
-you will see that postgres defines this volume
+you will see that postgres defines this volume...
 
 	"Volumes": {
 		"/var/lib/postgresql/data": "/var/lib/docker/vfs/dir/130b32b8a5187509c4764238a7d7b962f924ba4d52bcbaadca91f994ec30081d"
@@ -583,37 +740,34 @@ you will see that postgres defines this volume
 		"/var/lib/postgresql/data": true
 	}
 
-So, that means postgres can use volume "/var/lib/postgresql/data" if that is exported by another container.
-The special case is when we use a container generated from the same image.
+So, that means postgres allows its folder */var/lib/postgresql/data* to be *imported* into another container.
+Create container that immediately terminates.
 
-Create an "empty" container
-
-	docker run --name "dbdata" -v /dbdata postgres:9.4.0 echo "data only"
+	docker run --name "dbdata" -v /dbdata postgres:9.4.0 true
 
 Run a postgres instance with
 
-	docker run --rm --volumes-from dbdata --name mypg -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD=pwd postgres:9.4.0
+	docker run --rm --volumes-from dbdata --name mypg -p 5432:5432 -e POSTGRES_PASSWORD=pwd postgres:9.4.0
+
+#### Conclusions ####
+
+Container *mypg* will import */var/lib/postgresql/data* from *dbdata* into its filesystem. There is a name conflict but imported volumes take precedence on local filesystem entries. This way data are kept into the "data" container and it is possible to upgrade the container.
 
 ### A Web app ###
+#### or How do I dockerize my own Java web app ? ####
 
-A short way to bring up a running ps
+#### Goal ####
+Shows how a JEE app can be dockerized.
 
-	docker run --rm=true -p 5432:5432 --name="temppg" -e POSTGRES_PASSWORD=postgres "postgres:9"
-
-
-	docker run -d --name="itemsapp_db" postgres
-
+#### Instructions ####
 
 Creates a postgres container
 
-	docker run -d --name="itemsapp_db" postgres
+	$ docker run -d --name="itemsapp_db" postgres
 
-Just to check how the environment in a linking container is set
+Check how the environment in a linking container is set
 
-	docker run --rm --name="itemsapp" --link itemsapp_db:db "myself/mytomcat:0.1" env
-	docker run --rm --name="itemsapp" --link itemsapp_db:db "myself/mytomcat:0.1" cat /etc/hosts
-
-Here what we have.
+	$ docker run --rm --name="itemsapp" --link itemsapp_db:db "myself/mytomcat:0.1" env
 
 	PATH=/usr/local/tomcat/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 	HOSTNAME=fa3f9b73e652
@@ -635,16 +789,23 @@ Here what we have.
 	TOMCAT_TGZ_URL=https://www.apache.org/dist/tomcat/tomcat-8/v8.0.15/bin/apache-tomcat-8.0.15.tar.gz
 	HOME=/root
 
+Check how the hosts file is set
 
-## creates an app container 
-docker run -d -P --name="itemsapp" --link itemsapp_db:db "myself/mytomcat:0.1"
+	$ docker run --rm --name="itemsapp" --link itemsapp_db:db "myself/mytomcat:0.1" cat /etc/hosts
+
+Creates an app container
+
+	$ docker run -d -P --name="itemsapp" --link itemsapp_db:db "myself/mytomcat:0.1"
 
 
 
-### A Tomcat Cluster ###
+### A Tomcat Based Image ###
+#### or How do I build an Image running Tomcat ? ####
 
-Let's try to set up a Tomcat cluster on two nodes.
+#### Goal ####
+To show how can you leverage prebuilt Images to setup an application differently
 
+#### Instructions ####
 First of all, let's decide which base image we would like to use.
 
 	$ docker search tomcat
@@ -658,30 +819,19 @@ That gives this list.
 	jeanblanchard/busybox-tomcat          Minimal Docker image with Apache Tomcat         8                    [OK]
 	...
 
-Let's go for the 'tomcat' machine.
+Let's go for the 'tomcat' machine. Let's try to run it just to check what it does...
 
-
-	
-Let's see what happens...
-
-	$ docker create --name="tmc1" -P tomcat
+	$ docker run --rm --name="tmc1" -P tomcat
 	517108c9e06988da99e0ae11d3028bc1fd1cbbfc2ef091d63a531104af232be2
 
-Let's be sure the container exists
+Ler's tetrieve some info using ps
 
-	$ docker ps --all
-	CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-	517108c9e069        tomcat:latest       "catalina.sh run"   35 seconds ago 
-
-Not let's start it and lets check that happens
-
-	$ docker start tmc1
-	$ docker log tmc1
 	$ docker ps
 	CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                     NAMES
 	517108c9e069        tomcat:latest       "catalina.sh run"   3 minutes ago       Up About a minute   0.0.0.0:49155->8080/tcp   tmc1 
 
 Let's start a browser to localhost:49155, it works!
+
 Now, time to fix things.
 Let's stop the container. What there is inside ?
 
@@ -695,7 +845,9 @@ If we check...
 	# cat /usr/local/tomcat/conf/tomcat-users.xml | grep -n3 rolename 
 
 We'll discover that the users are commented out.
-So, our first goal is to change the Dockerfile to enable access to the manager app.
+So, our first goal is to create an image that enable access to the manager app.
+
+Let's copy a file out of the container filesystem into the local filesystem.
 
 	$ docker cp tmc1:/usr/local/tomcat/conf/tomcat-users.xml .
 
@@ -743,32 +895,57 @@ Now, let's stop the container, remove it and recreate it from the Dockerfile usi
 
 
 
+## Install on Ubuntu 14.04 ##
 
-## Under the hood ##
+This is to set the docker repo in ubuntu
 
-	/var/lib/docker/containers
-	└── <full-container-id>
-	    ├── 1ee8a5d778cba1738b636183a1e2470fe2699af3a127f50cd012f08dcd47cf4e-json.log
-	    ├── config.json
-	    ├── hostconfig.json
-	    ├── hostname
-	    ├── hosts
-	    └── resolv.conf
+	$ wget https://get.docker.com/ubuntu/ --output-document=./check-docker.sh
+	$ chmod u+x check-docker.sh
+	$ sudo ./check-docker.sh
 
-A full-container-id is the real name of a container.
-It is shortened to the first 12 chars when reported by tools. i.e.
+This is to update Ubuntu
 
-	full-container-id: 1ee8a5d778cba1738b636183a1e2470fe2699af3a127f50cd012f08dcd47cf4e
-	     container-id: 1ee8a5d778cb<------------------ removed ----------------------->
+	$ sudo apt-get update
+	$ sudo apt-get -y install lxc-docker
 
-	/var/lib/docker/vfs/dir
-		├── <volume-id>
-		├── <volume-id>
-		├── <volume-id>
-		└── <volume-id>
+This is to try Docker
 
+	$ sudo docker run -i -t ubuntu /bin/bash
 
+If it works well it should output something like that.
 
+	$ sudo docker run -i -t ubuntu /bin/bash
+	Unable to find image 'ubuntu:latest' locally
+	ubuntu:latest: The image you are pulling has been verified
+	511136ea3c5a: Pull complete 
+	3b363fd9d7da: Pull complete 
+	607c5d1cca71: Pull complete 
+	f62feddc05dc: Pull complete 
+	8eaa4ff06b53: Pull complete 
+	Status: Downloaded newer image for ubuntu:latest
+	root@953fa5507b96:/#
+
+Try a couple of commands and exit.
+
+	root@953fa5507b96:/# whoami
+	root
+	root@953fa5507b96:/# hostname
+	953fa5507b96
+	root@953fa5507b96:/# exit
+
+To avoid using "sudo" there's a special user group available.
+
+	# Add the docker group if it doesn't already exist.
+	$ sudo groupadd docker
+
+	# Add the connected user "${USER}" to the docker group.
+	# You may have to logout and log back in again.
+	$ sudo gpasswd -a ${USER} docker
+
+	# Restart the Docker daemon.
+	# If you are in Ubuntu 14.04, use docker.io instead of docker
+	$ sudo service docker restart
+	$ sudo service docker.io restart
 
 
 	
