@@ -26,13 +26,38 @@ Packer
 	* Virtual Box
 	* ...
 
+## Template
+
+	{
+		"description" : "description", 
+		"builders" : [
+			{
+				"type": "virtualbox-iso",
+				"guest_os_type": "Ubuntu_64",
+				"iso_url": "http://releases.ubuntu.com/12.04/ubuntu-12.04.5-server-amd64.iso",
+				"iso_checksum": "769474248a3897f4865817446f9a4a53",
+				"iso_checksum_type": "md5",
+				"ssh_username": "packer",
+				"ssh_password": "packer",
+				"ssh_wait_timeout": "30s",
+				"shutdown_command": "echo 'packer' | sudo -S shutdown -P now"
+			}
+		],
+		"provisioners" : [
+			{
+				"type":"shell",
+				"script":"setup.sh"
+			}
+		]
+	}
+
 ## Installation
 
 Packer is distributed as a binary package.
 
-1. Download Packer from https://www.packer.io/downloads.html (~80Mb)
-2. Unzip the Packer distributable in a directory
-3. Add the folder to the path
+* Download Packer from https://www.packer.io/downloads.html
+* Unzip the Packer distributable in a directory
+* Add the folder to the path
 
 	$ wget https://dl.bintray.com/mitchellh/packer packer_0.7.5_linux_amd64.zip
 
