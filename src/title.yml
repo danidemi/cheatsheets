@@ -1,4 +1,13 @@
-title: Cheatsheet
-author: Daniele Demichelis
-rights: Creative Commons Non-Commercial Share Alike 3.0
-language: en-UK
+
+---
+title:
+- type: main
+  text: The All Round Developer Cheat Sheet
+- type: subtitle
+  text: ...or what you need to survive 
+creator:
+- role: author
+  text: Daniele Demichelis
+rights: © 2015 Daniele Demichelis, CC BY-NC
+...
+
