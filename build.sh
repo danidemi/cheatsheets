@@ -44,6 +44,9 @@ function resize(){
 }
 
 function build_html(){
+
+	list FILES html-full.list
+
 	# build HTML version
 	# ===================================
 	
@@ -61,12 +64,7 @@ function build_html(){
 	# build html
 	mkdir -p build/html/
 	cp style/*.css build/html/
-	pandoc --standalone --smart --toc --toc-depth=3 --css=pandoc.css -o build/html/cheatsheets.html \
-		./src/title.yml \
-		./src/docker/docker_cheat_sheet.md \
-		./src/packer/packer.md \
-		./src/tomcat/tomcat_cheat_sheet.md \
-		./src/networking/networking_cheat_sheet.md
+	pandoc --standalone --smart --toc --toc-depth=3 --css=pandoc.css -o build/html/cheatsheets.html ${FILES}
 		
 	#ls | grep -v '\.lnx$' | xargs rm
 		
@@ -122,8 +120,7 @@ mkdir -p build
 
 #cat build/cheatsheets.txt | aspell -a > build/report_aspell.txt
 
-list K test.list
-echo "kkk:$K"
+
 
 build_clean
 build_epub
