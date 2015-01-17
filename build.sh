@@ -1,5 +1,14 @@
 #!/bin/bash +x
 
+function list(){
+	local LINE=""
+	while read p; do
+		LINE="${LINE} $p"
+	done <$2
+	local  __resultvar=$1
+	eval $__resultvar="'$LINE'"
+}
+
 # $1:	source folder
 # $2:	out folder
 function odg_2_png(){
@@ -113,9 +122,12 @@ mkdir -p build
 
 #cat build/cheatsheets.txt | aspell -a > build/report_aspell.txt
 
+list K test.list
+echo "kkk:$K"
+
 build_clean
 build_epub
-#build_html
+build_html
 
 	
 # references
