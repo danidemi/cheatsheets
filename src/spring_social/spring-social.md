@@ -142,6 +142,8 @@ Similar to UserDetailsService (from Spring Security) but loads details by user i
 ### SocialUserDetails < UserDetails (from Spring Security)
 An "extended" UserDetails that store also how a user is recognized in a provider.
 
+![Architecture](architecture.png)
+
 ## Sign In
 
 SocialAuthenticationFilter reacts to requests whose path fits a pattern of "/auth/{providerid}". 

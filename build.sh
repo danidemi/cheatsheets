@@ -20,6 +20,16 @@ function odg_2_png(){
 
 # $1:	source folder
 # $2:	out folder
+function plantuml_2_png(){
+	echo "convert all .plantuml to .png from $1 to $2"
+	find $1 -iname '*.plantuml' | while read uml; do
+		echo "converting ${uml} to $2"
+		plantuml -o $2 ${uml}
+	done
+}
+
+# $1:	source folder
+# $2:	out folder
 function copy_png(){
 	echo "copy all .png from $1 to $2"
 	find $1 -iname '*.png' | while read png; do
@@ -55,6 +65,9 @@ function build_html(){
 	# convert all .odg to .png
 	odg_2_png src/ build/html
 	
+	# convert all .plantuml to .png
+	plantuml_2_png src/ ${PWD}/build/html
+	
 	# copy all .png
 	copy_png src/ build/html
 	
@@ -65,8 +78,6 @@ function build_html(){
 	mkdir -p build/html/
 	cp style/*.css build/html/
 	pandoc --standalone --smart --toc --toc-depth=3 --css=pandoc.css -o build/html/cheatsheets.html ${FILES}
-		
-	#ls | grep -v '\.lnx$' | xargs rm
 		
 }
 
@@ -107,6 +118,8 @@ function build_clean(){
 
 # You need these to build it...
 # sudo apt-get install pandoc
+# sudo apt-get install graphviz
+# sudo apt-get install imagemagik
 
 mkdir -p build
 
