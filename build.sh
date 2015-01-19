@@ -9,6 +9,17 @@ function list(){
 	eval $__resultvar="'$LINE'"
 }
 
+function list_filenames(){
+	local LINE=""
+	local filename
+	while read p; do
+		filename=$(basename "$p")
+		LINE="${LINE} ${3}${filename}"
+	done <$2
+	local  __resultvar=$1
+	eval $__resultvar="'$LINE'"
+}
+
 # $1:	source folder
 # $2:	out folder
 function odg_2_png(){
@@ -53,60 +64,83 @@ function resize(){
 	done
 }
 
+# $1: index file
+# $2: sub folder
 function build_html(){
 
-	list FILES html-full.list
+	# pick only the files needed
+	mkdir -p build/picked
+	rm -rf build/picked/*
+	while read p; do
+		cp $p build/picked
+	done <$1	
+	
+	list_filenames FILES $1 "build/picked/"
+	echo "########################################\n$FILES"
+	
+
+	local SUBFOLDER=$2
+
+	#local FILES
+	#list FILES $1
 
 	# build HTML version
 	# ===================================
 	
-	mkdir -p build/html
+	mkdir -p build/${SUBFOLDER}/html
 	
 	# convert all .odg to .png
-	odg_2_png src/ build/html
+	odg_2_png src/ build/${SUBFOLDER}/html
 	
 	# convert all .plantuml to .png
-	plantuml_2_png src/ ${PWD}/build/html
+	plantuml_2_png src/ ${PWD}/build/${SUBFOLDER}/html
 	
 	# copy all .png
-	copy_png src/ build/html
+	copy_png src/ build/${SUBFOLDER}/html
 	
 	# resize all
-	resize build/html 700
+	resize build/${SUBFOLDER}/html 700
 	
 	# build html
-	mkdir -p build/html/
-	cp style/*.css build/html/
-	pandoc --standalone --smart --toc --toc-depth=3 --css=pandoc.css -o build/html/cheatsheets.html ${FILES}
+	mkdir -p build/${SUBFOLDER}/html/
+	cp style/*.css build/${SUBFOLDER}/html/
+	pandoc --standalone --smart --toc --toc-depth=3 --css=pandoc.css -o build/${SUBFOLDER}/html/index.html ${FILES}
 		
 }
 
+# $1: index file
+# $2: sub folder
 function build_epub(){
-	# build EPUB
-	# ===================================	
+
+	echo "Building EPUB from $1 into $2"
 	
-	mkdir -p build/epub
+	local SUBFOLDER=$2
+	mkdir -p build/${SUBFOLDER}/epub
+	
+	# pick only the files needed
+	rm -rf build/${SUBFOLDER}/epub/*
+	while read p; do
+		cp $p build/${SUBFOLDER}/epub/
+	done <$1		
 	
 	# convert all .odg to .png
-	odg_2_png src/ build/epub
+	odg_2_png src/ build/${SUBFOLDER}/epub
 	
 	# copy all .png
-	copy_png src/ build/epub
+	copy_png src/ build/${SUBFOLDER}/epub
 	
 	# resize all
-	resize build/epub 400
+	resize build/${SUBFOLDER}/epub 400
+	
+	list_filenames FILES $1 ""
+	echo "########################################\n$FILES"	
 	
 	# build epub
-	pushd build/epub
-	pandoc --standalone --smart --toc --toc-depth=3 -o cheatsheets.epub \
-		../../src/title.yml \
-		../../src/docker/docker_cheat_sheet.md \
-		../../src/packer/packer.md \
-		../../src/tomcat/tomcat_cheat_sheet.md \
-		../../src/networking/networking_cheat_sheet.md
+	pushd build/${SUBFOLDER}/epub
+	pandoc --standalone --smart --toc --toc-depth=3 -o cheatsheets.epub $FILES
 	popd
 	
-	find build/epub -type f | grep -v '\.epub$' | xargs rm
+	find build/${SUBFOLDER}/epub -type f | grep -v '\.epub$' | xargs rm
 }
 
 function build_clean(){
@@ -123,21 +157,10 @@ function build_clean(){
 
 mkdir -p build
 
-# check grammar building a text only version
-# pandoc -S -o build/cheatsheets.txt \
-# 	./src/title.yml \
-# 	./src/docker/docker_cheat_sheet.md \
-# 	./src/packer/packer.md \
-# 	./src/tomcat/tomcat_cheat_sheet.md \
-# 	./src/networking/networking_cheat_sheet.md
-
-#cat build/cheatsheets.txt | aspell -a > build/report_aspell.txt
-
-
-
 build_clean
-build_epub
-build_html
+build_html "html-full.index" full
+build_epub "docker.index" docker
+build_html "docker.index" docker
 
 	
 # references
