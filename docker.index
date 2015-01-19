@@ -1,4 +1,4 @@
-./src/title.yml
+./src/docker/docker-epub-metadata.md
 ./src/general/intro.md
 ./src/docker/docker.md
 ./src/docker/docker-big-picture.md

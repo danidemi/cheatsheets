@@ -1,6 +1,6 @@
 # Internetworking
 
-## IP 
+## IPv4
 
 ### Address
 
@@ -24,6 +24,64 @@
 		+-+-+-+-+-+--------------------+
 		|1 1 1 1 0|     Reserved       |     240.0.0.0 - 247.255.255.255
 		+-+-+-+-+-+--------------------+
+		
+	Class A
+	From:   0.  0.  0.  0 = 00000000.00000000.00000000.00000000
+	To  : 127.255.255.255 = 01111111.11111111.11111111.11111111
+	                        0nnnnnnn.HHHHHHHH.HHHHHHHH.HHHHHHHH
+	Class B
+	From: 128.  0.  0.  0 = 10000000.00000000.00000000.00000000
+	To  : 191.255.255.255 = 10111111.11111111.11111111.11111111
+	                        10nnnnnn.nnnnnnnn.HHHHHHHH.HHHHHHHH
+	Class C
+	From: 192.  0.  0.  0 = 11000000.00000000.00000000.00000000
+	To  : 223.255.255.255 = 11011111.11111111.11111111.11111111
+	                        110nnnnn.nnnnnnnn.nnnnnnnn.HHHHHHHH
+	
+	Class D (Multicast)
+	From: 224.  0.  0.  0 = 11100000.00000000.00000000.00000000
+	To  : 239.255.255.255 = 11101111.11111111.11111111.11111111
+	                        1110XXXX.XXXXXXXX.XXXXXXXX.XXXXXXXX
+	
+	Class E (Reserved)
+	From: 240.  0.  0.  0 = 11110000.00000000.00000000.00000000
+	To  : 255.255.255.255 = 11111111.11111111.11111111.11111111
+	                        1111XXXX.XXXXXXXX.XXXXXXXX.XXXXXXXX
+
+### Private Address Space
+
+	From                To
+	 10.  0.  0.  0      10.255.255.255  (10/8 prefix)
+	172. 16.  0.  0     172. 31.255.255  (172.16/12 prefix)
+	192.168.  0.  0     192.168.255.255  (192.168/16 prefix)
+
+Private class B address space is for instance made up by 16 subnets. 
+
+             172.      16.       0.       0               172.      31.     255.     255
+        10101100.00010000.00000000.00000000          10101100.00011111.11111111.11111111
+
+	      
+	from :  10101100.00010000.00000000.00000000
+	to   :  10101100.00011111.11111111.11111111
+                [    network    ]
+	net#1:  10101100.00010000.xxxxxxxx.xxxxxxxx
+        net#2:  10101100.00010001.xxxxxxxx.xxxxxxxx
+        net#3:  10101100.00010010.xxxxxxxx.xxxxxxxx
+        net#4:  10101100.00010011.xxxxxxxx.xxxxxxxx
+        net#5:  10101100.00010100.xxxxxxxx.xxxxxxxx
+        net#6:  10101100.00010101.xxxxxxxx.xxxxxxxx
+        net#7:  10101100.00010110.xxxxxxxx.xxxxxxxx
+        net#8:  10101100.00010111.xxxxxxxx.xxxxxxxx
+        net#9:  10101100.00011000.xxxxxxxx.xxxxxxxx
+        net#10: 10101100.00011001.xxxxxxxx.xxxxxxxx
+        net#11: 10101100.00011010.xxxxxxxx.xxxxxxxx
+        net#12: 10101100.00011011.xxxxxxxx.xxxxxxxx
+        net#13: 10101100.00011100.xxxxxxxx.xxxxxxxx
+        net#14: 10101100.00011101.xxxxxxxx.xxxxxxxx
+        net#15: 10101100.00011110.xxxxxxxx.xxxxxxxx
+        net#16: 10101100.00011111.xxxxxxxx.xxxxxxxx
+
+
 
 ### Subnetting
 
@@ -172,5 +230,10 @@ Two types of Broadcast depending on the reached hosts:
 	* Sent to all hosts on a network. 
 	Routers may be configured to forward directed broadcasts on large networks. 
 	For network 192.168.0.0, the broadcast is 192.168.255.255.
+
+## References
+
+<http://tools.ietf.org/html/rfc1918>
+
 
 
