@@ -1,5 +1,32 @@
 ## Docker CLI ##
 
+* main commands
+	* run
+		* run processes in isolated container
+		* can override CMD defined in the image
+		* detached vs foreground
+			* detached
+				* container is no longer listening to the command line where you executed docker run
+				* all I/O done through 
+					* network connections 
+					* shared volumes 			
+			* foreground
+				* start the process in the container 
+				* attach the console
+				
+	* exec
+		* run a new command in a running container
+		
+	* start
+		* start a stopped container
+	* stop
+		* stop a running container
+	* attach 
+		* attach a tty to a running container
+				
+					
+		
+
 ### docker run ###
 
 Runs a command in a container keeping the container alive until the command exit
