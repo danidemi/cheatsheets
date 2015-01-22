@@ -1,0 +1,63 @@
+@startuml
+
+interface java.lang.Serializable
+
+interface org.springframework.security.core.userdetails.UserDetails {
+    Collection<? extends GrantedAuthority> getAuthorities()
+    String getPassword()
+    String getUsername()
+}
+
+interface org.springframework.social.security.SocialUserDetails {
+    String getUserId()
+}
+
+class org.springframework.security.core.userdetails.User
+
+class org.springframework.security.provisioning.JdbcUserDetailsManager {
+    --
+    Jdbc user management service providing full CRUD.
+    --
+    createUser(UserDetails)
+}
+
+interface org.springframework.jdbc.core.support.JdbcDaoSupport {
+}
+
+interface org.springframework.security.core.userdetails.UserDetailsService {
+    UserDetails loadUserByUsername(String username)
+}
+
+interface org.springframework.security.provisioning.UserDetailsManager
+
+class org.springframework.social.security.SocialAuthenticationProvider
+
+interface org.springframework.social.connect.UsersConnectionRepository
+
+interface org.springframework.social.security.SocialUserDetailsService {
+    loads details by user id
+    --
+    SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException, DataAccessException;
+}
+
+java.lang.Serializable                                                 <|-- org.springframework.security.core.userdetails.UserDetails
+org.springframework.security.core.userdetails.UserDetails              <|-- org.springframework.social.security.SocialUserDetails
+org.springframework.social.security.SocialUserDetails                  <|-- org.springframework.social.security.SocialUser
+org.springframework.security.core.userdetails.User                     <|-- org.springframework.social.security.SocialUser
+org.springframework.security.core.userdetails.UserDetails              <|-- org.springframework.security.core.userdetails.User
+org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl         <|-- org.springframework.security.provisioning.JdbcUserDetailsManager
+org.springframework.jdbc.core.support.JdbcDaoSupport                   <|-- org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl
+org.springframework.security.core.userdetails.UserDetailsService       <|-- org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl
+org.springframework.security.core.userdetails.UserDetailsService       <|-- org.springframework.security.provisioning.UserDetailsManager
+org.springframework.security.provisioning.UserDetailsManager           <|-- org.springframework.security.provisioning.JdbcUserDetailsManager
+org.springframework.social.security.SocialUserDetailsService           <|-- todo.MySocialUserDetailsService
+interface org.springframework.social.connect.UsersConnectionRepository <|-- org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository
+
+org.springframework.security.core.userdetails.UserDetails              <..  org.springframework.security.core.userdetails.UserDetailsService
+org.springframework.social.security.SocialUserDetails                  <..  org.springframework.social.security.SocialAuthenticationFilter
+
+org.springframework.social.connect.UsersConnectionRepository           <.. org.springframework.social.security.SocialAuthenticationProvider
+org.springframework.social.security.SocialUserDetailsService           <.. org.springframework.social.security.SocialAuthenticationProvider
+org.springframework.social.security.SocialUserDetails                  <.. org.springframework.social.security.SocialUserDetailsService
+
+@enduml
