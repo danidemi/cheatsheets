@@ -1,5 +1,3 @@
-# Networking Cheat Sheet
-
 ## IP 
 
 ### Address
