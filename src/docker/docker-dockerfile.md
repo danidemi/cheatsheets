@@ -21,9 +21,14 @@
 |USER       |                                     |Yes                     |Sets the user name or UID to use when running the image                                                                                                                                                                                                                                    |                                                |
 |ONBUILD    |                                     |No                      |Adds to the image a trigger instruction to be executed at a later time, when the image is used as the base for another build                                                                                                                                                               |                                                |
 
-                    
+### Dockerfile Template ###                    
 
-
+	FROM debian:8.0
+	MAINTAINER John Doe
+	RUN cmd1
+	RUN cmd2
+	RUN cmd3
+	EXPOSE 80
 
 
 
