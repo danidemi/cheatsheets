@@ -160,7 +160,7 @@ function build_clean(){
 mkdir -p build
 
 build_clean
-#build_html "html-full.index" full
+build_html "html-full.index" full
 build_epub "docker.index" docker
 build_html "docker.index" docker
 build_epub "maven.index" maven
