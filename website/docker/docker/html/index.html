@@ -1,0 +1,982 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="pandoc.css" type="text/css" />
+</head>
+<body>
+<div id="TOC">
+<ul>
+<li><a href="#preface">Preface</a></li>
+<li><a href="#docker">Docker</a><ul>
+<li><a href="#big-picture">Big Picture</a><ul>
+<li><a href="#docker-engine">Docker Engine</a></li>
+<li><a href="#docker-hub">Docker Hub</a></li>
+<li><a href="#trusted-automated-builds">Trusted / Automated Builds</a></li>
+</ul></li>
+<li><a href="#closer-look">Closer Look</a><ul>
+<li><a href="#docker-engine-1">Docker Engine</a></li>
+<li><a href="#images">Images</a></li>
+<li><a href="#networking">Networking</a></li>
+<li><a href="#container-linking">Container Linking</a></li>
+<li><a href="#volumes">Volumes</a></li>
+</ul></li>
+<li><a href="#best-practices-pattern">Best practices &amp; pattern</a><ul>
+<li><a href="#general">General</a></li>
+<li><a href="#images-1">Images</a></li>
+<li><a href="#dockerfile">Dockerfile</a></li>
+<li><a href="#dockerized-app">Dockerized App</a></li>
+</ul></li>
+<li><a href="#docker-cli">Docker CLI</a><ul>
+<li><a href="#docker-run">docker run</a></li>
+<li><a href="#docker-ps">docker ps</a></li>
+<li><a href="#docker-logs">docker logs</a></li>
+<li><a href="#docker-version">docker version</a></li>
+<li><a href="#docker-port">docker port</a></li>
+<li><a href="#docker-rm">docker rm</a></li>
+<li><a href="#docker-images">docker images</a></li>
+<li><a href="#help">Help</a></li>
+</ul></li>
+<li><a href="#dockerfile-1">Dockerfile</a><ul>
+<li><a href="#dockerfile-template">Dockerfile Template</a></li>
+</ul></li>
+<li><a href="#install-on-ubuntu-14.04">Install on Ubuntu 14.04</a></li>
+<li><a href="#container-private-data">Container private data</a><ul>
+<li><a href="#running-an-ephemereal-postgres-db">Running an ephemereal Postgres DB</a></li>
+</ul></li>
+<li><a href="#examples-build-an-image-step-by-step">Examples: Build An Image Step By Step</a><ul>
+<li><a href="#running-an-persistent-postgres-db">Running an persistent Postgres DB</a></li>
+<li><a href="#a-tomcat-based-image">A Tomcat Based Image</a></li>
+<li><a href="#a-web-app">A Web app</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="preface"><a href="#preface">Preface</a></h1>
+<p>This book aims to be a quick reference for programmers. Its goal is not to explain each technology, but instead to be a quick reference card.</p>
+<p>For each argument, these are the points that are discussed.</p>
+<ul>
+<li>Big Picture
+<ul>
+<li>Here a brief explanation of the reasons why the technology is important is given. This section gives the programmer the minimum knowledge to sustain a chat about the argument. Questions like the following ones are answered in this section.
+<ul>
+<li>What the hell is that ?</li>
+<li>What it is needed for ?</li>
+<li>What can I do with that ?</li>
+<li>Why should I be aware of that ?</li>
+</ul></li>
+</ul></li>
+<li>Main Concepts
+<ul>
+<li>Each technology has its core concepts you should understand to properly use it.</li>
+</ul></li>
+<li>Set Up
+<ul>
+<li>A brief explanation about how you can install the technology. Not all the main ways you can install it are covered. But at least we try to give you a simple way you can start with.</li>
+</ul></li>
+<li>Problems And Solutions
+<ul>
+<li>If there are typical problems a programmer is going to face while she start with the new technology, we try to address them in this section, along with the possible answers.</li>
+</ul></li>
+<li>Examples
+<ul>
+<li>Short examples about how to use the technology.</li>
+</ul></li>
+</ul>
+<p>Happy reading.</p>
+<h1 id="docker"><a href="#docker">Docker</a></h1>
+<h2 id="big-picture"><a href="#big-picture">Big Picture</a></h2>
+<ul>
+<li>Docker is
+<ul>
+<li>an open source platform</li>
+<li>for
+<ul>
+<li>developers</li>
+<li>and sysadmins</li>
+</ul></li>
+<li>to
+<ul>
+<li>build</li>
+<li>ship</li>
+<li>run
+<ul>
+<li>distributed applications</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>With Docker you can:
+<ul>
+<li>run applications that have been previously dockerized
+<ul>
+<li>in comlpete isolation (a.k.a. “Container”)
+<ul>
+<li>more or less as it would happen with a VM</li>
+</ul></li>
+<li>withouth the burden of sysop
+<ul>
+<li>at some extent</li>
+</ul></li>
+</ul></li>
+<li>be sure that container will be the same regardless of the environment they are run in
+<ul>
+<li>because they can be created as instances of immutable “Images”</li>
+</ul></li>
+<li>setuplessly link containers
+<ul>
+<li>i.e.
+<ul>
+<li>run container#1 with a web appication</li>
+<li>run container#2 with the db needed by the web app</li>
+</ul></li>
+<li>applications should be built to work together (a.k.a. “dockerization”)</li>
+</ul></li>
+<li>extend available images in order to create new immutable images
+<ul>
+<li>share it across you team
+<ul>
+<li>in order to have a standard environment</li>
+</ul></li>
+</ul></li>
+<li>create a repeatable environment
+<ul>
+<li>put image definitions and container creation in a script in your codebase
+<ul>
+<li>all members will have same env</li>
+</ul></li>
+</ul></li>
+<li>develop / deploy / run the <strong>very same</strong> environment
+<ul>
+<li>extend a useful image</li>
+<li>including your dockerized app in it</li>
+<li>share the image</li>
+<li>create a container in prod from the same image</li>
+</ul></li>
+</ul></li>
+<li>Docker Platform is made up by
+<ul>
+<li>Docker Engine
+<ul>
+<li>a portable</li>
+<li>lightweight</li>
+<li>runtime</li>
+</ul></li>
+<li>Packaging Tool</li>
+<li>Docker Hub
+<ul>
+<li>a cloud service for
+<ul>
+<li>sharing Images of dockerized applications</li>
+<li>automating workflows</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Run on
+<ul>
+<li>Modern Linux
+<ul>
+<li>Docker needs
+<ul>
+<li>libvirt,</li>
+<li>LXC (Linux containers)</li>
+<li>and systemd-nspawn</li>
+</ul></li>
+</ul></li>
+<li>Win (and maybe older Linux) through a VM
+<ul>
+<li>https://github.com/boot2docker/boot2docker</li>
+<li>Azure supports Docker</li>
+<li>forthcoming support in Windows Server</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="docker-engine"><a href="#docker-engine">Docker Engine</a></h3>
+<ul>
+<li>Docker Engine
+<ul>
+<li>uses
+<ul>
+<li>resource isolation features of Linux kernel
+<ul>
+<li>to
+<ul>
+<li>allow independent containers to run within a single Linux instance</li>
+</ul></li>
+</ul></li>
+<li>union mount to provide the Union File System</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="figure">
+<img src="docker-filesystems-multilayer.png" alt="Multilayer File System" /><p class="caption">Multilayer File System</p>
+</div>
+<ul>
+<li>Docker runs processes in isolated containers.
+<ul>
+<li>When an operator executes docker run, she starts a process with
+<ul>
+<li>its own file system</li>
+<li>its own networking</li>
+<li>its own isolated process tree</li>
+</ul></li>
+<li>The Image which starts the process may
+<ul>
+<li>define defaults
+<ul>
+<li>related to the binary to run</li>
+<li>the networking to expose</li>
+<li>…</li>
+</ul></li>
+<li>can be usually overridden when container is started.</li>
+</ul></li>
+</ul></li>
+<li>By default container’s file system persists after the container exits.
+<ul>
+<li>Easier debugging</li>
+<li>Data are retained.</li>
+<li>It consume some space if you are not aware of it.</li>
+</ul></li>
+</ul>
+<h3 id="docker-hub"><a href="#docker-hub">Docker Hub</a></h3>
+<ul>
+<li>Official Docker Hub
+<ul>
+<li>to
+<ul>
+<li>store Images in repositories</li>
+<li>search and browse Images</li>
+</ul></li>
+<li>is a
+<ul>
+<li>Paas</li>
+<li>Docker-owned</li>
+</ul></li>
+<li>costs
+<ul>
+<li>public repositories
+<ul>
+<li>free for all</li>
+</ul></li>
+<li>private repositories
+<ul>
+<li>fees apply</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="figure">
+<img src="docker-fees.png" title="DockerHub fees on 17 Jan 2015" alt="DockerHub fees on 17 Jan 2015" /><p class="caption">DockerHub fees on 17 Jan 2015</p>
+</div>
+<ul>
+<li>Run-by-yourself Docker Hub
+<ul>
+<li>Docker Hub software is open source
+<ul>
+<li>https://github.com/docker/docker-registry - current</li>
+<li>https://github.com/docker/distribution - forthcoming</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="trusted-automated-builds"><a href="#trusted-automated-builds">Trusted / Automated Builds</a></h3>
+<p>Automated Builds are a special feature of Docker Hub which allow you to use Docker Hub’s build clusters to automatically create images from a specified Dockerfile and a GitHub or Bitbucket repo.</p>
+<h2 id="closer-look"><a href="#closer-look">Closer Look</a></h2>
+<h3 id="docker-engine-1"><a href="#docker-engine-1">Docker Engine</a></h3>
+<pre><code>/var/lib/docker/containers
+&lt;full-container-id&gt;
+└── 1ee8a5d778cba1738b636183a1e2470fe2699af3a127f50cd012f08dcd47cf4e-json.log
+    ├── config.json
+    ├── hostconfig.json
+    ├── hostname
+    ├── hosts
+    └── resolv.conf</code></pre>
+<p>A full-container-id is the real name of a container. It is shortened to the first 12 chars when reported by tools. i.e.</p>
+<pre><code>full-container-id: 1ee8a5d778cba1738b636183a1e2470fe2699af3a127f50cd012f08dcd47cf4e
+     container-id: 1ee8a5d778cb&lt;------------------ removed -----------------------&gt;
+
+/var/lib/docker/vfs/dir
+├── &lt;volume-id&gt;
+├── &lt;volume-id&gt;
+├── &lt;volume-id&gt;
+└── &lt;volume-id&gt;</code></pre>
+<h3 id="images"><a href="#images">Images</a></h3>
+<ul>
+<li>Docker images are the basis of containers</li>
+<li>If an image isn’t already present on the host then it’ll be downloaded from a registry
+<ul>
+<li>by default the Docker Hub Registry</li>
+</ul></li>
+<li><p>Docker stores downloaded images on the Docker host</p></li>
+<li>Creating new images
+<ul>
+<li>workflow #1: Start from existing image</li>
+<li>workflow #2: Define a new image through a Dockerfile</li>
+</ul></li>
+</ul>
+<h3 id="networking"><a href="#networking">Networking</a></h3>
+<p>By default, every time a container is restarted, it binds to different host ports.</p>
+<h3 id="container-linking"><a href="#container-linking">Container Linking</a></h3>
+<div class="figure">
+<img src="docker-linked-containers.png" title="Linking Example" alt="Linking Example" /><p class="caption">Linking Example</p>
+</div>
+<p>Docker creates these env variables in the “source” container for each “linked” container.</p>
+<pre><code>&lt;alias&gt;_NAME=/&lt;this_name&gt;/&lt;alias&gt;
+&lt;alias&gt;_PORT_&lt;exposed_port&gt;_&lt;protocol&gt;=&lt;protocol&gt;://&lt;linked_container_ip_address&gt;:&lt;port&gt;
+&lt;alias&gt;_PORT_&lt;exposed_port&gt;_&lt;protocol&gt;_ADDR=&lt;linked_container_ip_address&gt;
+&lt;alias&gt;_PORT_&lt;exposed_port&gt;_&lt;protocol&gt;_PORT=&lt;actual_port&gt;
+&lt;alias&gt;_PORT_&lt;exposed_port&gt;_&lt;protocol&gt;_PROTO=&lt;protocol&gt;</code></pre>
+<p>/etc/hosts is also changed</p>
+<pre><code>&lt;this_container_ip&gt;       &lt;this_container_id&gt;
+&lt;linked_container_ip&gt;     &lt;linked_container_alias&gt;</code></pre>
+<h3 id="volumes"><a href="#volumes">Volumes</a></h3>
+<ul>
+<li>Primary ways you can manage data in Docker
+<ul>
+<li>Data volumes
+<ul>
+<li>A specially-designated directory within one or more containers that bypasses the Union File System</li>
+<li>to provide several useful features for persistent or shared data:
+<ul>
+<li>Data volumes can be shared and reused between containers</li>
+<li>Changes to a data volume are made directly</li>
+<li>Changes to a data volume will not be included when you update an image</li>
+<li>Volumes persist until no containers use them</li>
+</ul></li>
+<li>Can be…
+<ul>
+<li>a new directory in the container</li>
+<li>mapped to a directory in the host</li>
+<li>mapped to a file in the host</li>
+</ul></li>
+</ul></li>
+<li>Data volume containers</li>
+</ul></li>
+<li>Volumes
+<ul>
+<li>decouple
+<ul>
+<li>the life of the data being stored in them</li>
+<li>from the life of the container that created them.</li>
+</ul></li>
+<li>so you can
+<ul>
+<li>docker rm my_container and your data will not be removed.</li>
+</ul></li>
+</ul></li>
+<li>A volume can be created in
+<ul>
+<li>two ways
+<ul>
+<li>Specifying VOLUME /some/dir in a Dockerfile</li>
+<li>Specying it as part of your run command as docker run -v /some/dir</li>
+</ul></li>
+<li>Either way,
+<ul>
+<li>It tells Docker to create a directory on the host,</li>
+<li>within the docker root path (by default /var/lib/docker),</li>
+<li>and mount it to the path you’ve specified (/some/dir above).</li>
+</ul></li>
+<li>When you remove the container using this volume, the volume itself continues to live on.</li>
+</ul></li>
+</ul>
+<h2 id="best-practices-pattern"><a href="#best-practices-pattern">Best practices &amp; pattern</a></h2>
+<h3 id="general"><a href="#general">General</a></h3>
+<h4 id="be-repeatable"><a href="#be-repeatable">Be repeatable</a></h4>
+<p>Main goal is to be able to create the very same container whenever you need it.</p>
+<h4 id="be-portable"><a href="#be-portable">Be portable</a></h4>
+<p>Main goal is to be able to run the very same container on different platforms.</p>
+<h4 id="dont-boot-init"><a href="#dont-boot-init">Don’t boot init</a></h4>
+<ul>
+<li>Containers model processes not machines</li>
+<li>The goal is that you only run one process per container</li>
+<li>So an init or supervisor is not needed.</li>
+<li>If the processes dies inside a container then the container dies</li>
+<li>Instead of restarting the process just restart the same container or a new container</li>
+</ul>
+<h3 id="images-1"><a href="#images-1">Images</a></h3>
+<h4 id="dont-upgrade-in-builds"><a href="#dont-upgrade-in-builds">Don’t upgrade in builds</a></h4>
+<ul>
+<li>Updates will be baked into the based images you don’t need to apt-get upgrade your containers.</li>
+<li>If there are security updates that a base image needs, let upstream know so that they can update it for everyone and ensure that your builds are consistent again.</li>
+<li>so
+<ul>
+<li>best case you run an upgrade in a build and it works.</li>
+<li>worse case a pkg tries to mount, etc and it fails.</li>
+</ul></li>
+<li>you should bake security fixes into the base images and rebuild on top of them so that the end result is consistent.</li>
+<li>The end goal is that the image i build today is the same image that will be built tomorrow unless i explicitly say otherwise.</li>
+</ul>
+<h4 id="use-small-base-images"><a href="#use-small-base-images">Use small base images</a></h4>
+<p>Some images are more bloated than others. I suggest using debian:jessie as your base.</p>
+<h4 id="use-specific-tags"><a href="#use-specific-tags">Use specific tags</a></h4>
+<h5 id="use-specific-tags-when-specifying-from-images"><a href="#use-specific-tags-when-specifying-from-images">Use specific tags when specifying FROM images</a></h5>
+<p>This is important for your base images. Your FROM should always contain the full repository and tag for the base image that you are depending on. FROM debian:jessie not just FROM debian</p>
+<h5 id="use-specific-tags-for-your-images"><a href="#use-specific-tags-for-your-images">Use specific tags for your images</a></h5>
+<p>Unless you are experimenting with docker you should always pass the -t option to docker build so that the resulting image is tagged. A simple human readable tag will help you manage what each image was created for.</p>
+<pre><code>docker build -t=&quot;crosbymichael/sentry&quot; .</code></pre>
+<p>Always pass -t to tag the resulting image.</p>
+<h4 id="use-the-cache"><a href="#use-the-cache">Use the cache</a></h4>
+<p>Keep common instructions at the top of the Dockerfile to utilize the cache.</p>
+<p>Each instruction in a Dockerfile commits the change into a new image which will then be used as the base of the next instruction. If an image exists with the same parent and instruction ( except for ADD ) docker will use the image instead of executing the instruction, i.e. the cache.</p>
+<h3 id="dockerfile"><a href="#dockerfile">Dockerfile</a></h3>
+<h4 id="expose-ing-ports"><a href="#expose-ing-ports">EXPOSE-ing ports</a></h4>
+<p>Images should able to run on any host and as many times as needed. With Dockerfiles you have the ability to map the private and public ports, however, you should never map the public port in a Dockerfile. By mapping to the public port on your host you will only be able to have one instance of your dockerized app running.</p>
+<pre><code># private and public mapping
+EXPOSE 80:8080
+
+# private only
+EXPOSE 80</code></pre>
+<p>If the consumer of the image cares what public port the container maps to they will pass the -p option when running the image, otherwise, docker will automatically assign a port for the container.</p>
+<p>Never map the public port in a Dockerfile.</p>
+<h4 id="cmd-and-entrypoint-syntax"><a href="#cmd-and-entrypoint-syntax">CMD and ENTRYPOINT syntax</a></h4>
+<p>Always use the array syntax.</p>
+<h3 id="dockerized-app"><a href="#dockerized-app">Dockerized App</a></h3>
+<h4 id="log-to-stdout"><a href="#log-to-stdout">Log to stdout</a></h4>
+<p>The docker logs command looks inside the container and returns its standard output. So, log to stdout to make logs available to the client.</p>
+<h2 id="docker-cli"><a href="#docker-cli">Docker CLI</a></h2>
+<ul>
+<li>main commands
+<ul>
+<li>run
+<ul>
+<li>run processes in isolated container</li>
+<li>can override CMD defined in the image</li>
+<li>detached vs foreground
+<ul>
+<li>detached
+<ul>
+<li>container is no longer listening to the command line where you executed docker run</li>
+<li>all I/O done through
+<ul>
+<li>network connections</li>
+<li>shared volumes<br /></li>
+</ul></li>
+</ul></li>
+<li>foreground
+<ul>
+<li>start the process in the container</li>
+<li>attach the console</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>exec
+<ul>
+<li>run a new command in a running container</li>
+</ul></li>
+<li>start
+<ul>
+<li>start a stopped container</li>
+</ul></li>
+<li>stop
+<ul>
+<li>stop a running container</li>
+</ul></li>
+<li>attach
+<ul>
+<li>attach a tty to a running container</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="docker-run"><a href="#docker-run">docker run</a></h3>
+<p>Runs a command in a container keeping the container alive until the command exit</p>
+<pre><code>sudo docker run [flags] &lt;image[:version]&gt; &lt;hostcommand&gt;
+-t          : assign a pseudo terminal
+-i          : interactive connection    
+-P          : tells Docker to map any required network ports inside our container to a random port on the host.
+-p          : allows to map a container port to an host port, &lt;host_ip&gt;:&lt;host_port&gt;:&lt;container_port&gt; i.e. -p 5000:5000
+    -e, --env=[]: Set environment variables. I.e. -e POSTGRES_PASSWORD=postgres</code></pre>
+<h4 id="examples"><a href="#examples">Examples</a></h4>
+<p>Invoke /bin/echo and exit immediately</p>
+<pre><code>$ sudo docker run ubuntu:14.04 /bin/echo &#39;Hello world&#39;</code></pre>
+<p>Launch bash on a new container instance</p>
+<pre><code>$ sudo docker run -t -i ubuntu /bin/bash</code></pre>
+<p>Run a simple script in a deamonized docker</p>
+<pre><code>$sudo docker run -d ubuntu:14.04 /bin/sh -c &quot;while true; do echo hello world; sleep 1; done&quot;</code></pre>
+<h3 id="docker-ps"><a href="#docker-ps">docker ps</a></h3>
+<p>Prints info on docker containers, like ps for processes.</p>
+<pre><code>sudo docker ps [flags]
+
+-a  :   Shows stopped containers too
+-l  :   Shows last started container</code></pre>
+<h4 id="examples-1"><a href="#examples-1">Examples</a></h4>
+<p>Prints out the docker containers</p>
+<pre><code>sudo docker ps</code></pre>
+<h3 id="docker-logs"><a href="#docker-logs">docker logs</a></h3>
+<p>The docker logs command looks inside the container and returns its standard output</p>
+<pre><code>sudo docker logs &lt;instance_name&gt;
+
+-f  :   Keep on tailing, like tail -f</code></pre>
+<h4 id="examples-2"><a href="#examples-2">Examples</a></h4>
+<p>Prints out the stdout of the insane_babbage instance. You would run docker ps to discover the instance name.</p>
+<pre><code>$ sudo docker logs insane_babbage</code></pre>
+<h3 id="docker-version"><a href="#docker-version">docker version</a></h3>
+<p>Prints out info about the docker environment.</p>
+<pre><code>sudo docker version</code></pre>
+<h4 id="example"><a href="#example">Example</a></h4>
+<pre><code>$ sudo docker version
+Client version: 1.4.1
+Client API version: 1.16
+Go version (client): go1.3.3
+Git commit (client): 5bc2ff8
+OS/Arch (client): linux/amd64
+Server version: 1.4.1
+Server API version: 1.16
+Go version (server): go1.3.3
+Git commit (server): 5bc2ff8</code></pre>
+<h3 id="docker-port"><a href="#docker-port">docker port</a></h3>
+<p>Immediately show the port of the host that correspond to the port in docker</p>
+<pre><code>$ sudo docker port &lt;instance&gt; [port_in_docker]</code></pre>
+<h4 id="examples-3"><a href="#examples-3">Examples</a></h4>
+<p>Prints all the ports mapping for the “compassionate_heisenberg” instance. This means that to reach the service running on 5000/tcp on the container, you should connect on localhost:49153</p>
+<pre><code>$ sudo docker port compassionate_heisenberg
+5000/tcp -&gt; 0.0.0.0:49153</code></pre>
+<h3 id="docker-rm"><a href="#docker-rm">docker rm</a></h3>
+<p>Remove a container. Should be already stopped.</p>
+<pre><code>docker rm &lt;host&gt;</code></pre>
+<h3 id="docker-images"><a href="#docker-images">docker images</a></h3>
+<p>List images downloaded to the host</p>
+<pre><code>docker images</code></pre>
+<h3 id="help"><a href="#help">Help</a></h3>
+<p>Prints all docker commands.</p>
+<pre><code>docker</code></pre>
+<p>Prints help for the given command, if such command accept some params.</p>
+<pre><code>docker &lt;command&gt;</code></pre>
+<p>Prints help for the given command</p>
+<pre><code>docker &lt;command&gt; --help</code></pre>
+<h2 id="dockerfile-1"><a href="#dockerfile-1">Dockerfile</a></h2>
+<pre><code># comment
+&amp;lt;INSTRUCTION&amp;gt; &amp;lt;statement&amp;gt;</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">INSTRUCTION</th>
+<th align="left">SYNTAX</th>
+<th align="left">Support Env Substutution</th>
+<th align="left">Description</th>
+<th align="left">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FROM</td>
+<td align="left">FROM &lt;image&gt;[:&lt;tag&gt;]</td>
+<td align="left">No</td>
+<td align="left">Base image</td>
+<td align="left">FROM ubuntu:12.04</td>
+</tr>
+<tr class="even">
+<td align="left">MAINTAINER</td>
+<td align="left">MAINTAINER &lt;author&gt;</td>
+<td align="left">No</td>
+<td align="left">Image maintainer</td>
+<td align="left">MAINTAINER Kate Smith &lt;ksmith@example.com&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">RUN</td>
+<td align="left">RUN &lt;command&gt;</td>
+<td align="left">No</td>
+<td align="left">The command is run in a shell - /bin/sh -c - shell form. multiple ‘RUN’ lines could be used for complex provisioning</td>
+<td align="left">apt-get update &amp;&amp; apt-get install -y ruby ruby-dev</td>
+</tr>
+<tr class="even">
+<td align="left">RUN</td>
+<td align="left">RUN [“executable”,“param1”, “param2”]</td>
+<td align="left">No</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">CMD</td>
+<td align="left">CMD [“executable”,“param1”,“param2”]</td>
+<td align="left">No</td>
+<td align="left">The main purpose of a CMD is to provide defaults for an executing container.</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">CMD</td>
+<td align="left">CMD [“param1”,“param2”]</td>
+<td align="left">No</td>
+<td align="left">The main purpose of a CMD is to provide defaults for an executing container.</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">CMD</td>
+<td align="left">CMD command param1 param2</td>
+<td align="left">No</td>
+<td align="left">The main purpose of a CMD is to provide defaults for an executing container.</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">EXPOSE</td>
+<td align="left">EXPOSE &lt;port&gt; [&lt;port&gt;…]</td>
+<td align="left">Yes</td>
+<td align="left">The EXPOSE instructions informs Docker that the container will listen on the specified network ports at runtime.</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">ENV</td>
+<td align="left">ENV &lt;key&gt; &lt;value&gt;</td>
+<td align="left">Yes</td>
+<td align="left">Sets the environment variable &lt;key&gt; to the value &lt;value&gt;</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">ADD</td>
+<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Copies new files, directories or remote file URLs from &lt;src&gt; to path &lt;dest&gt;. If &lt;src&gt; is a compressed file it will be uncompressed.</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">COPY</td>
+<td align="left">COPY &lt;src&gt;… &lt;dest&gt;</td>
+<td align="left">Yes</td>
+<td align="left">copies new files or directories from &lt;src&gt; and adds them to the filesystem of the container at the path &lt;dest&gt;. &lt;src&gt; MUST not be outside The folder where Dokerfile is. If &lt;dest&gt; terminated with “/” it is considered a folder,otherwise it’s considered a file.</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">WORKDIR</td>
+<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">sets the working directory for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">VOLUME</td>
+<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Will create a mount point with the specified name and mark it as holding externally mounted volumes from native host or other containers</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">USER</td>
+<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Sets the user name or UID to use when running the image</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">ONBUILD</td>
+<td align="left"></td>
+<td align="left">No</td>
+<td align="left">Adds to the image a trigger instruction to be executed at a later time, when the image is used as the base for another build</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="dockerfile-template"><a href="#dockerfile-template">Dockerfile Template</a></h3>
+<pre><code>FROM debian:8.0
+MAINTAINER John Doe
+RUN cmd1
+RUN cmd2
+RUN cmd3
+EXPOSE 80</code></pre>
+<h2 id="install-on-ubuntu-14.04"><a href="#install-on-ubuntu-14.04">Install on Ubuntu 14.04</a></h2>
+<p>This is to set the docker repo in ubuntu</p>
+<pre><code>$ wget https://get.docker.com/ubuntu/ --output-document=./check-docker.sh
+$ chmod u+x check-docker.sh
+$ sudo ./check-docker.sh</code></pre>
+<p>This is to update Ubuntu</p>
+<pre><code>$ sudo apt-get update
+$ sudo apt-get -y install lxc-docker</code></pre>
+<p>This is to try Docker</p>
+<pre><code>$ sudo docker run -i -t ubuntu /bin/bash</code></pre>
+<p>If it works well it should output something like that.</p>
+<pre><code>$ sudo docker run -i -t ubuntu /bin/bash
+Unable to find image &#39;ubuntu:latest&#39; locally
+ubuntu:latest: The image you are pulling has been verified
+511136ea3c5a: Pull complete 
+3b363fd9d7da: Pull complete 
+607c5d1cca71: Pull complete 
+f62feddc05dc: Pull complete 
+8eaa4ff06b53: Pull complete 
+Status: Downloaded newer image for ubuntu:latest
+root@953fa5507b96:/#</code></pre>
+<p>Try a couple of commands and exit.</p>
+<pre><code>root@953fa5507b96:/# whoami
+root
+root@953fa5507b96:/# hostname
+953fa5507b96
+root@953fa5507b96:/# exit</code></pre>
+<p>To avoid using “sudo” there’s a special user group available.</p>
+<pre><code># Add the docker group if it doesn&#39;t already exist.
+$ sudo groupadd docker
+
+# Add the connected user &quot;${USER}&quot; to the docker group.
+# You may have to logout and log back in again.
+$ sudo gpasswd -a ${USER} docker
+
+# Restart the Docker daemon.
+# If you are in Ubuntu 14.04, use docker.io instead of docker
+$ sudo service docker restart
+$ sudo service docker.io restart</code></pre>
+<h2 id="container-private-data"><a href="#container-private-data">Container private data</a></h2>
+<h4 id="goal"><a href="#goal">Goal</a></h4>
+<p>To show where a container puts its private data</p>
+<h4 id="instructions"><a href="#instructions">Instructions</a></h4>
+<p>Just check what is inside Docker’s system directories</p>
+<pre><code>$ sudo tree -L 3 /var/lib/docker/containers; \
+sudo tree -L 3 /var/lib/docker/volumes; \
+sudo tree -L 3 /var/lib/docker/vfs </code></pre>
+<p>The result depends on if and how you previously run docker. This time on my machine the folders are empty.</p>
+<pre><code>/var/lib/docker/containers
+
+0 directories, 0 files
+/var/lib/docker/volumes
+
+0 directories, 0 files
+/var/lib/docker/vfs
+bb b  dir
+
+1 directory, 0 files</code></pre>
+<p>Run a postgres instance with</p>
+<pre><code>docker run --rm --name mypg -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD=pwd postgres:9.4.0</code></pre>
+<p>While container is running check again for the folders.</p>
+<pre><code>/var/lib/docker/containers
+bb b  6e556aa9af283a15f0960352bf4277eec74722d03a3aca37722e9976145589c0
+    bb b  6e556aa9af283a15f0960352bf4277eec74722d03a3aca37722e9976145589c0-json.log
+    bb b  config.json
+    bb b  hostconfig.json
+    bb b  hostname
+    bb b  hosts
+    bb b  resolv.conf
+
+1 directory, 6 files
+/var/lib/docker/volumes
+bb b  605d94e8be0d21fb3b8816b2dcf10dcc714ccb90f1d964f1c75bc9dc322c608d
+    bb b  config.json
+
+1 directory, 1 file
+/var/lib/docker/vfs
+bb b  dir
+    bb b  605d94e8be0d21fb3b8816b2dcf10dcc714ccb90f1d964f1c75bc9dc322c608d
+    bb b  base
+    bb b  global
+    bb b  pg_clog
+    bb b  pg_dynshmem
+    bb b  pg_hba.conf
+    bb b  pg_ident.conf
+    bb b  pg_logical
+    bb b  pg_multixact
+    bb b  pg_notify
+    bb b  pg_replslot
+    bb b  pg_serial
+    bb b  pg_snapshots
+    bb b  pg_stat
+    bb b  pg_stat_tmp
+    bb b  pg_subtrans
+    bb b  pg_tblspc
+    bb b  pg_twophase
+    bb b  PG_VERSION
+    bb b  pg_xlog
+    bb b  postgresql.auto.conf
+    bb b  postgresql.conf
+    bb b  postmaster.opts
+    bb b  postmaster.pid</code></pre>
+<p>Stop the container <CTRL+C></p>
+<p>Check again in the folders.</p>
+<pre><code>/var/lib/docker/containers
+
+0 directories, 0 files
+/var/lib/docker/volumes
+
+0 directories, 0 files
+/var/lib/docker/vfs
+bb b  dir
+
+1 directory, 0 files</code></pre>
+<h4 id="conclusion"><a href="#conclusion">Conclusion</a></h4>
+<p>run –rm allows to play around with a container removing all its data when it terminates.</p>
+<h3 id="running-an-ephemereal-postgres-db"><a href="#running-an-ephemereal-postgres-db">Running an ephemereal Postgres DB</a></h3>
+<p><em>or… What it means for containers to be ephemereal</em></p>
+<h4 id="goal-1"><a href="#goal-1">Goal</a></h4>
+<p>To show what are the implications for containers to be ephemeral</p>
+<h4 id="instructions-1"><a href="#instructions-1">Instructions</a></h4>
+<p>Start a Postgres instance with</p>
+<pre><code>$ docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=pwd postgres:9.4.0</code></pre>
+<p>Docker outputs the new container id</p>
+<pre><code>9b204a60da31a39dc1cb6b4ad944aa75ecb53e6bd069dfe726e604bf3ec37715</code></pre>
+<p>Check the IP of the new container. You can use the first 12 chars as name.</p>
+<pre><code>$ docker inspect 9b204a60da31 | grep -i ipaddress
+&quot;IPAddress&quot;: &quot;172.17.0.11&quot;,</code></pre>
+<p>Connect to the DB with a new container that runs plsql</p>
+<pre><code>$ docker run -ti --rm mine/psql:0.1 psql -h 172.17.0.11 -p 5432 -U postgres postgres</code></pre>
+<p>a client and execute…</p>
+<pre><code>postgres=# create table people (name varchar(128));
+postgres=# insert into People(name) values(&#39;susie&#39;),(&#39;vivianne&#39;),(&#39;axelle&#39;);
+postgres=# select * from people;</code></pre>
+<p>The SELECT returns the expected values.</p>
+<p>Stop the postgres container</p>
+<pre><code>$ docker stop 9b204a60da31</code></pre>
+<h4 id="conclusions"><a href="#conclusions">Conclusions</a></h4>
+<p>Now, repeat the process and you’ll find that the modifications on the Db have not been kept. This is because run always create a new container. If you to restart the same container with restart, it will start at different address, but the data will still be there. Data are actually removed in only two ways:</p>
+<ul>
+<li>docker run –rm
+<ul>
+<li>when the container exits</li>
+</ul></li>
+<li>docker rm -v <container></li>
+</ul>
+<h2 id="examples-build-an-image-step-by-step"><a href="#examples-build-an-image-step-by-step">Examples: Build An Image Step By Step</a></h2>
+<p><em>or How you can create a reusable Docker image</em></p>
+<h4 id="goal-2"><a href="#goal-2">Goal</a></h4>
+<p>To create an image performing common operations.</p>
+<h4 id="instructions-2"><a href="#instructions-2">Instructions</a></h4>
+<p>The goal is to build a dockerized image of postgresql-client, the CLI Postgres client, that will allow us to interact with a container running postgres.</p>
+<p>Let’s start a container based on ubuntu</p>
+<pre><code>$ docker run -it ubuntu:14.04 </code></pre>
+<p>Once inside the container let’s check psql is not installed.</p>
+<pre><code># psql -V</code></pre>
+<p>let’s run apt-get. We don’t need to use sudo becasue we’re root.</p>
+<pre><code># apt-get install postgresql-client</code></pre>
+<p>psql is now available</p>
+<pre><code># psql -V</code></pre>
+<p>exit form the container</p>
+<pre><code># exit</code></pre>
+<p>check the name of the container</p>
+<pre><code># docker ps -a</code></pre>
+<p>in my case the name is “focused_mccharty”</p>
+<pre><code>$ docker commit -m=&quot;Added psql&quot; -a=&quot;Daniele&quot; focused_mccharty mine/psql:0.1</code></pre>
+<p>check that the new image is available</p>
+<pre><code>$ docker images</code></pre>
+<p>try to run a temprary container running psql with</p>
+<pre><code>$ docker run -ti --rm mine/psql:0.1</code></pre>
+<p>you will be able to run that whenever you want without the need to reintall psql</p>
+<h4 id="conclusion-1"><a href="#conclusion-1">Conclusion</a></h4>
+<p>Images are a good way to have a reproducibile, disposable application based on a container.</p>
+<h3 id="running-an-persistent-postgres-db"><a href="#running-an-persistent-postgres-db">Running an persistent Postgres DB</a></h3>
+<p><em>or… How do I separate the life of data folder from life of containers?</em></p>
+<h4 id="goal-3"><a href="#goal-3">Goal</a></h4>
+<p>Understand how one can remove container keeping its data. Or for instance keep the database data and upgrade from postgres 9:3 to postgres 9:4.</p>
+<h4 id="instrutions"><a href="#instrutions">Instrutions</a></h4>
+<p>If you check the <em>postgres</em> Image <a href="https://registry.hub.docker.com/_/postgres/">instructions</a> you will see that the image has been configured to store data in <em>/var/lib/postgresql/data/</em>.</p>
+<p>If you check with</p>
+<pre><code>$ docker inspect &lt;postgresql-container&gt;  | grep -n 3 -i volumes </code></pre>
+<p>you will see that postgres defines this volume…</p>
+<pre><code>&quot;Volumes&quot;: {
+    &quot;/var/lib/postgresql/data&quot;: &quot;/var/lib/docker/vfs/dir/130b32b8a5187509c4764238a7d7b962f924ba4d52bcbaadca91f994ec30081d&quot;
+},
+&quot;VolumesRW&quot;: {
+    &quot;/var/lib/postgresql/data&quot;: true
+}</code></pre>
+<p>So, that means postgres allows its folder <em>/var/lib/postgresql/data</em> to be <em>imported</em> into another container. Create container that immediately terminates.</p>
+<pre><code>docker run --name &quot;dbdata&quot; -v /dbdata postgres:9.4.0 true</code></pre>
+<p>Run a postgres instance with</p>
+<pre><code>docker run --rm --volumes-from dbdata --name mypg -p 5432:5432 -e POSTGRES_PASSWORD=pwd postgres:9.4.0</code></pre>
+<h4 id="conclusions-1"><a href="#conclusions-1">Conclusions</a></h4>
+<p>Container <em>mypg</em> will import <em>/var/lib/postgresql/data</em> from <em>dbdata</em> into its filesystem. There is a name conflict but imported volumes take precedence on local filesystem entries. This way data are kept into the “data” container and it is possible to upgrade the container.</p>
+<h3 id="a-tomcat-based-image"><a href="#a-tomcat-based-image">A Tomcat Based Image</a></h3>
+<h4 id="or-how-do-i-build-an-image-running-tomcat"><a href="#or-how-do-i-build-an-image-running-tomcat">or How do I build an Image running Tomcat ?</a></h4>
+<h4 id="goal-4"><a href="#goal-4">Goal</a></h4>
+<p>To show how can you leverage prebuilt Images to setup an application differently</p>
+<h4 id="instructions-3"><a href="#instructions-3">Instructions</a></h4>
+<p>First of all, let’s decide which base image we would like to use.</p>
+<pre><code>$ docker search tomcat</code></pre>
+<p>That gives this list.</p>
+<pre><code>NAME                                  DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+tomcat                                Apache Tomcat is an open source implementa...   42        [OK]       
+tutum/tomcat                          Tomcat image - listens in port 8080. For t...   37                   [OK]
+consol/tomcat-7.0                     Tomcat 7.0.57, 8080, &quot;admin/admin&quot;              11                   [OK]
+jeanblanchard/busybox-tomcat          Minimal Docker image with Apache Tomcat         8                    [OK]
+...</code></pre>
+<p>Let’s go for the ‘tomcat’ machine. Let’s try to run it just to check what it does…</p>
+<pre><code>$ docker run --rm --name=&quot;tmc1&quot; -P tomcat
+517108c9e06988da99e0ae11d3028bc1fd1cbbfc2ef091d63a531104af232be2</code></pre>
+<p>Ler’s tetrieve some info using ps</p>
+<pre><code>$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                     NAMES
+517108c9e069        tomcat:latest       &quot;catalina.sh run&quot;   3 minutes ago       Up About a minute   0.0.0.0:49155-&gt;8080/tcp   tmc1 </code></pre>
+<p>Let’s start a browser to localhost:49155, it works!</p>
+<p>Now, time to fix things. Let’s stop the container. What there is inside ?</p>
+<pre><code>$ sudo docker attach tmc1 # by Name
+$ sudo docker attach 665b4a1e17b6 # by ID
+$ sudo docker exec -i -t tmc1 bash # by Name
+$ sudo docker exec -i -t 517108c9e069 bash # by ID</code></pre>
+<p>If we check…</p>
+<pre><code># cat /usr/local/tomcat/conf/tomcat-users.xml | grep -n3 rolename </code></pre>
+<p>We’ll discover that the users are commented out. So, our first goal is to create an image that enable access to the manager app.</p>
+<p>Let’s copy a file out of the container filesystem into the local filesystem.</p>
+<pre><code>$ docker cp tmc1:/usr/local/tomcat/conf/tomcat-users.xml .</code></pre>
+<p>No we can edit in in the host.</p>
+<pre><code>$ vi tomcat-users.xml</code></pre>
+<p>Let’s add the usual config to make the app available</p>
+<pre><code>&lt;role rolename=&quot;manager-gui&quot;/&gt;
+&lt;user username=&quot;admin&quot; password=&quot;admin&quot; roles=&quot;manager-gui&quot; /&gt;</code></pre>
+<p>Let’s start up defining our machines using the Dockerfile.</p>
+<pre><code>$ touch Dockerfile</code></pre>
+<p>Let’s start with the basic info…</p>
+<pre><code>FROM tomcat
+MAINTAINER Daniele Demichelis &lt;demichelis@danidemi.com&gt;</code></pre>
+<p>And let’s modify Dockerfile to copy the file</p>
+<pre><code>FROM tomcat
+MAINTAINER Daniele Demichelis &lt;demichelis@danidemi.com&gt;
+COPY tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml</code></pre>
+<p>Now, let’s stop the container, remove it and recreate it from the Dockerfile using “build”.</p>
+<pre><code>$ docker stop tmc1
+$ docker rm tmc1
+$ docker build -t=&quot;myself/mytomcat:0.1&quot; .
+Sending build context to Docker daemon 18.43 kB
+Sending build context to Docker daemon 
+Step 0 : FROM tomcat
+ ---&gt; fe982f1618dd
+Step 1 : MAINTAINER Daniele Demichelis &lt;demichelis@danidemi.com&gt;
+ ---&gt; Using cache
+ ---&gt; 71a1241dc62e
+Step 2 : COPY tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
+ ---&gt; 1402edcdb559
+Removing intermediate container be629f6c350e
+Successfully built 1402edcdb559
+$ docker create -P --name=&quot;tmc1&quot; myself/mytomcat:0.1 </code></pre>
+<h3 id="a-web-app"><a href="#a-web-app">A Web app</a></h3>
+<h4 id="or-how-do-i-dockerize-my-own-java-web-app"><a href="#or-how-do-i-dockerize-my-own-java-web-app">or How do I dockerize my own Java web app ?</a></h4>
+<h4 id="goal-5"><a href="#goal-5">Goal</a></h4>
+<p>Shows how a JEE app can be dockerized.</p>
+<h4 id="instructions-4"><a href="#instructions-4">Instructions</a></h4>
+<p>Creates a postgres container</p>
+<pre><code>$ docker run -d --name=&quot;itemsapp_db&quot; postgres</code></pre>
+<p>Check how the environment in a linking container is set</p>
+<pre><code>$ docker run --rm --name=&quot;itemsapp&quot; --link itemsapp_db:db &quot;myself/mytomcat:0.1&quot; env
+
+PATH=/usr/local/tomcat/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=fa3f9b73e652
+DB_PORT=tcp://172.17.0.3:5432
+DB_PORT_5432_TCP=tcp://172.17.0.3:5432
+DB_PORT_5432_TCP_ADDR=172.17.0.3
+DB_PORT_5432_TCP_PORT=5432
+DB_PORT_5432_TCP_PROTO=tcp
+DB_NAME=/itemsapp/db
+DB_ENV_LANG=en_US.utf8
+DB_ENV_PG_MAJOR=9.4
+DB_ENV_PG_VERSION=9.4.0-1.pgdg70+1
+DB_ENV_PGDATA=/var/lib/postgresql/data
+JAVA_VERSION=7u71
+JAVA_DEBIAN_VERSION=7u71-2.5.3-2
+CATALINA_HOME=/usr/local/tomcat
+TOMCAT_MAJOR=8
+TOMCAT_VERSION=8.0.15
+TOMCAT_TGZ_URL=https://www.apache.org/dist/tomcat/tomcat-8/v8.0.15/bin/apache-tomcat-8.0.15.tar.gz
+HOME=/root</code></pre>
+<p>Check how the hosts file is set</p>
+<pre><code>$ docker run --rm --name=&quot;itemsapp&quot; --link itemsapp_db:db &quot;myself/mytomcat:0.1&quot; cat /etc/hosts</code></pre>
+<p>Creates an app container</p>
+<pre><code>$ docker run -d -P --name=&quot;itemsapp&quot; --link itemsapp_db:db &quot;myself/mytomcat:0.1&quot;</code></pre>
+<h2 id="references"><a href="#references">References</a></h2>
+<p><a href="https://docs.docker.com/installation/ubuntulinux/">https://docs.docker.com/installation/ubuntulinux/</a></p>
+<p><a href="https://docs.docker.com/userguide/dockerimages/">https://docs.docker.com/userguide/dockerimages/</a></p>
+<p><a href="https://docs.docker.com/reference/builder/">https://docs.docker.com/reference/builder/</a></p>
+<p><a href="https://devopsu.com/blog/docker-misconceptions/">https://devopsu.com/blog/docker-misconceptions/</a></p>
+<p><a href="http://askubuntu.com/questions/505506/docker-how-to-get-bash-ssh-inside-runned-container-run-d">http://askubuntu.com/questions/505506/docker-how-to-get-bash-ssh-inside-runned-container-run-d</a></p>
+<p><a href="http://www.mulesoft.com/tcat/tomcat-clustering">http://www.mulesoft.com/tcat/tomcat-clustering</a></p>
+<p><a href="http://crosbymichael.com/dockerfile-best-practices.html">http://crosbymichael.com/dockerfile-best-practices.html</a></p>
+<p><a href="https://bryantsai.com/db2-on-docker/">https://bryantsai.com/db2-on-docker/</a></p>
+<p><a href="http://zeroturnaround.com/rebellabs/docker-for-java-developers-how-to-sandbox-your-app-in-a-clean-environment/">http://zeroturnaround.com/rebellabs/docker-for-java-developers-how-to-sandbox-your-app-in-a-clean-environment/</a></p>
+<p><a href="https://blog.codecentric.de/en/2014/02/docker-registry-run-private-docker-image-repository/">https://blog.codecentric.de/en/2014/02/docker-registry-run-private-docker-image-repository/</a></p>
+<p><a href="http://www.offermann.us/2013/12/tiny-docker-pieces-loosely-joined.html">http://www.offermann.us/2013/12/tiny-docker-pieces-loosely-joined.html</a></p>
+<p><a href="http://www.tech-d.net/2014/11/18/data-only-container-madness/">http://www.tech-d.net/2014/11/18/data-only-container-madness/</a></p>
+<p><a href="https://www.martinvanbeurden.nl/blog/cleaning-up-after-docker/">https://www.martinvanbeurden.nl/blog/cleaning-up-after-docker/</a></p>
+</body>
+</html>
