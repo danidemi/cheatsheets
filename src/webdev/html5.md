@@ -14,3 +14,11 @@
 	</body>
 </html>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## CSS Link
+
+~~~~~~~ {#css-link .html .numberLines}
+<head>
+	<link rel="stylesheet" type="text/css" href="theme.css">
+</head> 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

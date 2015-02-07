@@ -1,4 +1,9 @@
-#!/bin/bash -x
+#!/bin/bash +x
+
+# You need these to build it...
+# sudo apt-get install pandoc
+# sudo apt-get install graphviz
+# sudo apt-get install imagemagik
 
 function list(){
 	local LINE=""
@@ -152,19 +157,23 @@ function build_clean(){
 	rm -rf build/*
 }
 
-# You need these to build it...
-# sudo apt-get install pandoc
-# sudo apt-get install graphviz
-# sudo apt-get install imagemagik
 
 mkdir -p build
 
 build_clean
+build_epub "html-full.index" full
 build_html "html-full.index" full
 build_epub "docker.index" docker
 build_html "docker.index" docker
 build_epub "maven.index" maven
 build_html "maven.index" maven
+
+mkdir -p website
+mv ./build/full ./website/full
+mv ./build/docker ./website/docker
+mv ./build/maven ./website/maven
+
+
 	
 # references
 # http://www.fmwconcepts.com/imagemagick/tidbits/image.php#resize
