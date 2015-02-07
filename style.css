@@ -1,0 +1,45 @@
+BODY {
+  background-color: white;
+}
+
+A {
+  border: 0;
+}
+
+.icon {
+  width: 2.5em;
+}
+
+.icon > img {
+  width: inherit;
+}
+
+.intro {
+  margin: 1em;
+}
+
+.intro > P {
+  border:0;
+  background: lightgreen;
+  margin: 1em;
+  padding: 1em;
+  color: darkblue;
+  margin: 0em;
+  padding: 0.2em;
+}
+
+.book {
+  border-style: dashed;
+  border-color: orange;
+  padding: 0.2em;
+  margin: 1em;
+}
+
+.title {
+  font-size: xx-large;
+  display: inline;
+}
+
+.abstract {
+  font-style: italic;
+}
