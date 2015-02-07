@@ -1,5 +1,14 @@
 # CSS Cheat Sheet
 
+## Syntax
+
+~~~~~~~~~~~~~~~~~~~~~~~~~ {#syntax}
+<selector> {
+  <property>:<value>;
+  <property>:<value>;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## Selectors
 \.class     
 css 1
