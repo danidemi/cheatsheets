@@ -1,0 +1,2505 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+  <link rel="stylesheet" href="pandoc.css" type="text/css" />
+</head>
+<body>
+<div id="TOC">
+<ul>
+<li><a href="#preface">Preface</a></li>
+<li><a href="#spring-social-cheat-sheet">Spring Social Cheat Sheet</a><ul>
+<li><a href="#big-picture">Big Picture</a></li>
+<li><a href="#architecture">Architecture</a><ul>
+<li><a href="#serviceprovider">ServiceProvider</a></li>
+<li><a href="#connection">Connection<ServiceProvider></a></li>
+<li><a href="#connectionkey">ConnectionKey</a></li>
+<li><a href="#authorization-protocol-concept">Authorization Protocol (Concept)</a></li>
+<li><a href="#authorization-scope-concept">Authorization Scope (Concept)</a></li>
+<li><a href="#connectionfactory">ConnectionFactory</a></li>
+<li><a href="#oauth2connectionfactory-connectionfactory">OAuth2ConnectionFactory &lt; ConnectionFactory</a></li>
+<li><a href="#oauth1connectionfactory-connectionfactory">OAuth1ConnectionFactory &lt; ConnectionFactory</a></li>
+<li><a href="#facebookconnectionfactory-oauth2connectionfactory-connectionfactory">FacebookConnectionFactory &lt; OAuth2ConnectionFactory &lt; ConnectionFactory</a></li>
+<li><a href="#connectionfactorylocator">ConnectionFactoryLocator</a></li>
+<li><a href="#connectionfactory-getconnectionfactorystring-providerid">ConnectionFactory&lt;?&gt; getConnectionFactory(String providerId);</a></li>
+<li><a href="#connectionrepository">ConnectionRepository</a></li>
+<li><a href="#usersconnectionrepository">UsersConnectionRepository</a></li>
+<li><a href="#jdbcusersconnectionrepository-usersconnectionrepository">JdbcUsersConnectionRepository &lt; UsersConnectionRepository</a></li>
+<li><a href="#connectcontroller">ConnectController</a></li>
+<li><a href="#useridsource">UserIdSource</a></li>
+<li><a href="#authenticationnameuseridsource-useridsource">AuthenticationNameUserIdSource &lt; UserIdSource</a></li>
+<li><a href="#connectinterceptor">ConnectInterceptor</a></li>
+<li><a href="#socialauthenticationfilter">SocialAuthenticationFilter</a></li>
+<li><a href="#socialuserdetailsservice">SocialUserDetailsService</a></li>
+<li><a href="#socialuserdetails-userdetails-from-spring-security">SocialUserDetails &lt; UserDetails (from Spring Security)</a></li>
+</ul></li>
+<li><a href="#sign-in">Sign In</a><ul>
+<li><a href="#flows">Flows</a></li>
+</ul></li>
+<li><a href="#implicit-signup">Implicit SignUp</a></li>
+<li><a href="#connection-1">Connection</a><ul>
+<li><a href="#flows-1">Flows</a></li>
+</ul></li>
+<li><a href="#set-up">Set Up</a><ul>
+<li><a href="#maven">Maven</a></li>
+</ul></li>
+<li><a href="#database">Database</a></li>
+<li><a href="#needed-customization">Needed Customization</a></li>
+</ul></li>
+<li><a href="#html5-cheat-sheet">HTML(5) Cheat Sheet</a><ul>
+<li><a href="#prelude">Prelude</a></li>
+<li><a href="#css-link">CSS Link</a></li>
+</ul></li>
+<li><a href="#css-cheat-sheet">CSS Cheat Sheet</a><ul>
+<li><a href="#syntax">Syntax</a></li>
+<li><a href="#selectors">Selectors</a></li>
+</ul></li>
+<li><a href="#placing-objects">Placing Objects</a><ul>
+<li><a href="#fixed-position">Fixed Position</a><ul>
+<li><a href="#center-a-table">Center a Table</a></li>
+</ul></li>
+<li><a href="#tables">Tables</a><ul>
+<li><a href="#remove-table-borders">Remove Table Borders</a></li>
+</ul></li>
+<li><a href="#pictures">Pictures</a></li>
+</ul></li>
+<li><a href="#networking-cheat-sheet">Networking Cheat Sheet</a></li>
+<li><a href="#docker">Docker</a><ul>
+<li><a href="#big-picture-1">Big Picture</a><ul>
+<li><a href="#docker-engine">Docker Engine</a></li>
+<li><a href="#docker-hub">Docker Hub</a></li>
+<li><a href="#trusted-automated-builds">Trusted / Automated Builds</a></li>
+</ul></li>
+<li><a href="#closer-look">Closer Look</a><ul>
+<li><a href="#docker-engine-1">Docker Engine</a></li>
+<li><a href="#images">Images</a></li>
+<li><a href="#networking">Networking</a></li>
+<li><a href="#container-linking">Container Linking</a></li>
+<li><a href="#volumes">Volumes</a></li>
+</ul></li>
+<li><a href="#best-practices-pattern">Best practices &amp; pattern</a><ul>
+<li><a href="#general">General</a></li>
+<li><a href="#images-1">Images</a></li>
+<li><a href="#dockerfile">Dockerfile</a></li>
+<li><a href="#dockerized-app">Dockerized App</a></li>
+</ul></li>
+<li><a href="#docker-cli">Docker CLI</a><ul>
+<li><a href="#docker-run">docker run</a></li>
+<li><a href="#docker-ps">docker ps</a></li>
+<li><a href="#docker-logs">docker logs</a></li>
+<li><a href="#docker-version">docker version</a></li>
+<li><a href="#docker-port">docker port</a></li>
+<li><a href="#docker-rm">docker rm</a></li>
+<li><a href="#docker-images">docker images</a></li>
+<li><a href="#help">Help</a></li>
+</ul></li>
+<li><a href="#dockerfile-1">Dockerfile</a><ul>
+<li><a href="#dockerfile-template">Dockerfile Template</a></li>
+</ul></li>
+<li><a href="#install-on-ubuntu-14.04">Install on Ubuntu 14.04</a></li>
+<li><a href="#container-private-data">Container private data</a><ul>
+<li><a href="#running-an-ephemereal-postgres-db">Running an ephemereal Postgres DB</a></li>
+</ul></li>
+<li><a href="#examples-build-an-image-step-by-step">Examples: Build An Image Step By Step</a><ul>
+<li><a href="#running-an-persistent-postgres-db">Running an persistent Postgres DB</a></li>
+<li><a href="#a-tomcat-based-image">A Tomcat Based Image</a></li>
+<li><a href="#a-web-app">A Web app</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+<li><a href="#packer">Packer</a><ul>
+<li><a href="#big-picture-2">Big Picture</a><ul>
+<li><a href="#template">Template</a></li>
+<li><a href="#provisioner">Provisioner</a></li>
+<li><a href="#builder">Builder</a></li>
+</ul></li>
+<li><a href="#template-1">Template</a></li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#commands">Commands</a></li>
+<li><a href="#builders">Builders</a></li>
+<li><a href="#examples-4">Examples</a><ul>
+<li><a href="#a-wordpress-machine">A Wordpress Machine</a></li>
+</ul></li>
+<li><a href="#problems">Problems</a></li>
+</ul></li>
+<li><a href="#maven-cheat-sheet">Maven Cheat Sheet</a></li>
+<li><a href="#command-line">Command Line</a></li>
+<li><a href="#maven-cheat-sheet-1">Maven Cheat Sheet</a><ul>
+<li><a href="#standard-layout">Standard Layout</a></li>
+<li><a href="#meta-inf">META-INF</a></li>
+<li><a href="#phases">Phases</a><ul>
+<li><a href="#clean-lifecycle">Clean Lifecycle</a></li>
+<li><a href="#default-lifecycle">Default Lifecycle</a></li>
+<li><a href="#site-lifecycle">Site Lifecycle</a></li>
+</ul></li>
+<li><a href="#dependencies">Dependencies</a><ul>
+<li><a href="#package-versions">Package Versions</a></li>
+<li><a href="#available-up-to-maven-2.x">Available up to Maven 2.x</a></li>
+<li><a href="#declare">Declare</a></li>
+<li><a href="#list-all">List All</a></li>
+</ul></li>
+<li><a href="#list-tree">List Tree</a></li>
+</ul></li>
+<li><a href="#configurations">Configurations</a><ul>
+<li><a href="#network-timeouts">Network Timeouts</a></li>
+<li><a href="#plugins">Plugins</a><ul>
+<li><a href="#general-properties">General Properties</a></li>
+<li><a href="#project.build.sourceencoding">project.build.sourceEncoding</a></li>
+<li><a href="#compiler-plugin">Compiler Plugin</a></li>
+<li><a href="#archetype-plugin">Archetype Plugin</a></li>
+<li><a href="#help-plugin">Help Plugin</a></li>
+<li><a href="#versions-plugin">Versions Plugin</a></li>
+<li><a href="#assembly-plugin">Assembly Plugin</a></li>
+<li><a href="#descriptor">Descriptor</a></li>
+<li><a href="#site-plugin">Site Plugin</a></li>
+<li><a href="#javadoc-plugin">Javadoc Plugin</a></li>
+<li><a href="#jdk-8-old-projects">JDK 8, old projects</a></li>
+</ul></li>
+<li><a href="#profiles">Profiles</a><ul>
+<li><a href="#active-profile">Active Profile</a></li>
+</ul></li>
+<li><a href="#default-profile-and-resources">Default Profile And Resources</a></li>
+<li><a href="#references-3">References</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="preface"><a href="#preface">Preface</a></h1>
+<p>This book aims to be a quick reference for programmers. Its goal is not to explain each technology, but instead to be a quick reference card.</p>
+<p>For each argument, these are the points that are discussed.</p>
+<ul>
+<li>Big Picture
+<ul>
+<li>Here a brief explanation of the reasons why the technology is important is given. This section gives the programmer the minimum knowledge to sustain a chat about the argument. Questions like the following ones are answered in this section.
+<ul>
+<li>What the hell is that ?</li>
+<li>What it is needed for ?</li>
+<li>What can I do with that ?</li>
+<li>Why should I be aware of that ?</li>
+</ul></li>
+</ul></li>
+<li>Main Concepts
+<ul>
+<li>Each technology has its core concepts you should understand to properly use it.</li>
+</ul></li>
+<li>Set Up
+<ul>
+<li>A brief explanation about how you can install the technology. Not all the main ways you can install it are covered. But at least we try to give you a simple way you can start with.</li>
+</ul></li>
+<li>Problems And Solutions
+<ul>
+<li>If there are typical problems a programmer is going to face while she start with the new technology, we try to address them in this section, along with the possible answers.</li>
+</ul></li>
+<li>Examples
+<ul>
+<li>Short examples about how to use the technology.</li>
+</ul></li>
+</ul>
+<p>Happy reading.</p>
+<h1 id="spring-social-cheat-sheet"><a href="#spring-social-cheat-sheet">Spring Social Cheat Sheet</a></h1>
+<h2 id="big-picture"><a href="#big-picture">Big Picture</a></h2>
+<ul>
+<li>Social Integration
+<ul>
+<li>Facebook is the service provider</li>
+<li>the movie club application is the service consumer</li>
+<li>Paul is the user of both</li>
+</ul></li>
+<li>Social integration is a three-way conversation between
+<ul>
+<li>a service provider (i.e. Facebook)</li>
+<li>a service consumer (i.e. Movie Forum)</li>
+<li>a user who holds an account on both the provider and consumer (i.e. Paul)</li>
+</ul></li>
+<li>Spring Social
+<ul>
+<li>Connect Framework that handles the core authorization and connection flow with service providers</li>
+<li>Connect Controller that handles the OAuth exchange between a service provider, consumer, and user in a web application environment</li>
+<li>A Signin Controller that allows users to authenticate with your application by signing in with their Provider accounts, such as their Twitter or Facebook accounts.</li>
+</ul></li>
+<li>Provider-based authentication
+<ul>
+<li>The user signs into (or may already be signed into) his or her provider account.</li>
+<li>The application then tries to match that provider account to a local user account.
+<ul>
+<li>If a match is found, the user is automatically signed into the application.</li>
+</ul></li>
+</ul></li>
+<li>Authentication
+<ul>
+<li>ProviderSignInController (if one doesn’t use Spring Security)</li>
+<li>SocialAuthenticationFilter (if one use Spring Security)</li>
+</ul></li>
+</ul>
+<h2 id="architecture"><a href="#architecture">Architecture</a></h2>
+<ul>
+<li>The spring-social-core module includes a Service Provider Connect Framework
+<ul>
+<li>establish connections between local user accounts and accounts those users have with external service providers</li>
+<li>Once a connection is established, it can be be used to obtain a strongly-typed Java binding to the ServiceProvider’s API, giving your application the ability to invoke the API on behalf of a user</li>
+</ul></li>
+</ul>
+<h3 id="serviceprovider"><a href="#serviceprovider">ServiceProvider</a></h3>
+<p>Object that wraps the API of the provider, i.e. Facebook API, Twitter API, etc…</p>
+<h3 id="connection"><a href="#connection">Connection<ServiceProvider></a></h3>
+<p>interface models a connection to an external service provider such as Facebook methods as</p>
+<pre class="sourceCode java"><code class="sourceCode java">ConnectionKey <span class="fu">getKey</span>();
+String <span class="fu">getDisplayName</span>();
+String <span class="fu">getProfileUrl</span>();
+String <span class="fu">getImageUrl</span>();
+<span class="dt">void</span> <span class="fu">sync</span>(); =&gt; Updates the profile
+<span class="dt">boolean</span> <span class="fu">test</span>();
+<span class="dt">boolean</span> <span class="fu">hasExpired</span>();
+&lt;ServiceProvider&gt; <span class="fu">getApi</span>(); <span class="co">// Api for the ServiceProvider</span>
+ConnectionData <span class="fu">createData</span>(); <span class="co">// returns a storable representation of this connection</span></code></pre>
+<h3 id="connectionkey"><a href="#connectionkey">ConnectionKey</a></h3>
+<p>Uniquely identifies the connection</p>
+<h3 id="authorization-protocol-concept"><a href="#authorization-protocol-concept">Authorization Protocol (Concept)</a></h3>
+<p>Not a class, just a concept.</p>
+<p><em>The ways a ServiceProvider authorize a user: </em> OAuth * OAuth2 * etc…</p>
+<h3 id="authorization-scope-concept"><a href="#authorization-scope-concept">Authorization Scope (Concept)</a></h3>
+<p>Not a class, just a concept.</p>
+<p>What a Service Consumer wants to do</p>
+<ul>
+<li>Post messages on the user’s wall</li>
+<li>update statuses</li>
+<li>etc…</li>
+</ul>
+<h3 id="connectionfactory"><a href="#connectionfactory">ConnectionFactory</a></h3>
+<p>Encapsulates the construction of connections that use a specific authorization protocol</p>
+<h3 id="oauth2connectionfactory-connectionfactory"><a href="#oauth2connectionfactory-connectionfactory">OAuth2ConnectionFactory &lt; ConnectionFactory</a></h3>
+<p>Connection Factory for OAuth2 based connections.</p>
+<h3 id="oauth1connectionfactory-connectionfactory"><a href="#oauth1connectionfactory-connectionfactory">OAuth1ConnectionFactory &lt; ConnectionFactory</a></h3>
+<p>Connection Factory for OAuth1 based connections.</p>
+<h3 id="facebookconnectionfactory-oauth2connectionfactory-connectionfactory"><a href="#facebookconnectionfactory-oauth2connectionfactory-connectionfactory">FacebookConnectionFactory &lt; OAuth2ConnectionFactory &lt; ConnectionFactory</a></h3>
+<p>Connection Factory for Facebook connections, that is based on OAuth2.</p>
+<h3 id="connectionfactorylocator"><a href="#connectionfactorylocator">ConnectionFactoryLocator</a></h3>
+<p>This creates a registry of connection factories that other objects can use to lookup connection factories dynamically. methods</p>
+<h3 id="connectionfactory-getconnectionfactorystring-providerid"><a href="#connectionfactory-getconnectionfactorystring-providerid">ConnectionFactory&lt;?&gt; getConnectionFactory(String providerId);</a></h3>
+<pre class="sourceCode java"><code class="sourceCode java">&lt;A&gt; ConnectionFactory&lt;A&gt; <span class="fu">getConnectionFactory</span>(Class&lt;A&gt; apiType);
+Set&lt;String&gt; <span class="fu">registeredProviderIds</span>();</code></pre>
+<h3 id="connectionrepository"><a href="#connectionrepository">ConnectionRepository</a></h3>
+<p>Persists connections of a single user for later use</p>
+<h3 id="usersconnectionrepository"><a href="#usersconnectionrepository">UsersConnectionRepository</a></h3>
+<p>A data access interface for managing a global store of users connections to service providers. Provides data access operations that apply across multiple user records.</p>
+<h3 id="jdbcusersconnectionrepository-usersconnectionrepository"><a href="#jdbcusersconnectionrepository-usersconnectionrepository">JdbcUsersConnectionRepository &lt; UsersConnectionRepository</a></h3>
+<p>persisting connections to a RDBMS.</p>
+<p>Script are in <code>/org/springframework/social/connect/jdbc/JdbcUsersConnectionRepository.sql</code> but you should possibly adapt it to your RDBMS</p>
+<h3 id="connectcontroller"><a href="#connectcontroller">ConnectController</a></h3>
+<p>As ConnectController directs the overall connection flow, it depends on several other objects to do its job.</p>
+<ul>
+<li>It needs
+<ul>
+<li>at least 1 ConnectionFactory
+<ul>
+<li>JdbcConnectionRepository</li>
+<li>InMemoryConnectionRepository</li>
+</ul></li>
+<li>1 org.springframework.social.connect.ConnectionRepository</li>
+</ul></li>
+<li>What it does ?
+<ul>
+<li>Delegates to one or more ConnectionFactory instances to establish connections to providers on behalf of users.</li>
+<li>Once a connection has been established, it delegates to a ConnectionRepository to persist user connection data. Therefore, we’ll also need to configure one or more ConnectionFactorys and a ConnectionRepository.</li>
+</ul></li>
+</ul>
+<h3 id="useridsource"><a href="#useridsource">UserIdSource</a></h3>
+<p>Unique Id of a User</p>
+<h3 id="authenticationnameuseridsource-useridsource"><a href="#authenticationnameuseridsource-useridsource">AuthenticationNameUserIdSource &lt; UserIdSource</a></h3>
+<h3 id="connectinterceptor"><a href="#connectinterceptor">ConnectInterceptor</a></h3>
+<p>Filter around a connection</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="dt">void</span> <span class="fu">preConnect</span>(ConnectionFactory&lt;A&gt; connectionFactory, MultiValueMap&lt;String, String&gt; parameters, WebRequest request);
+<span class="dt">void</span> <span class="fu">postConnect</span>(Connection&lt;A&gt; connection, WebRequest request);</code></pre>
+<h3 id="socialauthenticationfilter"><a href="#socialauthenticationfilter">SocialAuthenticationFilter</a></h3>
+<p>Manage sign in through SpringSecuirty</p>
+<h3 id="socialuserdetailsservice"><a href="#socialuserdetailsservice">SocialUserDetailsService</a></h3>
+<p>Similar to UserDetailsService (from Spring Security) but loads details by user id, not username</p>
+<h3 id="socialuserdetails-userdetails-from-spring-security"><a href="#socialuserdetails-userdetails-from-spring-security">SocialUserDetails &lt; UserDetails (from Spring Security)</a></h3>
+<p>An “extended” UserDetails that store also how a user is recognized in a provider.</p>
+<div class="figure">
+<img src="architecture.png" alt="Architecture" /><p class="caption">Architecture</p>
+</div>
+<h2 id="sign-in"><a href="#sign-in">Sign In</a></h2>
+<p>SocialAuthenticationFilter reacts to requests whose path fits a pattern of “/auth/{providerid}”. Therefore, to initiate a provider sign-in flow via SocialAuthenticationFilter, you can simply provide a link to “/auth/{providerid}” on a web page.</p>
+<h3 id="flows"><a href="#flows">Flows</a></h3>
+<h4 id="provider-using-oauth-2"><a href="#provider-using-oauth-2">Provider using OAuth 2</a></h4>
+<ul>
+<li>POST /signin/{providerId} - Initiates the sign in flow by redirecting to the provider’s authentication endpoint.</li>
+<li>GET /signin/{providerId}?code={verifier} - Receives the authentication callback from the provider, accepting a code. Exchanges this code for an access token. Using this access token, it retrieves the user’s provider user ID and uses that to lookup a connected account and then authenticates to the application through the sign in service.
+<ul>
+<li>If the provider user ID doesn’t match any existing connection, ProviderSignInController will redirect to a sign up URL. The default sign up URL is “/signup” (relative to the application root), but can be customized by setting the signUpUrl property.</li>
+<li>If the provider user ID matches more than one existing connection, ProviderSignInController will redirect to the application’s sign in URL to offer the user a chance to sign in through another provider or with their username and password. The request to the sign in URL will have an “error” query parameter set to “multiple_users” to indicate the problem so that the page can communicate it to the user. The default sign in URL is “/signin” (relative to the application root), but can be customized by setting the signInUrl property.</li>
+<li>If any error occurs while fetching the access token or while fetching the user’s profile data, ProviderSignInController will redirect to the application’s sign in URL. The request to the sign in URL will have an “error” query parameter set to “provider” to indicate an error occurred while communicating with the provider. The default sign in URL is “/signin” (relative to the application root), but can be customized by setting the signInUrl property. #### OAuth 1 Providers</li>
+</ul></li>
+<li>POST /signin/{providerId} - Initiates the sign in flow. This involves fetching a request token from the provider and then redirecting to Provider’s authentication endpoint.
+<ul>
+<li>If any error occurs while fetching the request token, ProviderSignInController will redirect to the application’s sign in URL. The request to the sign in URL will have an “error” query parameter set to “provider” to indicate an error occurred while communicating with the provider. The default sign in URL is “/signin” (relative to the application root), but can be customized by setting the signInUrl property.</li>
+</ul></li>
+<li>GET /signin/{providerId}?oauth_token={request token}&amp;oauth_verifier={verifier} - Receives the authentication callback from the provider, accepting a verification code. Exchanges this verification code along with the request token for an access token. Using this access token, it retrieves the user’s provider user ID and uses that to lookup a connected account and then authenticates to the application through the sign in service.
+<ul>
+<li>If the provider user ID doesn’t match any existing connection, ProviderSignInController will redirect to a sign up URL. The default sign up URL is “/signup” (relative to the application root), but can be customized by setting the signUpUrl property. here you can hook the “implicit signup” command.</li>
+<li>If the provider user ID matches more than one existing connection, ProviderSignInController will redirect to the application’s sign in URL to offer the user a chance to sign in through another provider or with their username and password. The request to the sign in URL will have an “error” query parameter set to “multiple_users” to indicate the problem so that the page can communicate it to the user. The default sign in URL is “/signin” (relative to the application root), but can be customized by setting the signInUrl property.</li>
+</ul></li>
+</ul>
+<h2 id="implicit-signup"><a href="#implicit-signup">Implicit SignUp</a></h2>
+<ul>
+<li>Write an implementation of ConnectionSignUp</li>
+<li>Inject it into the connection repository</li>
+</ul>
+<p>public class AccountConnectionSignUp implements ConnectionSignUp {</p>
+<pre class="sourceCode java"><code class="sourceCode java"><span class="kw">private</span> <span class="dt">final</span> AccountRepository accountRepository;
+
+<span class="kw">public</span> <span class="fu">AccountConnectionSignUp</span>(AccountRepository accountRepository) {
+    <span class="kw">this</span>.<span class="fu">accountRepository</span> = accountRepository;
+}
+
+<span class="kw">public</span> String <span class="fu">execute</span>(Connection&lt;?&gt; connection) {
+    UserProfile profile = connection.<span class="fu">fetchUserProfile</span>();
+    Account account = <span class="kw">new</span> <span class="fu">Account</span>(profile.<span class="fu">getUsername</span>(), profile.<span class="fu">getFirstName</span>(), profile.<span class="fu">getLastName</span>());
+    accountRepository.<span class="fu">createAccount</span>(account);
+    <span class="kw">return</span> account.<span class="fu">getUsername</span>();
+}</code></pre>
+<h2 id="connection-1"><a href="#connection-1">Connection</a></h2>
+<p>The path pattern that ConnectController handles is “/connect/{providerId}”. * Therefore, if ConnectController is handling a request for “/connect/twitter”, * then the ConnectionFactory whose getProviderId() returns “twitter” will be used. * ConnectController constructs a callback URL for the provider to redirect to after the user grants authorization.</p>
+<h3 id="flows-1"><a href="#flows-1">Flows</a></h3>
+<h4 id="oauth2-paths"><a href="#oauth2-paths">OAuth2 Paths</a></h4>
+<ul>
+<li>GET /connect - Displays a web page showing connection status for all providers.
+<ul>
+<li>ConnectController respond with a view that has URL
+<ul>
+<li>connect/status</li>
+</ul></li>
+</ul></li>
+<li>GET /connect/{providerId} - Displays a web page showing connection status to the provider.
+<ul>
+<li>ConnectController respond with a view URL depending on the connection status
+<ul>
+<li>connect/{providerId}Connect (if already connected)</li>
+<li>connect/{providerId}Connected (if not yet connected)</li>
+</ul></li>
+</ul></li>
+<li>POST /connect/{providerId} - Initiates the connection flow with the provider.
+<ul>
+<li>You should POST fields containing the Authorizations Scopes
+<ul>
+<li>Facebook Example</li>
+</ul></li>
+</ul></li>
+</ul>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;input</span><span class="ot"> type=</span><span class="st">&quot;hidden&quot;</span><span class="ot"> name=</span><span class="st">&quot;scope&quot;</span><span class="ot"> value=</span><span class="st">&quot;publish_stream,offline_access&quot;</span> <span class="kw">/&gt;</span></code></pre>
+<pre><code>    * https://developers.facebook.com/docs/facebook-login/permissions/v2.2?locale=it_IT
+    * Free to use
+        * public_profile
+        * email
+        * user_friends
+    * Requires authorizations from FB
+        * user_place_visits
+        * age_range
+        * user_birthday
+        * publish_actions
+* GET /connect/{providerId}?code={code} - Receives the authorization callback from the provider, accepting an authorization code. Uses the code to request an access token and complete the connection.
+* DELETE /connect/{providerId} - Severs all of the user’s connection with the provider.
+* DELETE /connect/{providerId}/{providerUserId} - Severs a specific connection with the provider, based on the user’s provider user ID.</code></pre>
+<p>OAuth1 provider * GET /connect - Displays a web page showing connection status for all providers. * GET /connect/{providerId} - Displays a web page showing connection status to the provider. * POST /connect/{providerId} - Initiates the connection flow with the provider. * GET /connect/{providerId}?oauth_token={request token}&amp;oauth_verifier={verifier} * Receives the authorization callback from the provider, accepting a verification code. Exchanges this verification code along with the request token for an access token and completes the connection. The oauth_verifier parameter is optional and is only used for providers implementing OAuth 1.0a. * DELETE /connect/{providerId} - Severs all of the user’s connection with the provider. * DELETE /connect/{providerId}/{providerUserId} - Severs a specific connection with the provider, based on the user’s provider user ID.</p>
+<h2 id="set-up"><a href="#set-up">Set Up</a></h2>
+<h3 id="maven"><a href="#maven">Maven</a></h3>
+<h4 id="basic-dependencies"><a href="#basic-dependencies">Basic Dependencies</a></h4>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.social&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-social-core&lt;/artifactId&gt;
+    &lt;version&gt;1.1.0.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.social&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-social-config&lt;/artifactId&gt;
+    &lt;version&gt;1.1.0.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.social&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-social-security&lt;/artifactId&gt;
+    &lt;version&gt;1.1.0.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;            
+
+&lt;dependency&gt;
+    &lt;groupId&gt;org.apache.httpcomponents&lt;/groupId&gt;
+    &lt;artifactId&gt;httpclient&lt;/artifactId&gt;
+    &lt;version&gt;4.3.6&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+<h4 id="twitter"><a href="#twitter">Twitter</a></h4>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.social&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-social-twitter&lt;/artifactId&gt;
+    &lt;version&gt;1.1.0.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+<h4 id="facebook"><a href="#facebook">Facebook</a></h4>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.social&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-social-facebook&lt;/artifactId&gt;
+    &lt;version&gt;1.1.0.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+<h2 id="database"><a href="#database">Database</a></h2>
+<p>If you want to store info on a db, you have to execute the script stored in spring-social-core.sql</p>
+<pre class="sourceCode sql"><code class="sourceCode sql"><span class="kw">create</span> <span class="kw">table</span> UserConnection (userId <span class="dt">varchar</span>(<span class="dv">255</span>) <span class="kw">not</span> <span class="kw">null</span>,
+    providerId <span class="dt">varchar</span>(<span class="dv">255</span>) <span class="kw">not</span> <span class="kw">null</span>,
+    providerUserId <span class="dt">varchar</span>(<span class="dv">255</span>),
+    <span class="fu">rank</span> <span class="dt">int</span> <span class="kw">not</span> <span class="kw">null</span>,
+    displayName <span class="dt">varchar</span>(<span class="dv">255</span>),
+    profileUrl <span class="dt">varchar</span>(<span class="dv">512</span>),
+    imageUrl <span class="dt">varchar</span>(<span class="dv">512</span>),
+    accessToken <span class="dt">varchar</span>(<span class="dv">255</span>) <span class="kw">not</span> <span class="kw">null</span>,
+    secret <span class="dt">varchar</span>(<span class="dv">255</span>),
+    refreshToken <span class="dt">varchar</span>(<span class="dv">255</span>),
+    expireTime bigint,
+    <span class="kw">primary</span> <span class="kw">key</span> (userId, providerId, providerUserId));
+<span class="kw">create</span> <span class="kw">unique</span> <span class="kw">index</span> UserConnectionRank <span class="kw">on</span> UserConnection(userId, providerId, <span class="fu">rank</span>);</code></pre>
+<p>Spring Context</p>
+<pre class="sourceCode xml"><code class="sourceCode xml">    <span class="kw">&lt;security:http&gt;</span>
+        <span class="kw">&lt;security:intercept-url</span><span class="ot"> pattern=</span><span class="st">&quot;/app/admin/**&quot;</span><span class="ot"> access=</span><span class="st">&quot;ROLE_ADMIN&quot;</span><span class="kw">/&gt;</span>
+        <span class="kw">&lt;security:intercept-url</span><span class="ot"> pattern=</span><span class="st">&quot;/admin/**&quot;</span><span class="ot"> access=</span><span class="st">&quot;ROLE_ADMIN&quot;</span><span class="kw">/&gt;</span>
+        <span class="kw">&lt;security:custom-filter</span><span class="ot"> ref=</span><span class="st">&quot;socialAuthenticationFilter&quot;</span><span class="ot"> before=</span><span class="st">&quot;PRE_AUTH_FILTER&quot;</span> <span class="kw">/&gt;</span>
+        <span class="kw">&lt;security:form-login</span>
+<span class="ot">            login-page=</span><span class="st">&quot;/security-sign-in.html&quot;</span>
+<span class="ot">            authentication-failure-url=</span><span class="st">&quot;/security-sign-in.html?param.error=bad_credentials&quot;</span> <span class="kw">/&gt;</span>
+        <span class="kw">&lt;security:logout</span><span class="ot"> logout-url=</span><span class="st">&quot;/security-sign-out.html&quot;</span><span class="kw">/&gt;</span>
+    <span class="kw">&lt;/security:http&gt;</span></code></pre>
+<h2 id="needed-customization"><a href="#needed-customization">Needed Customization</a></h2>
+<p>It is reasonable to think that your app will possibly use a completely different table to store “security” users, even though it can be reasonable to imagine to use the default “social” user table.</p>
+<p>In such scenario</p>
+<p>interface UserDetailsManager from Spring Security</p>
+<p>You should provide an implementation of this interface that works with your underlying storage.</p>
+<p>It provides CRUD operations using “username” as the key to identify the user.</p>
+<p>Here “username” means the clear text string that the user use to login.</p>
+<p>It could be the email in some systems.</p>
+<p>It could be a plain username.</p>
+<p>Could it be both ? In Twitter, after all, you log in with both your email or twitter username.</p>
+<p>Let users identify themselves by both email and username</p>
+<p>Assign to each user an unique synthetic key, and use two fields both unique: username and email.</p>
+<p>interface SocialUserDetailsService from Spring Social</p>
+<p>You should provide an implementation of this interface that works with your underlying storage.</p>
+<p>It provides just a SocialUserDetails loadUserByUserId(String userId) Here “user id” is whatever you use to uniquely identify yous “social” users. So, if your “social” users are identified by a synthetic key, this method means loadUserByUserId(Stirng syntheticKey) If you are able to retrieve a “security” user from UserDetailsManager, you can create a “social” SocialUserDetails just like that…</p>
+<pre class="sourceCode xml"><code class="sourceCode xml">        SocialUserDetails sud = new SocialUser(
+                securityUserDetails.getUsername(), 
+                securityUserDetails.getPassword(), 
+                securityUserDetails.getAuthorities());</code></pre>
+<p>if you wants to support “social” from the beginning, is reasonable to implement UserDetailsManager and SocialUserDetailsService in a unique class.</p>
+<h1 id="html5-cheat-sheet"><a href="#html5-cheat-sheet">HTML(5) Cheat Sheet</a></h1>
+<h2 id="prelude"><a href="#prelude">Prelude</a></h2>
+<table class="sourceCode html numberLines" id="prelude"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre></td><td class="sourceCode"><pre><code class="sourceCode html"><span class="dt">&lt;!DOCTYPE </span>html<span class="dt">&gt;</span>
+<span class="kw">&lt;html&gt;</span>
+    <span class="kw">&lt;head&gt;</span>      
+        <span class="kw">&lt;meta</span><span class="ot"> charset=</span><span class="st">&quot;UTF-8&quot;</span><span class="kw">&gt;</span>
+        <span class="kw">&lt;title&gt;</span>Title of the document<span class="kw">&lt;/title&gt;</span>
+    <span class="kw">&lt;/head&gt;</span>
+    <span class="kw">&lt;body&gt;</span>
+        Content of the document......
+    <span class="kw">&lt;/body&gt;</span>
+<span class="kw">&lt;/html&gt;</span></code></pre></td></tr></table>
+<h2 id="css-link"><a href="#css-link">CSS Link</a></h2>
+<table class="sourceCode html numberLines" id="css-link"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+</pre></td><td class="sourceCode"><pre><code class="sourceCode html"><span class="kw">&lt;head&gt;</span>
+    <span class="kw">&lt;link</span><span class="ot"> rel=</span><span class="st">&quot;stylesheet&quot;</span><span class="ot"> type=</span><span class="st">&quot;text/css&quot;</span><span class="ot"> href=</span><span class="st">&quot;theme.css&quot;</span><span class="kw">&gt;</span>
+<span class="kw">&lt;/head&gt;</span> </code></pre></td></tr></table>
+<h1 id="css-cheat-sheet"><a href="#css-cheat-sheet">CSS Cheat Sheet</a></h1>
+<h2 id="syntax"><a href="#syntax">Syntax</a></h2>
+<pre id="syntax"><code>&lt;selector&gt; {
+  &lt;property&gt;:&lt;value&gt;;
+  &lt;property&gt;:&lt;value&gt;;
+}</code></pre>
+<h2 id="selectors"><a href="#selectors">Selectors</a></h2>
+<p>.class<br />css 1 .intro =&gt; Selects all elements with class=“intro”</p>
+<p>.class.class css 1 .heart.on =&gt; Selects all elements with both classed “heart” and “on”</p>
+<p>#id<br />css 1 #firstname =&gt; Selects the element with id=“firstname”</p>
+element&gt;element<br />css 2 div &gt; p =&gt; Selects all
+<p> 
+elements where the parent is a
+<div> 
+<p>element</p>
+:nth-child(n)<br />css 3 p:nth-child(2) =&gt; Selects every
+<p> 
+<p>element that is the second child of its parent</p>
+<h1 id="placing-objects"><a href="#placing-objects">Placing Objects</a></h1>
+<h2 id="fixed-position"><a href="#fixed-position">Fixed Position</a></h2>
+<table class="sourceCode css numberLines" id="prelude"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+</pre></td><td class="sourceCode"><pre><code class="sourceCode css"><span class="fl">.selector</span> <span class="kw">{</span>
+  <span class="kw">position:</span><span class="dt">fixed</span><span class="kw">;</span>
+  <span class="kw">bottom:</span> <span class="dt">0</span><span class="kw">;</span>
+<span class="kw">}</span></code></pre></td></tr></table>
+<h3 id="center-a-table"><a href="#center-a-table">Center a Table</a></h3>
+<p>“text-align” applies to inline content, not to a block-level element like “table”.</p>
+<h4 id="method-1"><a href="#method-1">Method 1</a></h4>
+<p>To center a table, you need to set the margins, like this:</p>
+<table class="sourceCode css numberLines" id="prelude"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+</pre></td><td class="sourceCode"><pre><code class="sourceCode css">table<span class="fl">.center</span> <span class="kw">{</span>
+ <span class="kw">margin-left:</span><span class="dt">auto</span><span class="kw">;</span>
+ <span class="kw">margin-right:</span><span class="dt">auto</span><span class="kw">;</span>
+<span class="kw">}</span></code></pre></td></tr></table>
+<p>And then do this:</p>
+<table class="sourceCode css numberLines" id="prelude"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+</pre></td><td class="sourceCode"><pre><code class="sourceCode css">&lt;table class=<span class="st">&quot;center&quot;</span>&gt;
+&lt;/table&gt;</code></pre></td></tr></table>
+<p>At this point, Mozilla and Opera will center your table. Internet Explorer 5.5 and up, however, needs you to add this to your CSS as well:</p>
+<table class="sourceCode css numberLines" id="prelude"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+</pre></td><td class="sourceCode"><pre><code class="sourceCode css">body <span class="kw">{text-align:</span><span class="dt">center</span><span class="kw">;}</span></code></pre></td></tr></table>
+<h4 id="method-2"><a href="#method-2">Method 2</a></h4>
+<p>If you want your table to be a certain percentage width, you can do this:</p>
+<table class="sourceCode css numberLines" id="prelude"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+</pre></td><td class="sourceCode"><pre><code class="sourceCode css">  table<span class="fl">.center</span> <span class="kw">{</span>
+    <span class="kw">width:</span><span class="dt">70%</span><span class="kw">;</span>
+    <span class="kw">margin-left:</span><span class="dt">15%</span><span class="kw">;</span>
+    <span class="kw">margin-right:</span><span class="dt">15%</span><span class="kw">;</span>
+  <span class="kw">}</span></code></pre></td></tr></table>
+<h4 id="method-3"><a href="#method-3">Method 3</a></h4>
+<p>If you want your table to be of fixed width, define your CSS like this:</p>
+<table class="sourceCode css numberLines" id="prelude"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="sourceCode"><pre><code class="sourceCode css">  div<span class="fl">.container</span> <span class="kw">{</span>
+    <span class="kw">width:</span><span class="dt">98%</span><span class="kw">;</span>
+    <span class="kw">margin:</span><span class="dt">1%</span><span class="kw">;</span>
+  <span class="kw">}</span>
+  table<span class="fl">#table1</span> <span class="kw">{</span>
+    <span class="kw">text-align:</span><span class="dt">center</span><span class="kw">;</span>
+    <span class="kw">margin-left:</span><span class="dt">auto</span><span class="kw">;</span>
+    <span class="kw">margin-right:</span><span class="dt">auto</span><span class="kw">;</span>
+    <span class="kw">width:</span><span class="dt">100px</span><span class="kw">;</span>
+  <span class="kw">}</span>
+  tr,td <span class="kw">{text-align:</span><span class="dt">left</span><span class="kw">;}</span></code></pre></td></tr></table>
+<p>Set “width:100px” to whatever width you need.</p>
+<p>“text-align: center” is there for Internet Explorer, which won’t work without it. Unfortunately, “text-align: center” will center all the text inside your table cells, but we counter that by setting “tr” and “td” to align left.</p>
+<p>In your HTML, you would then do this:</p>
+<pre class="sourceCode html" id="prelude"><code class="sourceCode html">  <span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;container&quot;</span><span class="kw">&gt;</span>
+    <span class="kw">&lt;table</span><span class="ot"> id=</span><span class="st">&quot;table1&quot;</span><span class="kw">&gt;</span>
+      ...
+    <span class="kw">&lt;/table&gt;</span>
+  <span class="kw">&lt;/div&gt;</span></code></pre>
+<h2 id="tables"><a href="#tables">Tables</a></h2>
+<h3 id="remove-table-borders"><a href="#remove-table-borders">Remove Table Borders</a></h3>
+<pre class="sourceCode html" id="prelude"><code class="sourceCode html">table {
+    border-collapse: collapse;
+}</code></pre>
+<h2 id="pictures"><a href="#pictures">Pictures</a></h2>
+<p>Picture in DIV with CSS</p>
+<pre class="sourceCode html"><code class="sourceCode html"><span class="kw">&lt;div</span><span class="ot"> class=</span><span class="st">&quot;image&quot;</span><span class="kw">&gt;&lt;/div&gt;</span></code></pre>
+<pre class="sourceCode css"><code class="sourceCode css">div<span class="fl">.image</span><span class="dv">:before</span> <span class="kw">{</span>
+   <span class="kw">content:</span><span class="dt">url(</span>http://placehold<span class="dt">.</span>it/<span class="dt">350</span>x150<span class="dt">)</span><span class="kw">;</span>
+<span class="kw">}</span></code></pre>
+<h1 id="networking-cheat-sheet"><a href="#networking-cheat-sheet">Networking Cheat Sheet</a></h1>
+<h1 id="docker"><a href="#docker">Docker</a></h1>
+<h2 id="big-picture-1"><a href="#big-picture-1">Big Picture</a></h2>
+<ul>
+<li>Docker is
+<ul>
+<li>an open source platform</li>
+<li>for
+<ul>
+<li>developers</li>
+<li>and sysadmins</li>
+</ul></li>
+<li>to
+<ul>
+<li>build</li>
+<li>ship</li>
+<li>run
+<ul>
+<li>distributed applications</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>With Docker you can:
+<ul>
+<li>run applications that have been previously dockerized
+<ul>
+<li>in comlpete isolation (a.k.a. “Container”)
+<ul>
+<li>more or less as it would happen with a VM</li>
+</ul></li>
+<li>withouth the burden of sysop
+<ul>
+<li>at some extent</li>
+</ul></li>
+</ul></li>
+<li>be sure that container will be the same regardless of the environment they are run in
+<ul>
+<li>because they can be created as instances of immutable “Images”</li>
+</ul></li>
+<li>setuplessly link containers
+<ul>
+<li>i.e.
+<ul>
+<li>run container#1 with a web appication</li>
+<li>run container#2 with the db needed by the web app</li>
+</ul></li>
+<li>applications should be built to work together (a.k.a. “dockerization”)</li>
+</ul></li>
+<li>extend available images in order to create new immutable images
+<ul>
+<li>share it across you team
+<ul>
+<li>in order to have a standard environment</li>
+</ul></li>
+</ul></li>
+<li>create a repeatable environment
+<ul>
+<li>put image definitions and container creation in a script in your codebase
+<ul>
+<li>all members will have same env</li>
+</ul></li>
+</ul></li>
+<li>develop / deploy / run the <strong>very same</strong> environment
+<ul>
+<li>extend a useful image</li>
+<li>including your dockerized app in it</li>
+<li>share the image</li>
+<li>create a container in prod from the same image</li>
+</ul></li>
+</ul></li>
+<li>Docker Platform is made up by
+<ul>
+<li>Docker Engine
+<ul>
+<li>a portable</li>
+<li>lightweight</li>
+<li>runtime</li>
+</ul></li>
+<li>Packaging Tool</li>
+<li>Docker Hub
+<ul>
+<li>a cloud service for
+<ul>
+<li>sharing Images of dockerized applications</li>
+<li>automating workflows</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>Run on
+<ul>
+<li>Modern Linux
+<ul>
+<li>Docker needs
+<ul>
+<li>libvirt,</li>
+<li>LXC (Linux containers)</li>
+<li>and systemd-nspawn</li>
+</ul></li>
+</ul></li>
+<li>Win (and maybe older Linux) through a VM
+<ul>
+<li>https://github.com/boot2docker/boot2docker</li>
+<li>Azure supports Docker</li>
+<li>forthcoming support in Windows Server</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="docker-engine"><a href="#docker-engine">Docker Engine</a></h3>
+<ul>
+<li>Docker Engine
+<ul>
+<li>uses
+<ul>
+<li>resource isolation features of Linux kernel
+<ul>
+<li>to
+<ul>
+<li>allow independent containers to run within a single Linux instance</li>
+</ul></li>
+</ul></li>
+<li>union mount to provide the Union File System</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="figure">
+<img src="docker-filesystems-multilayer.png" alt="Multilayer File System" /><p class="caption">Multilayer File System</p>
+</div>
+<ul>
+<li>Docker runs processes in isolated containers.
+<ul>
+<li>When an operator executes docker run, she starts a process with
+<ul>
+<li>its own file system</li>
+<li>its own networking</li>
+<li>its own isolated process tree</li>
+</ul></li>
+<li>The Image which starts the process may
+<ul>
+<li>define defaults
+<ul>
+<li>related to the binary to run</li>
+<li>the networking to expose</li>
+<li>…</li>
+</ul></li>
+<li>can be usually overridden when container is started.</li>
+</ul></li>
+</ul></li>
+<li>By default container’s file system persists after the container exits.
+<ul>
+<li>Easier debugging</li>
+<li>Data are retained.</li>
+<li>It consume some space if you are not aware of it.</li>
+</ul></li>
+</ul>
+<h3 id="docker-hub"><a href="#docker-hub">Docker Hub</a></h3>
+<ul>
+<li>Official Docker Hub
+<ul>
+<li>to
+<ul>
+<li>store Images in repositories</li>
+<li>search and browse Images</li>
+</ul></li>
+<li>is a
+<ul>
+<li>Paas</li>
+<li>Docker-owned</li>
+</ul></li>
+<li>costs
+<ul>
+<li>public repositories
+<ul>
+<li>free for all</li>
+</ul></li>
+<li>private repositories
+<ul>
+<li>fees apply</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="figure">
+<img src="docker-fees.png" title="DockerHub fees on 17 Jan 2015" alt="DockerHub fees on 17 Jan 2015" /><p class="caption">DockerHub fees on 17 Jan 2015</p>
+</div>
+<ul>
+<li>Run-by-yourself Docker Hub
+<ul>
+<li>Docker Hub software is open source
+<ul>
+<li>https://github.com/docker/docker-registry - current</li>
+<li>https://github.com/docker/distribution - forthcoming</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="trusted-automated-builds"><a href="#trusted-automated-builds">Trusted / Automated Builds</a></h3>
+<p>Automated Builds are a special feature of Docker Hub which allow you to use Docker Hub’s build clusters to automatically create images from a specified Dockerfile and a GitHub or Bitbucket repo.</p>
+<h2 id="closer-look"><a href="#closer-look">Closer Look</a></h2>
+<h3 id="docker-engine-1"><a href="#docker-engine-1">Docker Engine</a></h3>
+<pre><code>/var/lib/docker/containers
+&lt;full-container-id&gt;
+└── 1ee8a5d778cba1738b636183a1e2470fe2699af3a127f50cd012f08dcd47cf4e-json.log
+    ├── config.json
+    ├── hostconfig.json
+    ├── hostname
+    ├── hosts
+    └── resolv.conf</code></pre>
+<p>A full-container-id is the real name of a container. It is shortened to the first 12 chars when reported by tools. i.e.</p>
+<pre><code>full-container-id: 1ee8a5d778cba1738b636183a1e2470fe2699af3a127f50cd012f08dcd47cf4e
+     container-id: 1ee8a5d778cb&lt;------------------ removed -----------------------&gt;
+
+/var/lib/docker/vfs/dir
+├── &lt;volume-id&gt;
+├── &lt;volume-id&gt;
+├── &lt;volume-id&gt;
+└── &lt;volume-id&gt;</code></pre>
+<h3 id="images"><a href="#images">Images</a></h3>
+<ul>
+<li>Docker images are the basis of containers</li>
+<li>If an image isn’t already present on the host then it’ll be downloaded from a registry
+<ul>
+<li>by default the Docker Hub Registry</li>
+</ul></li>
+<li><p>Docker stores downloaded images on the Docker host</p></li>
+<li>Creating new images
+<ul>
+<li>workflow #1: Start from existing image</li>
+<li>workflow #2: Define a new image through a Dockerfile</li>
+</ul></li>
+</ul>
+<h3 id="networking"><a href="#networking">Networking</a></h3>
+<p>By default, every time a container is restarted, it binds to different host ports.</p>
+<h3 id="container-linking"><a href="#container-linking">Container Linking</a></h3>
+<div class="figure">
+<img src="docker-linked-containers.png" title="Linking Example" alt="Linking Example" /><p class="caption">Linking Example</p>
+</div>
+<p>Docker creates these env variables in the “source” container for each “linked” container.</p>
+<pre><code>&lt;alias&gt;_NAME=/&lt;this_name&gt;/&lt;alias&gt;
+&lt;alias&gt;_PORT_&lt;exposed_port&gt;_&lt;protocol&gt;=&lt;protocol&gt;://&lt;linked_container_ip_address&gt;:&lt;port&gt;
+&lt;alias&gt;_PORT_&lt;exposed_port&gt;_&lt;protocol&gt;_ADDR=&lt;linked_container_ip_address&gt;
+&lt;alias&gt;_PORT_&lt;exposed_port&gt;_&lt;protocol&gt;_PORT=&lt;actual_port&gt;
+&lt;alias&gt;_PORT_&lt;exposed_port&gt;_&lt;protocol&gt;_PROTO=&lt;protocol&gt;</code></pre>
+<p>/etc/hosts is also changed</p>
+<pre><code>&lt;this_container_ip&gt;       &lt;this_container_id&gt;
+&lt;linked_container_ip&gt;     &lt;linked_container_alias&gt;</code></pre>
+<h3 id="volumes"><a href="#volumes">Volumes</a></h3>
+<ul>
+<li>Primary ways you can manage data in Docker
+<ul>
+<li>Data volumes
+<ul>
+<li>A specially-designated directory within one or more containers that bypasses the Union File System</li>
+<li>to provide several useful features for persistent or shared data:
+<ul>
+<li>Data volumes can be shared and reused between containers</li>
+<li>Changes to a data volume are made directly</li>
+<li>Changes to a data volume will not be included when you update an image</li>
+<li>Volumes persist until no containers use them</li>
+</ul></li>
+<li>Can be…
+<ul>
+<li>a new directory in the container</li>
+<li>mapped to a directory in the host</li>
+<li>mapped to a file in the host</li>
+</ul></li>
+</ul></li>
+<li>Data volume containers</li>
+</ul></li>
+<li>Volumes
+<ul>
+<li>decouple
+<ul>
+<li>the life of the data being stored in them</li>
+<li>from the life of the container that created them.</li>
+</ul></li>
+<li>so you can
+<ul>
+<li>docker rm my_container and your data will not be removed.</li>
+</ul></li>
+</ul></li>
+<li>A volume can be created in
+<ul>
+<li>two ways
+<ul>
+<li>Specifying VOLUME /some/dir in a Dockerfile</li>
+<li>Specying it as part of your run command as docker run -v /some/dir</li>
+</ul></li>
+<li>Either way,
+<ul>
+<li>It tells Docker to create a directory on the host,</li>
+<li>within the docker root path (by default /var/lib/docker),</li>
+<li>and mount it to the path you’ve specified (/some/dir above).</li>
+</ul></li>
+<li>When you remove the container using this volume, the volume itself continues to live on.</li>
+</ul></li>
+</ul>
+<h2 id="best-practices-pattern"><a href="#best-practices-pattern">Best practices &amp; pattern</a></h2>
+<h3 id="general"><a href="#general">General</a></h3>
+<h4 id="be-repeatable"><a href="#be-repeatable">Be repeatable</a></h4>
+<p>Main goal is to be able to create the very same container whenever you need it.</p>
+<h4 id="be-portable"><a href="#be-portable">Be portable</a></h4>
+<p>Main goal is to be able to run the very same container on different platforms.</p>
+<h4 id="dont-boot-init"><a href="#dont-boot-init">Don’t boot init</a></h4>
+<ul>
+<li>Containers model processes not machines</li>
+<li>The goal is that you only run one process per container</li>
+<li>So an init or supervisor is not needed.</li>
+<li>If the processes dies inside a container then the container dies</li>
+<li>Instead of restarting the process just restart the same container or a new container</li>
+</ul>
+<h3 id="images-1"><a href="#images-1">Images</a></h3>
+<h4 id="dont-upgrade-in-builds"><a href="#dont-upgrade-in-builds">Don’t upgrade in builds</a></h4>
+<ul>
+<li>Updates will be baked into the based images you don’t need to apt-get upgrade your containers.</li>
+<li>If there are security updates that a base image needs, let upstream know so that they can update it for everyone and ensure that your builds are consistent again.</li>
+<li>so
+<ul>
+<li>best case you run an upgrade in a build and it works.</li>
+<li>worse case a pkg tries to mount, etc and it fails.</li>
+</ul></li>
+<li>you should bake security fixes into the base images and rebuild on top of them so that the end result is consistent.</li>
+<li>The end goal is that the image i build today is the same image that will be built tomorrow unless i explicitly say otherwise.</li>
+</ul>
+<h4 id="use-small-base-images"><a href="#use-small-base-images">Use small base images</a></h4>
+<p>Some images are more bloated than others. I suggest using debian:jessie as your base.</p>
+<h4 id="use-specific-tags"><a href="#use-specific-tags">Use specific tags</a></h4>
+<h5 id="use-specific-tags-when-specifying-from-images"><a href="#use-specific-tags-when-specifying-from-images">Use specific tags when specifying FROM images</a></h5>
+<p>This is important for your base images. Your FROM should always contain the full repository and tag for the base image that you are depending on. FROM debian:jessie not just FROM debian</p>
+<h5 id="use-specific-tags-for-your-images"><a href="#use-specific-tags-for-your-images">Use specific tags for your images</a></h5>
+<p>Unless you are experimenting with docker you should always pass the -t option to docker build so that the resulting image is tagged. A simple human readable tag will help you manage what each image was created for.</p>
+<pre><code>docker build -t=&quot;crosbymichael/sentry&quot; .</code></pre>
+<p>Always pass -t to tag the resulting image.</p>
+<h4 id="use-the-cache"><a href="#use-the-cache">Use the cache</a></h4>
+<p>Keep common instructions at the top of the Dockerfile to utilize the cache.</p>
+<p>Each instruction in a Dockerfile commits the change into a new image which will then be used as the base of the next instruction. If an image exists with the same parent and instruction ( except for ADD ) docker will use the image instead of executing the instruction, i.e. the cache.</p>
+<h3 id="dockerfile"><a href="#dockerfile">Dockerfile</a></h3>
+<h4 id="expose-ing-ports"><a href="#expose-ing-ports">EXPOSE-ing ports</a></h4>
+<p>Images should able to run on any host and as many times as needed. With Dockerfiles you have the ability to map the private and public ports, however, you should never map the public port in a Dockerfile. By mapping to the public port on your host you will only be able to have one instance of your dockerized app running.</p>
+<pre><code># private and public mapping
+EXPOSE 80:8080
+
+# private only
+EXPOSE 80</code></pre>
+<p>If the consumer of the image cares what public port the container maps to they will pass the -p option when running the image, otherwise, docker will automatically assign a port for the container.</p>
+<p>Never map the public port in a Dockerfile.</p>
+<h4 id="cmd-and-entrypoint-syntax"><a href="#cmd-and-entrypoint-syntax">CMD and ENTRYPOINT syntax</a></h4>
+<p>Always use the array syntax.</p>
+<h3 id="dockerized-app"><a href="#dockerized-app">Dockerized App</a></h3>
+<h4 id="log-to-stdout"><a href="#log-to-stdout">Log to stdout</a></h4>
+<p>The docker logs command looks inside the container and returns its standard output. So, log to stdout to make logs available to the client.</p>
+<h2 id="docker-cli"><a href="#docker-cli">Docker CLI</a></h2>
+<ul>
+<li>main commands
+<ul>
+<li>run
+<ul>
+<li>run processes in isolated container</li>
+<li>can override CMD defined in the image</li>
+<li>detached vs foreground
+<ul>
+<li>detached
+<ul>
+<li>container is no longer listening to the command line where you executed docker run</li>
+<li>all I/O done through
+<ul>
+<li>network connections</li>
+<li>shared volumes<br /></li>
+</ul></li>
+</ul></li>
+<li>foreground
+<ul>
+<li>start the process in the container</li>
+<li>attach the console</li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li>exec
+<ul>
+<li>run a new command in a running container</li>
+</ul></li>
+<li>start
+<ul>
+<li>start a stopped container</li>
+</ul></li>
+<li>stop
+<ul>
+<li>stop a running container</li>
+</ul></li>
+<li>attach
+<ul>
+<li>attach a tty to a running container</li>
+</ul></li>
+</ul></li>
+</ul>
+<h3 id="docker-run"><a href="#docker-run">docker run</a></h3>
+<p>Runs a command in a container keeping the container alive until the command exit</p>
+<pre><code>sudo docker run [flags] &lt;image[:version]&gt; &lt;hostcommand&gt;
+-t          : assign a pseudo terminal
+-i          : interactive connection    
+-P          : tells Docker to map any required network ports inside our container to a random port on the host.
+-p          : allows to map a container port to an host port, &lt;host_ip&gt;:&lt;host_port&gt;:&lt;container_port&gt; i.e. -p 5000:5000
+    -e, --env=[]: Set environment variables. I.e. -e POSTGRES_PASSWORD=postgres</code></pre>
+<h4 id="examples"><a href="#examples">Examples</a></h4>
+<p>Invoke /bin/echo and exit immediately</p>
+<pre><code>$ sudo docker run ubuntu:14.04 /bin/echo &#39;Hello world&#39;</code></pre>
+<p>Launch bash on a new container instance</p>
+<pre><code>$ sudo docker run -t -i ubuntu /bin/bash</code></pre>
+<p>Run a simple script in a deamonized docker</p>
+<pre><code>$sudo docker run -d ubuntu:14.04 /bin/sh -c &quot;while true; do echo hello world; sleep 1; done&quot;</code></pre>
+<h3 id="docker-ps"><a href="#docker-ps">docker ps</a></h3>
+<p>Prints info on docker containers, like ps for processes.</p>
+<pre><code>sudo docker ps [flags]
+
+-a  :   Shows stopped containers too
+-l  :   Shows last started container</code></pre>
+<h4 id="examples-1"><a href="#examples-1">Examples</a></h4>
+<p>Prints out the docker containers</p>
+<pre><code>sudo docker ps</code></pre>
+<h3 id="docker-logs"><a href="#docker-logs">docker logs</a></h3>
+<p>The docker logs command looks inside the container and returns its standard output</p>
+<pre><code>sudo docker logs &lt;instance_name&gt;
+
+-f  :   Keep on tailing, like tail -f</code></pre>
+<h4 id="examples-2"><a href="#examples-2">Examples</a></h4>
+<p>Prints out the stdout of the insane_babbage instance. You would run docker ps to discover the instance name.</p>
+<pre><code>$ sudo docker logs insane_babbage</code></pre>
+<h3 id="docker-version"><a href="#docker-version">docker version</a></h3>
+<p>Prints out info about the docker environment.</p>
+<pre><code>sudo docker version</code></pre>
+<h4 id="example"><a href="#example">Example</a></h4>
+<pre><code>$ sudo docker version
+Client version: 1.4.1
+Client API version: 1.16
+Go version (client): go1.3.3
+Git commit (client): 5bc2ff8
+OS/Arch (client): linux/amd64
+Server version: 1.4.1
+Server API version: 1.16
+Go version (server): go1.3.3
+Git commit (server): 5bc2ff8</code></pre>
+<h3 id="docker-port"><a href="#docker-port">docker port</a></h3>
+<p>Immediately show the port of the host that correspond to the port in docker</p>
+<pre><code>$ sudo docker port &lt;instance&gt; [port_in_docker]</code></pre>
+<h4 id="examples-3"><a href="#examples-3">Examples</a></h4>
+<p>Prints all the ports mapping for the “compassionate_heisenberg” instance. This means that to reach the service running on 5000/tcp on the container, you should connect on localhost:49153</p>
+<pre><code>$ sudo docker port compassionate_heisenberg
+5000/tcp -&gt; 0.0.0.0:49153</code></pre>
+<h3 id="docker-rm"><a href="#docker-rm">docker rm</a></h3>
+<p>Remove a container. Should be already stopped.</p>
+<pre><code>docker rm &lt;host&gt;</code></pre>
+<h3 id="docker-images"><a href="#docker-images">docker images</a></h3>
+<p>List images downloaded to the host</p>
+<pre><code>docker images</code></pre>
+<h3 id="help"><a href="#help">Help</a></h3>
+<p>Prints all docker commands.</p>
+<pre><code>docker</code></pre>
+<p>Prints help for the given command, if such command accept some params.</p>
+<pre><code>docker &lt;command&gt;</code></pre>
+<p>Prints help for the given command</p>
+<pre><code>docker &lt;command&gt; --help</code></pre>
+<h2 id="dockerfile-1"><a href="#dockerfile-1">Dockerfile</a></h2>
+<pre><code># comment
+&amp;lt;INSTRUCTION&amp;gt; &amp;lt;statement&amp;gt;</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">INSTRUCTION</th>
+<th align="left">SYNTAX</th>
+<th align="left">Support Env Substutution</th>
+<th align="left">Description</th>
+<th align="left">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FROM</td>
+<td align="left">FROM &lt;image&gt;[:&lt;tag&gt;]</td>
+<td align="left">No</td>
+<td align="left">Base image</td>
+<td align="left">FROM ubuntu:12.04</td>
+</tr>
+<tr class="even">
+<td align="left">MAINTAINER</td>
+<td align="left">MAINTAINER &lt;author&gt;</td>
+<td align="left">No</td>
+<td align="left">Image maintainer</td>
+<td align="left">MAINTAINER Kate Smith &lt;ksmith@example.com&gt;</td>
+</tr>
+<tr class="odd">
+<td align="left">RUN</td>
+<td align="left">RUN &lt;command&gt;</td>
+<td align="left">No</td>
+<td align="left">The command is run in a shell - /bin/sh -c - shell form. multiple ‘RUN’ lines could be used for complex provisioning</td>
+<td align="left">apt-get update &amp;&amp; apt-get install -y ruby ruby-dev</td>
+</tr>
+<tr class="even">
+<td align="left">RUN</td>
+<td align="left">RUN [“executable”,“param1”, “param2”]</td>
+<td align="left">No</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">CMD</td>
+<td align="left">CMD [“executable”,“param1”,“param2”]</td>
+<td align="left">No</td>
+<td align="left">The main purpose of a CMD is to provide defaults for an executing container.</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">CMD</td>
+<td align="left">CMD [“param1”,“param2”]</td>
+<td align="left">No</td>
+<td align="left">The main purpose of a CMD is to provide defaults for an executing container.</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">CMD</td>
+<td align="left">CMD command param1 param2</td>
+<td align="left">No</td>
+<td align="left">The main purpose of a CMD is to provide defaults for an executing container.</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">EXPOSE</td>
+<td align="left">EXPOSE &lt;port&gt; [&lt;port&gt;…]</td>
+<td align="left">Yes</td>
+<td align="left">The EXPOSE instructions informs Docker that the container will listen on the specified network ports at runtime.</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">ENV</td>
+<td align="left">ENV &lt;key&gt; &lt;value&gt;</td>
+<td align="left">Yes</td>
+<td align="left">Sets the environment variable &lt;key&gt; to the value &lt;value&gt;</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">ADD</td>
+<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Copies new files, directories or remote file URLs from &lt;src&gt; to path &lt;dest&gt;. If &lt;src&gt; is a compressed file it will be uncompressed.</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">COPY</td>
+<td align="left">COPY &lt;src&gt;… &lt;dest&gt;</td>
+<td align="left">Yes</td>
+<td align="left">copies new files or directories from &lt;src&gt; and adds them to the filesystem of the container at the path &lt;dest&gt;. &lt;src&gt; MUST not be outside The folder where Dokerfile is. If &lt;dest&gt; terminated with “/” it is considered a folder,otherwise it’s considered a file.</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">WORKDIR</td>
+<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">sets the working directory for any RUN, CMD and ENTRYPOINT instructions that follow it in the Dockerfile</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">VOLUME</td>
+<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Will create a mount point with the specified name and mark it as holding externally mounted volumes from native host or other containers</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">USER</td>
+<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Sets the user name or UID to use when running the image</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">ONBUILD</td>
+<td align="left"></td>
+<td align="left">No</td>
+<td align="left">Adds to the image a trigger instruction to be executed at a later time, when the image is used as the base for another build</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<h3 id="dockerfile-template"><a href="#dockerfile-template">Dockerfile Template</a></h3>
+<pre><code>FROM debian:8.0
+MAINTAINER John Doe
+RUN cmd1
+RUN cmd2
+RUN cmd3
+EXPOSE 80</code></pre>
+<h2 id="install-on-ubuntu-14.04"><a href="#install-on-ubuntu-14.04">Install on Ubuntu 14.04</a></h2>
+<p>This is to set the docker repo in ubuntu</p>
+<pre><code>$ wget https://get.docker.com/ubuntu/ --output-document=./check-docker.sh
+$ chmod u+x check-docker.sh
+$ sudo ./check-docker.sh</code></pre>
+<p>This is to update Ubuntu</p>
+<pre><code>$ sudo apt-get update
+$ sudo apt-get -y install lxc-docker</code></pre>
+<p>This is to try Docker</p>
+<pre><code>$ sudo docker run -i -t ubuntu /bin/bash</code></pre>
+<p>If it works well it should output something like that.</p>
+<pre><code>$ sudo docker run -i -t ubuntu /bin/bash
+Unable to find image &#39;ubuntu:latest&#39; locally
+ubuntu:latest: The image you are pulling has been verified
+511136ea3c5a: Pull complete 
+3b363fd9d7da: Pull complete 
+607c5d1cca71: Pull complete 
+f62feddc05dc: Pull complete 
+8eaa4ff06b53: Pull complete 
+Status: Downloaded newer image for ubuntu:latest
+root@953fa5507b96:/#</code></pre>
+<p>Try a couple of commands and exit.</p>
+<pre><code>root@953fa5507b96:/# whoami
+root
+root@953fa5507b96:/# hostname
+953fa5507b96
+root@953fa5507b96:/# exit</code></pre>
+<p>To avoid using “sudo” there’s a special user group available.</p>
+<pre><code># Add the docker group if it doesn&#39;t already exist.
+$ sudo groupadd docker
+
+# Add the connected user &quot;${USER}&quot; to the docker group.
+# You may have to logout and log back in again.
+$ sudo gpasswd -a ${USER} docker
+
+# Restart the Docker daemon.
+# If you are in Ubuntu 14.04, use docker.io instead of docker
+$ sudo service docker restart
+$ sudo service docker.io restart</code></pre>
+<h2 id="container-private-data"><a href="#container-private-data">Container private data</a></h2>
+<h4 id="goal"><a href="#goal">Goal</a></h4>
+<p>To show where a container puts its private data</p>
+<h4 id="instructions"><a href="#instructions">Instructions</a></h4>
+<p>Just check what is inside Docker’s system directories</p>
+<pre><code>$ sudo tree -L 3 /var/lib/docker/containers; \
+sudo tree -L 3 /var/lib/docker/volumes; \
+sudo tree -L 3 /var/lib/docker/vfs </code></pre>
+<p>The result depends on if and how you previously run docker. This time on my machine the folders are empty.</p>
+<pre><code>/var/lib/docker/containers
+
+0 directories, 0 files
+/var/lib/docker/volumes
+
+0 directories, 0 files
+/var/lib/docker/vfs
+bb b  dir
+
+1 directory, 0 files</code></pre>
+<p>Run a postgres instance with</p>
+<pre><code>docker run --rm --name mypg -p 127.0.0.1:5432:5432 -e POSTGRES_PASSWORD=pwd postgres:9.4.0</code></pre>
+<p>While container is running check again for the folders.</p>
+<pre><code>/var/lib/docker/containers
+bb b  6e556aa9af283a15f0960352bf4277eec74722d03a3aca37722e9976145589c0
+    bb b  6e556aa9af283a15f0960352bf4277eec74722d03a3aca37722e9976145589c0-json.log
+    bb b  config.json
+    bb b  hostconfig.json
+    bb b  hostname
+    bb b  hosts
+    bb b  resolv.conf
+
+1 directory, 6 files
+/var/lib/docker/volumes
+bb b  605d94e8be0d21fb3b8816b2dcf10dcc714ccb90f1d964f1c75bc9dc322c608d
+    bb b  config.json
+
+1 directory, 1 file
+/var/lib/docker/vfs
+bb b  dir
+    bb b  605d94e8be0d21fb3b8816b2dcf10dcc714ccb90f1d964f1c75bc9dc322c608d
+    bb b  base
+    bb b  global
+    bb b  pg_clog
+    bb b  pg_dynshmem
+    bb b  pg_hba.conf
+    bb b  pg_ident.conf
+    bb b  pg_logical
+    bb b  pg_multixact
+    bb b  pg_notify
+    bb b  pg_replslot
+    bb b  pg_serial
+    bb b  pg_snapshots
+    bb b  pg_stat
+    bb b  pg_stat_tmp
+    bb b  pg_subtrans
+    bb b  pg_tblspc
+    bb b  pg_twophase
+    bb b  PG_VERSION
+    bb b  pg_xlog
+    bb b  postgresql.auto.conf
+    bb b  postgresql.conf
+    bb b  postmaster.opts
+    bb b  postmaster.pid</code></pre>
+<p>Stop the container <CTRL+C></p>
+<p>Check again in the folders.</p>
+<pre><code>/var/lib/docker/containers
+
+0 directories, 0 files
+/var/lib/docker/volumes
+
+0 directories, 0 files
+/var/lib/docker/vfs
+bb b  dir
+
+1 directory, 0 files</code></pre>
+<h4 id="conclusion"><a href="#conclusion">Conclusion</a></h4>
+<p>run –rm allows to play around with a container removing all its data when it terminates.</p>
+<h3 id="running-an-ephemereal-postgres-db"><a href="#running-an-ephemereal-postgres-db">Running an ephemereal Postgres DB</a></h3>
+<p><em>or… What it means for containers to be ephemereal</em></p>
+<h4 id="goal-1"><a href="#goal-1">Goal</a></h4>
+<p>To show what are the implications for containers to be ephemeral</p>
+<h4 id="instructions-1"><a href="#instructions-1">Instructions</a></h4>
+<p>Start a Postgres instance with</p>
+<pre><code>$ docker run -d -p 5432:5432 -e POSTGRES_PASSWORD=pwd postgres:9.4.0</code></pre>
+<p>Docker outputs the new container id</p>
+<pre><code>9b204a60da31a39dc1cb6b4ad944aa75ecb53e6bd069dfe726e604bf3ec37715</code></pre>
+<p>Check the IP of the new container. You can use the first 12 chars as name.</p>
+<pre><code>$ docker inspect 9b204a60da31 | grep -i ipaddress
+&quot;IPAddress&quot;: &quot;172.17.0.11&quot;,</code></pre>
+<p>Connect to the DB with a new container that runs plsql</p>
+<pre><code>$ docker run -ti --rm mine/psql:0.1 psql -h 172.17.0.11 -p 5432 -U postgres postgres</code></pre>
+<p>a client and execute…</p>
+<pre><code>postgres=# create table people (name varchar(128));
+postgres=# insert into People(name) values(&#39;susie&#39;),(&#39;vivianne&#39;),(&#39;axelle&#39;);
+postgres=# select * from people;</code></pre>
+<p>The SELECT returns the expected values.</p>
+<p>Stop the postgres container</p>
+<pre><code>$ docker stop 9b204a60da31</code></pre>
+<h4 id="conclusions"><a href="#conclusions">Conclusions</a></h4>
+<p>Now, repeat the process and you’ll find that the modifications on the Db have not been kept. This is because run always create a new container. If you to restart the same container with restart, it will start at different address, but the data will still be there. Data are actually removed in only two ways:</p>
+<ul>
+<li>docker run –rm
+<ul>
+<li>when the container exits</li>
+</ul></li>
+<li>docker rm -v <container></li>
+</ul>
+<h2 id="examples-build-an-image-step-by-step"><a href="#examples-build-an-image-step-by-step">Examples: Build An Image Step By Step</a></h2>
+<p><em>or How you can create a reusable Docker image</em></p>
+<h4 id="goal-2"><a href="#goal-2">Goal</a></h4>
+<p>To create an image performing common operations.</p>
+<h4 id="instructions-2"><a href="#instructions-2">Instructions</a></h4>
+<p>The goal is to build a dockerized image of postgresql-client, the CLI Postgres client, that will allow us to interact with a container running postgres.</p>
+<p>Let’s start a container based on ubuntu</p>
+<pre><code>$ docker run -it ubuntu:14.04 </code></pre>
+<p>Once inside the container let’s check psql is not installed.</p>
+<pre><code># psql -V</code></pre>
+<p>let’s run apt-get. We don’t need to use sudo becasue we’re root.</p>
+<pre><code># apt-get install postgresql-client</code></pre>
+<p>psql is now available</p>
+<pre><code># psql -V</code></pre>
+<p>exit form the container</p>
+<pre><code># exit</code></pre>
+<p>check the name of the container</p>
+<pre><code># docker ps -a</code></pre>
+<p>in my case the name is “focused_mccharty”</p>
+<pre><code>$ docker commit -m=&quot;Added psql&quot; -a=&quot;Daniele&quot; focused_mccharty mine/psql:0.1</code></pre>
+<p>check that the new image is available</p>
+<pre><code>$ docker images</code></pre>
+<p>try to run a temprary container running psql with</p>
+<pre><code>$ docker run -ti --rm mine/psql:0.1</code></pre>
+<p>you will be able to run that whenever you want without the need to reintall psql</p>
+<h4 id="conclusion-1"><a href="#conclusion-1">Conclusion</a></h4>
+<p>Images are a good way to have a reproducibile, disposable application based on a container.</p>
+<h3 id="running-an-persistent-postgres-db"><a href="#running-an-persistent-postgres-db">Running an persistent Postgres DB</a></h3>
+<p><em>or… How do I separate the life of data folder from life of containers?</em></p>
+<h4 id="goal-3"><a href="#goal-3">Goal</a></h4>
+<p>Understand how one can remove container keeping its data. Or for instance keep the database data and upgrade from postgres 9:3 to postgres 9:4.</p>
+<h4 id="instrutions"><a href="#instrutions">Instrutions</a></h4>
+<p>If you check the <em>postgres</em> Image <a href="https://registry.hub.docker.com/_/postgres/">instructions</a> you will see that the image has been configured to store data in <em>/var/lib/postgresql/data/</em>.</p>
+<p>If you check with</p>
+<pre><code>$ docker inspect &lt;postgresql-container&gt;  | grep -n 3 -i volumes </code></pre>
+<p>you will see that postgres defines this volume…</p>
+<pre><code>&quot;Volumes&quot;: {
+    &quot;/var/lib/postgresql/data&quot;: &quot;/var/lib/docker/vfs/dir/130b32b8a5187509c4764238a7d7b962f924ba4d52bcbaadca91f994ec30081d&quot;
+},
+&quot;VolumesRW&quot;: {
+    &quot;/var/lib/postgresql/data&quot;: true
+}</code></pre>
+<p>So, that means postgres allows its folder <em>/var/lib/postgresql/data</em> to be <em>imported</em> into another container. Create container that immediately terminates.</p>
+<pre><code>docker run --name &quot;dbdata&quot; -v /dbdata postgres:9.4.0 true</code></pre>
+<p>Run a postgres instance with</p>
+<pre><code>docker run --rm --volumes-from dbdata --name mypg -p 5432:5432 -e POSTGRES_PASSWORD=pwd postgres:9.4.0</code></pre>
+<h4 id="conclusions-1"><a href="#conclusions-1">Conclusions</a></h4>
+<p>Container <em>mypg</em> will import <em>/var/lib/postgresql/data</em> from <em>dbdata</em> into its filesystem. There is a name conflict but imported volumes take precedence on local filesystem entries. This way data are kept into the “data” container and it is possible to upgrade the container.</p>
+<h3 id="a-tomcat-based-image"><a href="#a-tomcat-based-image">A Tomcat Based Image</a></h3>
+<h4 id="or-how-do-i-build-an-image-running-tomcat"><a href="#or-how-do-i-build-an-image-running-tomcat">or How do I build an Image running Tomcat ?</a></h4>
+<h4 id="goal-4"><a href="#goal-4">Goal</a></h4>
+<p>To show how can you leverage prebuilt Images to setup an application differently</p>
+<h4 id="instructions-3"><a href="#instructions-3">Instructions</a></h4>
+<p>First of all, let’s decide which base image we would like to use.</p>
+<pre><code>$ docker search tomcat</code></pre>
+<p>That gives this list.</p>
+<pre><code>NAME                                  DESCRIPTION                                     STARS     OFFICIAL   AUTOMATED
+tomcat                                Apache Tomcat is an open source implementa...   42        [OK]       
+tutum/tomcat                          Tomcat image - listens in port 8080. For t...   37                   [OK]
+consol/tomcat-7.0                     Tomcat 7.0.57, 8080, &quot;admin/admin&quot;              11                   [OK]
+jeanblanchard/busybox-tomcat          Minimal Docker image with Apache Tomcat         8                    [OK]
+...</code></pre>
+<p>Let’s go for the ‘tomcat’ machine. Let’s try to run it just to check what it does…</p>
+<pre><code>$ docker run --rm --name=&quot;tmc1&quot; -P tomcat
+517108c9e06988da99e0ae11d3028bc1fd1cbbfc2ef091d63a531104af232be2</code></pre>
+<p>Ler’s tetrieve some info using ps</p>
+<pre><code>$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                     NAMES
+517108c9e069        tomcat:latest       &quot;catalina.sh run&quot;   3 minutes ago       Up About a minute   0.0.0.0:49155-&gt;8080/tcp   tmc1 </code></pre>
+<p>Let’s start a browser to localhost:49155, it works!</p>
+<p>Now, time to fix things. Let’s stop the container. What there is inside ?</p>
+<pre><code>$ sudo docker attach tmc1 # by Name
+$ sudo docker attach 665b4a1e17b6 # by ID
+$ sudo docker exec -i -t tmc1 bash # by Name
+$ sudo docker exec -i -t 517108c9e069 bash # by ID</code></pre>
+<p>If we check…</p>
+<pre><code># cat /usr/local/tomcat/conf/tomcat-users.xml | grep -n3 rolename </code></pre>
+<p>We’ll discover that the users are commented out. So, our first goal is to create an image that enable access to the manager app.</p>
+<p>Let’s copy a file out of the container filesystem into the local filesystem.</p>
+<pre><code>$ docker cp tmc1:/usr/local/tomcat/conf/tomcat-users.xml .</code></pre>
+<p>No we can edit in in the host.</p>
+<pre><code>$ vi tomcat-users.xml</code></pre>
+<p>Let’s add the usual config to make the app available</p>
+<pre><code>&lt;role rolename=&quot;manager-gui&quot;/&gt;
+&lt;user username=&quot;admin&quot; password=&quot;admin&quot; roles=&quot;manager-gui&quot; /&gt;</code></pre>
+<p>Let’s start up defining our machines using the Dockerfile.</p>
+<pre><code>$ touch Dockerfile</code></pre>
+<p>Let’s start with the basic info…</p>
+<pre><code>FROM tomcat
+MAINTAINER Daniele Demichelis &lt;demichelis@danidemi.com&gt;</code></pre>
+<p>And let’s modify Dockerfile to copy the file</p>
+<pre><code>FROM tomcat
+MAINTAINER Daniele Demichelis &lt;demichelis@danidemi.com&gt;
+COPY tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml</code></pre>
+<p>Now, let’s stop the container, remove it and recreate it from the Dockerfile using “build”.</p>
+<pre><code>$ docker stop tmc1
+$ docker rm tmc1
+$ docker build -t=&quot;myself/mytomcat:0.1&quot; .
+Sending build context to Docker daemon 18.43 kB
+Sending build context to Docker daemon 
+Step 0 : FROM tomcat
+ ---&gt; fe982f1618dd
+Step 1 : MAINTAINER Daniele Demichelis &lt;demichelis@danidemi.com&gt;
+ ---&gt; Using cache
+ ---&gt; 71a1241dc62e
+Step 2 : COPY tomcat-users.xml /usr/local/tomcat/conf/tomcat-users.xml
+ ---&gt; 1402edcdb559
+Removing intermediate container be629f6c350e
+Successfully built 1402edcdb559
+$ docker create -P --name=&quot;tmc1&quot; myself/mytomcat:0.1 </code></pre>
+<h3 id="a-web-app"><a href="#a-web-app">A Web app</a></h3>
+<h4 id="or-how-do-i-dockerize-my-own-java-web-app"><a href="#or-how-do-i-dockerize-my-own-java-web-app">or How do I dockerize my own Java web app ?</a></h4>
+<h4 id="goal-5"><a href="#goal-5">Goal</a></h4>
+<p>Shows how a JEE app can be dockerized.</p>
+<h4 id="instructions-4"><a href="#instructions-4">Instructions</a></h4>
+<p>Creates a postgres container</p>
+<pre><code>$ docker run -d --name=&quot;itemsapp_db&quot; postgres</code></pre>
+<p>Check how the environment in a linking container is set</p>
+<pre><code>$ docker run --rm --name=&quot;itemsapp&quot; --link itemsapp_db:db &quot;myself/mytomcat:0.1&quot; env
+
+PATH=/usr/local/tomcat/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+HOSTNAME=fa3f9b73e652
+DB_PORT=tcp://172.17.0.3:5432
+DB_PORT_5432_TCP=tcp://172.17.0.3:5432
+DB_PORT_5432_TCP_ADDR=172.17.0.3
+DB_PORT_5432_TCP_PORT=5432
+DB_PORT_5432_TCP_PROTO=tcp
+DB_NAME=/itemsapp/db
+DB_ENV_LANG=en_US.utf8
+DB_ENV_PG_MAJOR=9.4
+DB_ENV_PG_VERSION=9.4.0-1.pgdg70+1
+DB_ENV_PGDATA=/var/lib/postgresql/data
+JAVA_VERSION=7u71
+JAVA_DEBIAN_VERSION=7u71-2.5.3-2
+CATALINA_HOME=/usr/local/tomcat
+TOMCAT_MAJOR=8
+TOMCAT_VERSION=8.0.15
+TOMCAT_TGZ_URL=https://www.apache.org/dist/tomcat/tomcat-8/v8.0.15/bin/apache-tomcat-8.0.15.tar.gz
+HOME=/root</code></pre>
+<p>Check how the hosts file is set</p>
+<pre><code>$ docker run --rm --name=&quot;itemsapp&quot; --link itemsapp_db:db &quot;myself/mytomcat:0.1&quot; cat /etc/hosts</code></pre>
+<p>Creates an app container</p>
+<pre><code>$ docker run -d -P --name=&quot;itemsapp&quot; --link itemsapp_db:db &quot;myself/mytomcat:0.1&quot;</code></pre>
+<h2 id="references"><a href="#references">References</a></h2>
+<p><a href="https://docs.docker.com/installation/ubuntulinux/">https://docs.docker.com/installation/ubuntulinux/</a></p>
+<p><a href="https://docs.docker.com/userguide/dockerimages/">https://docs.docker.com/userguide/dockerimages/</a></p>
+<p><a href="https://docs.docker.com/reference/builder/">https://docs.docker.com/reference/builder/</a></p>
+<p><a href="https://devopsu.com/blog/docker-misconceptions/">https://devopsu.com/blog/docker-misconceptions/</a></p>
+<p><a href="http://askubuntu.com/questions/505506/docker-how-to-get-bash-ssh-inside-runned-container-run-d">http://askubuntu.com/questions/505506/docker-how-to-get-bash-ssh-inside-runned-container-run-d</a></p>
+<p><a href="http://www.mulesoft.com/tcat/tomcat-clustering">http://www.mulesoft.com/tcat/tomcat-clustering</a></p>
+<p><a href="http://crosbymichael.com/dockerfile-best-practices.html">http://crosbymichael.com/dockerfile-best-practices.html</a></p>
+<p><a href="https://bryantsai.com/db2-on-docker/">https://bryantsai.com/db2-on-docker/</a></p>
+<p><a href="http://zeroturnaround.com/rebellabs/docker-for-java-developers-how-to-sandbox-your-app-in-a-clean-environment/">http://zeroturnaround.com/rebellabs/docker-for-java-developers-how-to-sandbox-your-app-in-a-clean-environment/</a></p>
+<p><a href="https://blog.codecentric.de/en/2014/02/docker-registry-run-private-docker-image-repository/">https://blog.codecentric.de/en/2014/02/docker-registry-run-private-docker-image-repository/</a></p>
+<p><a href="http://www.offermann.us/2013/12/tiny-docker-pieces-loosely-joined.html">http://www.offermann.us/2013/12/tiny-docker-pieces-loosely-joined.html</a></p>
+<p><a href="http://www.tech-d.net/2014/11/18/data-only-container-madness/">http://www.tech-d.net/2014/11/18/data-only-container-madness/</a></p>
+<p><a href="https://www.martinvanbeurden.nl/blog/cleaning-up-after-docker/">https://www.martinvanbeurden.nl/blog/cleaning-up-after-docker/</a></p>
+<h1 id="packer"><a href="#packer">Packer</a></h1>
+<h2 id="big-picture-2"><a href="#big-picture-2">Big Picture</a></h2>
+<ul>
+<li>Packer is a tool for
+<ul>
+<li>creating identical machine images</li>
+<li>for multiple platforms</li>
+<li>from a single source configuration</li>
+</ul></li>
+</ul>
+<h3 id="template"><a href="#template">Template</a></h3>
+<ul>
+<li>The configuration file used to define
+<ul>
+<li>what image we want built</li>
+<li>how we want to build it</li>
+</ul></li>
+<li>The format of a template is simple JSON</li>
+</ul>
+<h3 id="provisioner"><a href="#provisioner">Provisioner</a></h3>
+<ul>
+<li>Install software in the image</li>
+</ul>
+<h3 id="builder"><a href="#builder">Builder</a></h3>
+<ul>
+<li>Ouput the image in a usable format
+<ul>
+<li>Amazon</li>
+<li>Virtual Box</li>
+<li>…</li>
+</ul></li>
+</ul>
+<h2 id="template-1"><a href="#template-1">Template</a></h2>
+<pre><code>{
+    &quot;description&quot; : &quot;description&quot;, 
+    &quot;builders&quot; : [
+        {
+            &quot;type&quot;: &quot;virtualbox-iso&quot;,
+            &quot;guest_os_type&quot;: &quot;Ubuntu_64&quot;,
+            &quot;iso_url&quot;: &quot;http://releases.ubuntu.com/12.04/ubuntu-12.04.5-server-amd64.iso&quot;,
+            &quot;iso_checksum&quot;: &quot;769474248a3897f4865817446f9a4a53&quot;,
+            &quot;iso_checksum_type&quot;: &quot;md5&quot;,
+            &quot;ssh_username&quot;: &quot;packer&quot;,
+            &quot;ssh_password&quot;: &quot;packer&quot;,
+            &quot;ssh_wait_timeout&quot;: &quot;30s&quot;,
+            &quot;shutdown_command&quot;: &quot;echo &#39;packer&#39; | sudo -S shutdown -P now&quot;
+        }
+    ],
+    &quot;provisioners&quot; : [
+        {
+            &quot;type&quot;:&quot;shell&quot;,
+            &quot;script&quot;:&quot;setup.sh&quot;
+        }
+    ]
+}</code></pre>
+<h2 id="installation"><a href="#installation">Installation</a></h2>
+<p>Packer is distributed as a binary package.</p>
+<ul>
+<li>Download Packer from https://www.packer.io/downloads.html</li>
+<li>Unzip the Packer distributable in a directory</li>
+<li><p>Add the folder to the path</p>
+<p>$ wget https://dl.bintray.com/mitchellh/packer packer_0.7.5_linux_amd64.zip</p></li>
+</ul>
+<h2 id="commands"><a href="#commands">Commands</a></h2>
+<pre><code>packer build</code></pre>
+<h2 id="builders"><a href="#builders">Builders</a></h2>
+<ul>
+<li>Virtuabox
+<ul>
+<li>virtualbox-iso
+<ul>
+<li>Starts from an ISO file, creates a brand new VirtualBox VM, installs an OS, provisions software within the OS, then exports that machine to create an image. This is best for people who want to start from scratch.</li>
+</ul></li>
+<li>virtualbox-ovf
+<ul>
+<li>This builder imports an existing OVF/OVA file, runs provisioners on top of that VM, and exports that machine to create an image. This is best if you have an existing VirtualBox VM export you want to use as the source. As an additional benefit, you can feed the artifact of this builder back into itself to iterate on a machine.</li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="examples-4"><a href="#examples-4">Examples</a></h2>
+<h3 id="a-wordpress-machine"><a href="#a-wordpress-machine">A Wordpress Machine</a></h3>
+<p>Type this file</p>
+<pre><code>TBD</code></pre>
+<p>Verify the file</p>
+<pre><code>$ packer validate machine.json
+Template validated successfully.</code></pre>
+<h2 id="problems"><a href="#problems">Problems</a></h2>
+<pre><code>$ packer build machine.json
+virtualbox-iso output will be in this color.
+
+Build &#39;virtualbox-iso&#39; errored: Error reading version for guest additions download: VirtualBox is not properly setup: WARNING: The vboxdrv kernel module is not loaded. Either there is no module
+     available for the current kernel (3.13.0-35-generic) or it failed to
+     load. Please recompile the kernel module and install it by
+
+       sudo /etc/init.d/vboxdrv setup
+
+     You will not be able to start VMs until this problem is fixed.
+4.3.14r95030
+
+==&gt; Some builds didn&#39;t complete successfully and had errors:
+--&gt; virtualbox-iso: Error reading version for guest additions download: VirtualBox is not properly setup: WARNING: The vboxdrv kernel module is not loaded. Either there is no module
+     available for the current kernel (3.13.0-35-generic) or it failed to
+     load. Please recompile the kernel module and install it by
+
+       sudo /etc/init.d/vboxdrv setup
+
+     You will not be able to start VMs until this problem is fixed.
+4.3.14r95030
+
+==&gt; Builds finished but no artifacts were created.
+danidemi@ubuntu-desk-box:~/Gits/sitebox$ sudo /etc/init.d/vboxdrv setup
+[sudo] password for danidemi: 
+Stopping VirtualBox kernel modules ...done.
+Uninstalling old VirtualBox DKMS kernel modules ...done.
+Trying to register the VirtualBox kernel modules using DKMS ...done.
+Starting VirtualBox kernel modules ...done.</code></pre>
+<h1 id="maven-cheat-sheet"><a href="#maven-cheat-sheet">Maven Cheat Sheet</a></h1>
+<h1 id="command-line"><a href="#command-line">Command Line</a></h1>
+<pre><code>$ mvn --help
+usage: mvn [options] [&lt;goal(s)&gt;] [&lt;phase(s)&gt;]</code></pre>
+<ul>
+<li>-am,–also-make
+<ul>
+<li>If project list is specified, also build projects required by the list</li>
+</ul></li>
+<li>-amd,–also-make-dependents
+<ul>
+<li>If project list is specified, also build projects that depend on projects on the list</li>
+</ul></li>
+<li>-B,–batch-mode
+<ul>
+<li>Run in non-interactive (batch) mode</li>
+</ul></li>
+<li>-b,–builder <arg>
+<ul>
+<li>The id of the build strategy to use.</li>
+</ul></li>
+<li>-C,–strict-checksums
+<ul>
+<li>Fail the build if checksums don’t match</li>
+</ul></li>
+<li>-c,–lax-checksums
+<ul>
+<li>Warn if checksums don’t match</li>
+</ul></li>
+<li>-cpu,–check-plugin-updates
+<ul>
+<li>Ineffective, only kept for backward compatibility</li>
+</ul></li>
+<li>-D,–define <arg>
+<ul>
+<li>Define a system property</li>
+<li>Needed every time a system property like test.skip should pe passed along</li>
+</ul></li>
+<li>-e,–errors
+<ul>
+<li>Produce execution error messages</li>
+</ul></li>
+<li>-emp,–encrypt-master-password <arg>
+<ul>
+<li>Encrypt master security password</li>
+</ul></li>
+<li>-ep,–encrypt-password <arg>
+<ul>
+<li>Encrypt server password</li>
+</ul></li>
+<li>-f,–file
+<ul>
+<li>Force the use of an alternate POM file (or directory with pom.xml).</li>
+</ul></li>
+<li>-fae,–fail-at-end
+<ul>
+<li>Only fail the build afterwards; allow all non-impacted builds to continue</li>
+</ul></li>
+<li>-ff,–fail-fast
+<ul>
+<li>Stop at first failure in reactorized builds</li>
+</ul></li>
+<li>-fn,–fail-never
+<ul>
+<li>NEVER fail the build, regardless of project result</li>
+</ul></li>
+<li>-gs,–global-settings <arg>
+<ul>
+<li>Alternate path for the global settings file</li>
+</ul></li>
+<li>-h,–help
+<ul>
+<li>Display help information</li>
+</ul></li>
+<li>-l,–log-file <arg>
+<ul>
+<li>Log file to where all build output will go.</li>
+</ul></li>
+<li>-llr,–legacy-local-repository
+<ul>
+<li>Use Maven 2 Legacy Local Repository behaviour, ie no use of _remote.repositories. Can also be activated by using -Dmaven.legacyLocalRepo=true
+</td></li>
+</ul></li>
+<li>-N,–non-recursive
+<ul>
+<li>Do not recurse into sub-projects</li>
+</ul></li>
+<li>-npr,–no-plugin-registry
+<ul>
+<li>Ineffective, only kept for backward compatibility</li>
+</ul></li>
+<li>-npu,–no-plugin-updates
+<ul>
+<li>Ineffective, only kept for backward compatibility</li>
+</ul></li>
+<li>-nsu,–no-snapshot-updates
+<ul>
+<li>Suppress SNAPSHOT updates</li>
+</ul></li>
+<li>-o,–offline
+<ul>
+<li>Work offline</li>
+</ul></li>
+<li>-P,–activate-profiles <arg>
+<ul>
+<li>Comma-delimited list of profiles to activate</li>
+</ul></li>
+<li>-pl,–projects <arg>
+<ul>
+<li>Comma-delimited list of specified reactor projects to build instead of all projects. A project can be specified by [groupId]:artifactId or by its relative path.</li>
+</ul></li>
+<li>-q,–quiet
+<ul>
+<li>Quiet output - only show errors</li>
+</ul></li>
+<li>-rf,–resume-from <arg>
+<ul>
+<li>Resume reactor from specified project</li>
+</ul></li>
+<li>-s,–settings <arg>
+<ul>
+<li>Alternate path for the user settings file</li>
+</ul></li>
+<li>-T,–threads <arg>
+<ul>
+<li>Thread count, for instance 2.0C where C is core multiplied</li>
+</ul></li>
+<li>-t,–toolchains <arg>
+<ul>
+<li>Alternate path for the user toolchains file</li>
+</ul></li>
+<li>-U,–update-snapshots
+<ul>
+<li>Forces a check for missing releases and updated snapshots on remote repositories</li>
+</ul></li>
+<li>-up,–update-plugins
+<ul>
+<li>Ineffective, only kept for backward compatibility</li>
+</ul></li>
+<li>-V,–show-version
+<ul>
+<li>Display version information WITHOUT stopping build</li>
+</ul></li>
+<li>-v,–version
+<ul>
+<li>Display version information</li>
+</ul></li>
+<li>-X,–debug
+<ul>
+<li>Produce execution debug output</li>
+</ul></li>
+</ul>
+<h1 id="maven-cheat-sheet-1"><a href="#maven-cheat-sheet-1">Maven Cheat Sheet</a></h1>
+<h2 id="standard-layout"><a href="#standard-layout">Standard Layout</a></h2>
+<pre><code>src/main/java       Application/Library sources
+src/main/resources  Application/Library resources
+src/main/filters    Resource filter files
+src/main/config     Configuration files
+src/main/scripts    Application/Library scripts
+src/main/webapp     Web application sources
+src/test/java       Test sources
+src/test/resources  Test resources
+src/test/filters    Test resource filter files
+src/it              Integration Tests (primarily for plugins)
+src/assembly        Assembly descriptors
+src/site            Site
+LICENSE.txt         Project&#39;s license
+NOTICE.txt          Notices and attributions required by libraries that the project depends on
+README.txt          Project&#39;s readme</code></pre>
+<h2 id="meta-inf"><a href="#meta-inf">META-INF</a></h2>
+<p>For jars, <code>META-INF</code> should be usually put under <code>src/main/resources</code> For wars, <code>META-INF</code> should be usually put under <code>src/main/webapp</code></p>
+<h2 id="phases"><a href="#phases">Phases</a></h2>
+<h3 id="clean-lifecycle"><a href="#clean-lifecycle">Clean Lifecycle</a></h3>
+<table>
+  <tr>
+    <td>
+pre-clean
+</td>
+    <td>
+executes processes needed prior to the actual project cleaning
+</td>
+  </tr>
+  <tr>
+    <td>
+clean
+</td>
+    <td>
+remove all files generated by the previous build
+</td>
+  </tr>
+  <tr>
+    <td>
+post-clean
+</td>
+    <td>
+executes processes needed to finalize the project cleaning
+</td>
+  </tr>
+</table>
+
+
+<h3 id="default-lifecycle"><a href="#default-lifecycle">Default Lifecycle</a></h3>
+<table>
+  <tr>
+    <td>
+validate
+</td>
+    <td>
+validate the project is correct and all necessary information is available.
+</td>
+  </tr>
+  <tr>
+    <td>
+initialize
+</td>
+    <td>
+initialize build state, e.g. set properties or create directories.
+</td>
+  </tr>
+  <tr>
+    <td>
+generate-sources
+</td>
+    <td>
+generate any source code for inclusion in compilation.
+</td>
+  </tr>
+  <tr>
+    <td>
+process-sources
+</td>
+    <td>
+process the source code, for example to filter any values.
+</td>
+  </tr>
+  <tr>
+    <td>
+generate-resources
+</td>
+    <td>
+generate resources for inclusion in the package.
+</td>
+  </tr>
+  <tr>
+    <td>
+process-resources
+</td>
+    <td>
+copy and process the resources into the destination directory, ready for packaging.
+</td>
+  </tr>
+  <tr>
+    <td>
+compile
+</td>
+    <td>
+compile the source code of the project.
+</td>
+  </tr>
+  <tr>
+    <td>
+process-classes
+</td>
+    <td>
+post-process the generated files from compilation, for example to do bytecode enhancement on Java classes.
+</td>
+  </tr>
+  <tr>
+    <td>
+generate-test-sources
+</td>
+    <td>
+generate any test source code for inclusion in compilation.
+</td>
+  </tr>
+  <tr>
+    <td>
+process-test-sources
+</td>
+    <td>
+process the test source code, for example to filter any values.
+</td>
+  </tr>
+  <tr>
+    <td>
+generate-test-resources
+</td>
+    <td>
+create resources for testing.
+</td>
+  </tr>
+  <tr>
+    <td>
+process-test-resources
+</td>
+    <td>
+copy and process the resources into the test destination directory.
+</td>
+  </tr>
+  <tr>
+    <td>
+test-compile
+</td>
+    <td>
+compile the test source code into the test destination directory
+</td>
+  </tr>
+  <tr>
+    <td>
+process-test-classes
+</td>
+    <td>
+post-process the generated files from test compilation, for example to do bytecode enhancement on Java classes. For Maven 2.0.5 and above.
+</td>
+  </tr>
+  <tr>
+    <td>
+test
+</td>
+    <td>
+run tests using a suitable unit testing framework. These tests should not require the code be packaged or deployed.
+</td>
+  </tr>
+  <tr>
+    <td>
+prepare-package
+</td>
+    <td>
+perform any operations necessary to prepare a package before the actual packaging. This often results in an unpacked, processed version of the package. (Maven 2.1 and above)
+</td>
+  </tr>
+  <tr>
+    <td>
+package
+</td>
+    <td>
+take the compiled code and package it in its distributable format, such as a JAR.
+</td>
+  </tr>
+  <tr>
+    <td>
+pre-integration-test
+</td>
+    <td>
+perform actions required before integration tests are executed. This may involve things such as setting up the required environment.
+</td>
+  </tr>
+  <tr>
+    <td>
+integration-test
+</td>
+    <td>
+process and deploy the package if necessary into an environment where integration tests can be run.
+</td>
+  </tr>
+  <tr>
+    <td>
+post-integration-test
+</td>
+    <td>
+perform actions required after integration tests have been executed. This may including cleaning up the environment.
+</td>
+  </tr>
+  <tr>
+    <td>
+verify
+</td>
+    <td>
+run any checks to verify the package is valid and meets quality criteria.
+</td>
+  </tr>
+  <tr>
+    <td>
+install
+</td>
+    <td>
+install the package into the local repository, for use as a dependency in other projects locally.
+</td>
+  </tr>
+  <tr>
+    <td>
+deploy
+</td>
+    <td>
+done in an integration or release environment, copies the final package to the remote repository for sharing with other developers and projects.
+</td>
+  </tr>
+</table>
+
+
+<h3 id="site-lifecycle"><a href="#site-lifecycle">Site Lifecycle</a></h3>
+<table>
+  <tr>
+    <td>
+pre-site
+</td>
+    <td>
+executes processes needed prior to the actual project site generation
+</td>
+  </tr>
+  <tr>
+    <td>
+site
+</td>
+    <td>
+generates the project’s site documentation
+</td>
+  </tr>
+  <tr>
+    <td>
+post-site
+</td>
+    <td>
+executes processes needed to finalize the site generation, and to prepare for site deployment
+</td>
+  </tr>
+  <tr>
+    <td>
+site-deploy
+</td>
+    <td>
+deploys the generated site documentation to the specified web server
+</td>
+  </tr>
+</table>
+
+
+
+
+<h2 id="dependencies"><a href="#dependencies">Dependencies</a></h2>
+<h3 id="package-versions"><a href="#package-versions">Package Versions</a></h3>
+<p>The exact version</p>
+<pre><code>&lt;version&gt;&lt;major&gt;.&lt;minor&gt;.&lt;incremental&gt;&lt;/version&gt;</code></pre>
+<p>The latest snapshot of the given version</p>
+<pre><code>&lt;version&gt;&lt;major&gt;.&lt;minor&gt;.&lt;incremental&gt;-SNAPSHOT&lt;/version&gt;
+    </code></pre>
+<p>Declare an exact version.</p>
+<pre><code>&lt;version&gt;[1.0.1]&lt;/version&gt;</code></pre>
+<p>Declare an explicit version, will always resolve to 1.0.1 unless a collision occurs, when Maven will select a matching version.</p>
+<pre><code>&lt;version&gt;1.0.1&lt;/version&gt;</code></pre>
+<p>Use any version that 1.0.0 &lt;= version &lt; 2.0.0, i.e: 1.9.9</p>
+<pre><code>&lt;version&gt;[1.0.0,2.0.0)&lt;/version&gt;</code></pre>
+<p>Declare an open-ended version, i.e: 4.3.2, but not 0.4.4</p>
+<pre><code>&lt;version&gt;[1.0.0,)&lt;/version&gt;</code></pre>
+<h3 id="available-up-to-maven-2.x"><a href="#available-up-to-maven-2.x">Available up to Maven 2.x</a></h3>
+<p>LATEST refers to the latest released or snapshot version of a particular artifact, the most recently deployed artifact in a particular repository.</p>
+<pre><code>&lt;version&gt;LATEST&lt;/version&gt;</code></pre>
+<p>RELEASE refers to the last non-snapshot release in the repository.</p>
+<pre><code>&lt;version&gt;RELEASE&lt;/version&gt;  </code></pre>
+<h3 id="declare"><a href="#declare">Declare</a></h3>
+<p><dependencies> <dependency> <groupId>{groupId}</groupId> <artifactId>{artifactId}</artifactId> <version>{version}</version> <exclusions> <exclusion> <groupId>{excludedGroupId}</groupId> <artifactId>{excludedArtifactId}</artifactId> </exclusion> </exclusions> </dependency> </dependencies></p>
+<p>excludedGroupId:excludedArtifactId won’t be brough in by groupId:artifactId regardless of its deep in the dependnecy tree.</p>
+<h3 id="list-all"><a href="#list-all">List All</a></h3>
+<p><a href="http://maven.apache.org/plugins/maven-dependency-plugin/list-mojo.html">http://maven.apache.org/plugins/maven-dependency-plugin/list-mojo.html</a></p>
+<pre><code>$ mvn dependency:list</code></pre>
+<h2 id="list-tree"><a href="#list-tree">List Tree</a></h2>
+<p><a href="http://maven.apache.org/plugins/maven-dependency-plugin/examples/resolving-conflicts-using-the-dependency-tree.html">http://maven.apache.org/plugins/maven-dependency-plugin/examples/resolving-conflicts-using-the-dependency-tree.html</a></p>
+<pre><code>$ mvn dependency:tree -Dverbose -Dincludes=commons-collections</code></pre>
+<h1 id="configurations"><a href="#configurations">Configurations</a></h1>
+<h2 id="network-timeouts"><a href="#network-timeouts">Network Timeouts</a></h2>
+<p><a href="http://maven.apache.org/guides/mini/guide-http-settings.html">http://maven.apache.org/guides/mini/guide-http-settings.html</a></p>
+<p><a href="http://stackoverflow.com/questions/23510525/maven-dependency-timeout-settings/27015320#27015320">http://stackoverflow.com/questions/23510525/maven-dependency-timeout-settings/27015320#27015320</a></p>
+<p>Network timeout can be set on a per server basis.</p>
+<pre><code>&lt;server&gt;
+
+&lt;id&gt;ask-3rdparties&lt;/id&gt;
+
+    &lt;configuration&gt;
+
+        &lt;httpConfiguration&gt;
+
+            &lt;all&gt;&lt;!-- all | put | get | head --&gt;
+
+                &lt;connectionTimeout&gt;5000&lt;/connectionTimeout&gt;
+
+                &lt;readTimeout&gt;5000&lt;/readTimeout&gt;
+
+            &lt;/all&gt;
+
+        &lt;/httpConfiguration&gt;
+
+    &lt;/configuration&gt;
+
+&lt;/server&gt;</code></pre>
+<h2 id="plugins"><a href="#plugins">Plugins</a></h2>
+<h3 id="general-properties"><a href="#general-properties">General Properties</a></h3>
+<p>Lot of plugins share the same properties.</p>
+<h3 id="project.build.sourceencoding"><a href="#project.build.sourceencoding">project.build.sourceEncoding</a></h3>
+<p>Encodign for sources and resources.</p>
+<p><properties></p>
+<p><project.build.sourceEncoding>UTF-8</project.build.sourceEncoding></p>
+<p></properties></p>
+<h3 id="compiler-plugin"><a href="#compiler-plugin">Compiler Plugin</a></h3>
+<pre><code>&lt;plugin&gt;
+
+   &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+
+   &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+
+   &lt;version&gt;2.3.1&lt;/version&gt;
+
+   &lt;configuration&gt;
+
+       &lt;source&gt;1.6&lt;/source&gt;
+
+       &lt;target&gt;1.6&lt;/target&gt;
+
+   &lt;/configuration&gt;
+
+   &lt;/plugin&gt;</code></pre>
+<h3 id="archetype-plugin"><a href="#archetype-plugin">Archetype Plugin</a></h3>
+<p><a href="http://maven.apache.org/guides/introduction/introduction-to-archetypes.html">http://maven.apache.org/guides/introduction/introduction-to-archetypes.html</a></p>
+<p>Scaffold a project based on a “template” called archetype.</p>
+<p>archetype:generate &gt; /tmp/archetype.txt</p>
+<p>Store the list of available archetypes in a file, there are 1200+ of them.</p>
+<p>archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart</p>
+<p>Generate a quickstart maven project</p>
+<h4 id="useful-archetypes"><a href="#useful-archetypes">Useful Archetypes</a></h4>
+<p>org.apache.maven.archetypes:maven-archetype-quickstart: An archetype which contains a sample Maven project.</p>
+<h3 id="help-plugin"><a href="#help-plugin">Help Plugin</a></h3>
+<p><a href="http://maven.apache.org/plugins/maven-help-plugin/">http://maven.apache.org/plugins/maven-help-plugin/</a></p>
+<p>help:effective-pom</p>
+<p>The effective pom, with dependencies from parent among other things.</p>
+<p>help:describe</p>
+<p>Describe a plugin, a mvn command, etc…</p>
+<p>mvn help:describe -Dcmd=deploy</p>
+<p>mvn help:describe -Dplugin=archetype (here “org.apache.” is probably added automatically as usual)</p>
+<h3 id="versions-plugin"><a href="#versions-plugin">Versions Plugin</a></h3>
+<p>versions:set</p>
+<p>Sets the current projects version, updating the details of any child modules as necessary.</p>
+<p>versions:commit</p>
+<p>If all goes well</p>
+<p>versions:rollback</p>
+<p>To return to the latest versions</p>
+<h4 id="references-1"><a href="#references-1">References</a></h4>
+<p><a href="http://mojo.codehaus.org/versions-maven-plugin">http://mojo.codehaus.org/versions-maven-plugin</a></p>
+<h3 id="assembly-plugin"><a href="#assembly-plugin">Assembly Plugin</a></h3>
+<pre><code>&lt;plugin&gt;
+
+&lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
+
+&lt;version&gt;2.5.2&lt;/version&gt;
+
+&lt;executions&gt;
+
+    &lt;execution&gt;
+
+        &lt;id&gt;targz-assembly&lt;/id&gt;
+
+        &lt;phase&gt;package&lt;/phase&gt;
+
+        &lt;goals&gt;
+
+            &lt;goal&gt;single&lt;/goal&gt;
+
+        &lt;/goals&gt;
+
+        &lt;configuration&gt;
+
+            &lt;descriptors&gt;
+
+                &lt;descriptor&gt;src/assembly/assembly.xml&lt;/descriptor&gt;
+
+            &lt;/descriptors&gt;
+
+        &lt;/configuration&gt;                        
+
+    &lt;/execution&gt;
+
+&lt;/executions&gt;
+
+&lt;/plugin&gt;</code></pre>
+<p>binds the building of the assembly to the package phase, so…</p>
+<pre><code>$ mvn package</code></pre>
+<p>…should be enough to build the distributable havin the project itself in the libraries.</p>
+<h3 id="descriptor"><a href="#descriptor">Descriptor</a></h3>
+<pre><code>&lt;assembly 
+
+    xmlns=&quot;http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2&quot; 
+
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+
+    xsi:schemaLocation=&quot;
+
+        http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 
+
+        [http://maven.apache.org/xsd/assembly-1.1.2.xsd](http://maven.apache.org/xsd/assembly-1.1.2.xsd)&quot;&gt;
+
+    &lt;id&gt;default&lt;/id&gt;    
+
+    &lt;formats&gt;
+
+        &lt;format&gt;tar.gz&lt;/format&gt;
+
+    &lt;/formats&gt;
+
+    &lt;!-- name of the folder the archive will be expanded to --&gt;
+
+    &lt;baseDirectory&gt;Oracle.GFP&lt;/baseDirectory&gt;
+
+    
+
+    &lt;moduleSets&gt;
+
+        &lt;!-- where project jar will be copied to --&gt;    
+
+        &lt;moduleSet&gt;
+
+            &lt;binaries&gt;
+
+                &lt;outputDirectory&gt;lib&lt;/outputDirectory&gt;
+
+            &lt;/binaries&gt;
+
+        &lt;/moduleSet&gt;
+
+    &lt;/moduleSets&gt;
+
+    
+
+    &lt;dependencySets&gt;
+
+        &lt;!-- where dependencies will be copied to --&gt;
+
+        &lt;dependencySet&gt;
+
+            &lt;useProjectArtifact&gt;true&lt;/useProjectArtifact&gt;
+
+            &lt;outputDirectory&gt;lib&lt;/outputDirectory&gt;
+
+        &lt;/dependencySet&gt;
+
+    &lt;/dependencySets&gt;
+
+    
+
+    &lt;fileSets&gt;
+
+        &lt;!-- copies scritps --&gt;
+
+        &lt;fileSet&gt;
+
+            &lt;directory&gt;src/main/scripts&lt;/directory&gt;
+
+            &lt;outputDirectory&gt;/&lt;/outputDirectory&gt;
+
+            &lt;fileMode&gt;0744&lt;/fileMode&gt;
+
+        &lt;/fileSet&gt;
+
+        
+
+        &lt;!-- copy the environmental configuration files --&gt;
+
+        &lt;fileSet&gt;
+
+            &lt;directory&gt;${basedir}/env/${my.environment}&lt;/directory&gt;
+
+            &lt;outputDirectory&gt;/conf&lt;/outputDirectory&gt;
+
+            &lt;includes&gt;
+
+                &lt;include&gt;*.xml&lt;/include&gt;
+
+            &lt;/includes&gt;         
+
+        &lt;/fileSet&gt;
+
+        &lt;!-- This is just a trick to create an empty ‘log’ folder --&gt;
+
+        &lt;!-- assembly.xml can only create folders if you copy something →
+
+&lt;!-- existing in them --&gt;
+
+        &lt;fileSet&gt;
+
+            &lt;directory&gt;${basedir}/src/main/resources&lt;/directory&gt;
+
+            &lt;outputDirectory&gt;/log&lt;/outputDirectory&gt;
+
+            &lt;excludes&gt;
+
+                &lt;exclude&gt;*/**&lt;/exclude&gt;
+
+            &lt;/excludes&gt;
+
+        &lt;/fileSet&gt;
+
+    &lt;/fileSets&gt;
+
+&lt;/assembly&gt;</code></pre>
+<h4 id="references-2"><a href="#references-2">References</a></h4>
+<ul>
+<li><p><a href="http://stackoverflow.com/questions/14276453/maven-assembly-include-the-current-project-jar-in-the-final-zip-tar">http://stackoverflow.com/questions/14276453/maven-assembly-include-the-current-project-jar-in-the-final-zip-tar</a></p></li>
+<li><p><a href="http://maven.apache.org/plugins/maven-assembly-plugin/assembly.html#class_fileSet">http://maven.apache.org/plugins/maven-assembly-plugin/assembly.html#class_fileSet</a></p></li>
+</ul>
+<h3 id="site-plugin"><a href="#site-plugin">Site Plugin</a></h3>
+<ul>
+<li><p>site:site</p>
+<ul>
+<li>is used generate a site for a <strong>single project</strong>. Note that links between module sites in a multi module build will not work, since local build directory structure doesn’t match deployed site.</li>
+</ul></li>
+<li><p>site:deploy</p>
+<ul>
+<li>is used to deploy the generated site using Wagon supported protocol to the site URL specified in the <distributionManagement> section of the POM.</li>
+</ul></li>
+<li><p>site:run</p>
+<ul>
+<li>starts the site up, rendering documents as requested for faster editing. It uses Jetty as the web server.</li>
+</ul></li>
+<li><p>site:stage</p>
+<ul>
+<li>generates a site in a local staging or mock directory based on the site URL specified in the <distributionManagement> section of the POM. It can be used to test that links between module sites in a multi module build works. To preview the whole tree of a multi-module site, you can use the<a href="http://maven.apache.org/plugins/maven-site-plugin/stage-mojo.html">site:stage</a> goal. This will copy individual sites to their proper place at the staging location.</li>
+</ul></li>
+<li><p>site:stage-deploy</p>
+<ul>
+<li>deploys the generated site to a staging or mock directory to the site URL specified in the <distributionManagement> section of the POM.</li>
+</ul></li>
+<li><p>site:attach-descriptor</p>
+<ul>
+<li>adds the site descriptor (site.xml) to the list of files to be installed/deployed. For more references of the site descriptor, here’s a link.</li>
+</ul></li>
+<li><p>site:jar</p>
+<ul>
+<li>bundles the site output into a JAR so that it can be deployed to a repository.</li>
+</ul></li>
+<li><p>site:effective-site</p>
+<ul>
+<li>calculates the effective site descriptor, after inheritance and interpolation.</li>
+</ul></li>
+</ul>
+<h3 id="javadoc-plugin"><a href="#javadoc-plugin">Javadoc Plugin</a></h3>
+<pre><code>&lt;project&gt;
+
+  ...
+
+  &lt;reporting&gt;
+
+    &lt;plugins&gt;
+
+      &lt;plugin&gt;
+
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+
+        &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
+
+        &lt;version&gt;2.10.1&lt;/version&gt;
+
+        &lt;configuration&gt;
+
+          ...
+
+        &lt;/configuration&gt;
+
+      &lt;/plugin&gt;
+
+    &lt;/plugins&gt;
+
+    ...
+
+  &lt;/reporting&gt;
+
+  ...
+
+&lt;/project&gt;</code></pre>
+<h3 id="jdk-8-old-projects"><a href="#jdk-8-old-projects">JDK 8, old projects</a></h3>
+<p>Old projects have probably javadoc comments that are not very well accepted by JDK8’s javadoc tool, namely ‘doclint’.</p>
+<p>If you keep on receiving ERRORs about javadoc comments during the build process, try to disable ‘doclint’</p>
+<p>Setting a property…</p>
+<pre><code>&lt;properties&gt;
+
+&lt;additionalparam&gt;-Xdoclint:none&lt;/additionalparam&gt;
+
+&lt;/properties&gt;
+
+or add it to the maven-javadoc-plugin:
+
+&lt;plugins&gt;
+
+    &lt;plugin&gt;
+
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+
+      &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
+
+      &lt;configuration&gt;
+
+        &lt;additionalparam&gt;-Xdoclint:none&lt;/additionalparam&gt;
+
+      &lt;/configuration&gt;
+
+    &lt;/plugin&gt;
+
+  &lt;/plugins&gt;</code></pre>
+<h2 id="profiles"><a href="#profiles">Profiles</a></h2>
+<h3 id="active-profile"><a href="#active-profile">Active Profile</a></h3>
+<p>which profile is active</p>
+<pre><code>$ mvn help:active-profiles</code></pre>
+<h2 id="default-profile-and-resources"><a href="#default-profile-and-resources">Default Profile And Resources</a></h2>
+<p>The ‘default’ profile is active by default. It means that Eclipse will use that, and will include files from env/development in the classpath (see the profile’s resource section).</p>
+<p>When you want to build the project for a specific environment, through a given profile, remember to provide -Dspecific to disable development. So for instance…</p>
+<pre><code>$ mvn assembly:single -Popenshift -Dspecific</code></pre>
+<p>…will disable this profile during build.</p>
+<pre><code>&lt;profiles&gt;
+    &lt;profile&gt;
+    &lt;id&gt;dev&lt;/id&gt;
+    &lt;!-- This profile is active by default. It means that Eclipse will us
+            that, and will include files from env/development in the classpath (see this
+            profile&#39;s resource section). When you want to build the project for a specific
+            environment, through a given profile, remember to provide -Dspecific to disable
+            development. So for instance... mvn assembly:single -Popenshift -Dspecific
+            ...will disable this profile during build. --&gt;
+    &lt;activation&gt;
+        &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
+        &lt;property&gt;
+            &lt;name&gt;!specific&lt;/name&gt;
+        &lt;/property&gt;
+    &lt;/activation&gt;
+    &lt;properties&gt;
+        &lt;my.environment&gt;dev&lt;/my.environment&gt;
+    &lt;/properties&gt;
+    &lt;build&gt;
+        &lt;resources&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;src/main/resources&lt;/directory&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*&lt;/include&gt;
+                &lt;/includes&gt;
+                &lt;filtering&gt;true&lt;/filtering&gt;
+            &lt;/resource&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;env/${my.environment}&lt;/directory&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*&lt;/include&gt;
+                &lt;/includes&gt;
+                &lt;filtering&gt;true&lt;/filtering&gt;
+            &lt;/resource&gt;
+        &lt;/resources&gt;
+    &lt;/build&gt;
+    &lt;/profile&gt;
+    &lt;profile&gt;
+    &lt;id&gt;dockerized&lt;/id&gt;
+    &lt;activation&gt;
+        &lt;activeByDefault&gt;false&lt;/activeByDefault&gt;
+    &lt;/activation&gt;
+    &lt;properties&gt;
+        &lt;my.environment&gt;dockerized&lt;/my.environment&gt;
+    &lt;/properties&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
+<p>To build…</p>
+<pre><code>$ mvn build install =&gt; uses resources in env/dev
+
+$ mvn build install -Dspecific -Pdockerized uses resources in /env/dockerized</code></pre>
+<h2 id="references-3"><a href="#references-3">References</a></h2>
+<p><a href="http://ruleoftech.com/2014/distribute-projects-artifacts-in-maven-central-with-ossrh">http://ruleoftech.com/2014/distribute-projects-artifacts-in-maven-central-with-ossrh</a> <a href="http://central.sonatype.org/pages/apache-maven.html">http://central.sonatype.org/pages/apache-maven.html</a></p>
+</body>
+</html>
