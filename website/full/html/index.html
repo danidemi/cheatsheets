@@ -85,10 +85,37 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#remove-table-borders">Remove Table Borders</a></li>
 </ul></li>
 <li><a href="#pictures">Pictures</a></li>
+<li><a href="#responsive-design">Responsive Design</a><ul>
+<li><a href="#big-picture-1">Big Picture</a></li>
+<li><a href="#vieport">Vieport</a></li>
+<li><a href="#size">Size</a></li>
+<li><a href="#media-query">Media Query</a></li>
 </ul></li>
-<li><a href="#networking-cheat-sheet">Networking Cheat Sheet</a></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+<li><a href="#networking-cheat-sheet">Networking Cheat Sheet</a><ul>
+<li><a href="#ip">IP</a><ul>
+<li><a href="#address">Address</a></li>
+<li><a href="#classes">Classes</a></li>
+<li><a href="#subnetting">Subnetting</a></li>
+<li><a href="#ip-broadcast">IP Broadcast</a></li>
+<li><a href="#ip-multicast">IP Multicast</a></li>
+<li><a href="#level-of-conformance">Level Of Conformance</a></li>
+<li><a href="#functioning">Functioning</a></li>
+<li><a href="#ip-broadcast-1">IP Broadcast</a></li>
+</ul></li>
+<li><a href="#http">Http</a><ul>
+<li><a href="#multipart">Multipart</a></li>
+</ul></li>
+<li><a href="#dns">DNS</a><ul>
+<li><a href="#resource-record">Resource Record</a></li>
+<li><a href="#a-record">A Record</a></li>
+<li><a href="#mx-record">MX Record</a></li>
+<li><a href="#txt-record">TXT Record</a></li>
+</ul></li>
+</ul></li>
 <li><a href="#docker">Docker</a><ul>
-<li><a href="#big-picture-1">Big Picture</a><ul>
+<li><a href="#big-picture-2">Big Picture</a><ul>
 <li><a href="#docker-engine">Docker Engine</a></li>
 <li><a href="#docker-hub">Docker Hub</a></li>
 <li><a href="#trusted-automated-builds">Trusted / Automated Builds</a></li>
@@ -128,10 +155,10 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#a-tomcat-based-image">A Tomcat Based Image</a></li>
 <li><a href="#a-web-app">A Web app</a></li>
 </ul></li>
-<li><a href="#references">References</a></li>
+<li><a href="#references-2">References</a></li>
 </ul></li>
 <li><a href="#packer">Packer</a><ul>
-<li><a href="#big-picture-2">Big Picture</a><ul>
+<li><a href="#big-picture-3">Big Picture</a><ul>
 <li><a href="#template">Template</a></li>
 <li><a href="#provisioner">Provisioner</a></li>
 <li><a href="#builder">Builder</a></li>
@@ -144,6 +171,49 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <li><a href="#a-wordpress-machine">A Wordpress Machine</a></li>
 </ul></li>
 <li><a href="#problems">Problems</a></li>
+</ul></li>
+<li><a href="#maven-cheat-sheet">Maven Cheat Sheet</a></li>
+<li><a href="#command-line">Command Line</a></li>
+<li><a href="#maven-cheat-sheet-1">Maven Cheat Sheet</a><ul>
+<li><a href="#standard-layout">Standard Layout</a></li>
+<li><a href="#meta-inf">META-INF</a></li>
+<li><a href="#phases">Phases</a><ul>
+<li><a href="#clean-lifecycle">Clean Lifecycle</a></li>
+<li><a href="#default-lifecycle">Default Lifecycle</a></li>
+<li><a href="#site-lifecycle">Site Lifecycle</a></li>
+</ul></li>
+<li><a href="#dependencies">Dependencies</a><ul>
+<li><a href="#package-versions">Package Versions</a></li>
+<li><a href="#available-up-to-maven-2.x">Available up to Maven 2.x</a></li>
+<li><a href="#declare">Declare</a></li>
+<li><a href="#list-all">List All</a></li>
+</ul></li>
+<li><a href="#list-tree">List Tree</a></li>
+</ul></li>
+<li><a href="#configurations">Configurations</a><ul>
+<li><a href="#network-timeouts">Network Timeouts</a></li>
+<li><a href="#plugins">Plugins</a><ul>
+<li><a href="#general-properties">General Properties</a></li>
+<li><a href="#project.build.sourceencoding">project.build.sourceEncoding</a></li>
+<li><a href="#compiler-plugin">Compiler Plugin</a></li>
+<li><a href="#archetype-plugin">Archetype Plugin</a></li>
+<li><a href="#help-plugin">Help Plugin</a></li>
+<li><a href="#versions-plugin">Versions Plugin</a></li>
+<li><a href="#assembly-plugin">Assembly Plugin</a></li>
+<li><a href="#descriptor">Descriptor</a></li>
+<li><a href="#site-plugin">Site Plugin</a></li>
+<li><a href="#javadoc-plugin">Javadoc Plugin</a></li>
+<li><a href="#jdk-8-old-projects">JDK 8, old projects</a></li>
+</ul></li>
+<li><a href="#profiles">Profiles</a><ul>
+<li><a href="#active-profile">Active Profile</a></li>
+</ul></li>
+<li><a href="#default-profile-and-resources">Default Profile And Resources</a></li>
+<li><a href="#references-5">References</a></li>
+<li><a href="#xpath">XPath</a><ul>
+<li><a href="#expressions">Expressions</a></li>
+<li><a href="#predicates">Predicates</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </div>
@@ -600,9 +670,343 @@ elements where the parent is a
 <pre class="sourceCode css"><code class="sourceCode css">div<span class="fl">.image</span><span class="dv">:before</span> <span class="kw">{</span>
    <span class="kw">content:</span><span class="dt">url(</span>http://placehold<span class="dt">.</span>it/<span class="dt">350</span>x150<span class="dt">)</span><span class="kw">;</span>
 <span class="kw">}</span></code></pre>
+<h2 id="responsive-design"><a href="#responsive-design">Responsive Design</a></h2>
+<h3 id="big-picture-1"><a href="#big-picture-1">Big Picture</a></h3>
+<ul>
+<li>Lot Of Formats
+<ul>
+<li>Smartphone</li>
+<li>Tablet</li>
+<li>Phablet</li>
+<li>54&quot; TV</li>
+<li>14&quot; LCD</li>
+</ul></li>
+<li>Problems
+<ul>
+<li>content should be shown correctly on all those</li>
+</ul></li>
+<li>Responsive Design
+<ul>
+<li>to adapt the content to the device</li>
+</ul></li>
+</ul>
+<h3 id="vieport"><a href="#vieport">Vieport</a></h3>
+<ul>
+<li>Use meta viewport tag to control width and scaling</li>
+<li>Include <code>width=device-width</code>.</li>
+<li>Include <code>initial-scale=1</code>.</li>
+<li><p>Ensure your page is accessible by not disabling user scaling.</p>
+<p><meta name="viewport" content="width=device-width, initial-scale=1"></p></li>
+<li><code>width=device-width</code> instructs the page to match the screen’s width in device independent pixels</li>
+<li><code>initial-scale=1</code> instructs browsers to establish a 1:1 relationship between CSS pixels and device independent pixels regardless of device orientation, and allows the page to take advantage of the full landscape width.</li>
+<li>don’t use <code>minimum-scale</code>, <code>maximum-scale</code> to avoid accessibility issues.</li>
+<li><p>allow <code>user-scalable</code></p></li>
+</ul>
+<h3 id="size"><a href="#size">Size</a></h3>
+<ul>
+<li>Use percentage size
+<ul>
+<li>content automatically scale</li>
+</ul></li>
+<li>Don’t use absolute size
+<ul>
+<li>content can be bigger than viewport</li>
+</ul></li>
+</ul>
+<h3 id="media-query"><a href="#media-query">Media Query</a></h3>
+<ul>
+<li><p>Media queries can be used to apply styles based on device characteristics.</p>
+<p><span class="citation">@media</span> print { /* print style sheets go here */ }</p>
+<p><span class="citation">@import</span> url(print.css) print;</p>
+<p>&lt;link rel=“stylesheet” href=“print.css” media=“print”&gt;</p></li>
+</ul>
+<p>Media query</p>
+<pre><code>@media (query) {
+    /* CSS Rules used when query matches */
+}</code></pre>
+<ul>
+<li>query
+<ul>
+<li>min-width</li>
+<li>max-width</li>
+<li>min-height</li>
+<li>max-height</li>
+<li>orientation=portrait</li>
+<li>orientation=landscape</li>
+</ul></li>
+</ul>
+<h2 id="references"><a href="#references">References</a></h2>
+<p><a href="https://developers.google.com/web/fundamentals/layouts/rwd-fundamentals/">https://developers.google.com/web/fundamentals/layouts/rwd-fundamentals/</a> <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes">https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Flexible_boxes</a> <a href="https://developers.google.com/web/fundamentals/layouts/rwd-fundamentals/set-the-viewport">https://developers.google.com/web/fundamentals/layouts/rwd-fundamentals/set-the-viewport</a></p>
 <h1 id="networking-cheat-sheet"><a href="#networking-cheat-sheet">Networking Cheat Sheet</a></h1>
+<h2 id="ip"><a href="#ip">IP</a></h2>
+<h3 id="address"><a href="#address">Address</a></h3>
+<p>32 bit =&gt; 4 byte =&gt; [0-&gt;255].[0-&gt;255].[0-&gt;255].[0-&gt;255]</p>
+<h3 id="classes"><a href="#classes">Classes</a></h3>
+<pre><code>Bit --&gt;  0                           31            Address Range:
+    +-+----------------------------+
+    |0|       Class A Address      |       0.0.0.0 - 127.255.255.255
+    +-+----------------------------+
+    +-+-+--------------------------+
+    |1 0|     Class B Address      |     128.0.0.0 - 191.255.255.255
+    +-+-+--------------------------+
+    +-+-+-+------------------------+
+    |1 1 0|   Class C Address      |     192.0.0.0 - 223.255.255.255
+    +-+-+-+------------------------+
+    +-+-+-+-+----------------------+
+    |1 1 1 0|  MULTICAST Address   |     224.0.0.0 - 239.255.255.255
+    +-+-+-+-+----------------------+
+    +-+-+-+-+-+--------------------+
+    |1 1 1 1 0|     Reserved       |     240.0.0.0 - 247.255.255.255
+    +-+-+-+-+-+--------------------+</code></pre>
+<h3 id="subnetting"><a href="#subnetting">Subnetting</a></h3>
+<p>A subnetwork, or subnet, is a logical, visible subdivision of an IP network. The practice of dividing a network into two or more networks is called subnetting.</p>
+<p>An IP can be represented as a sequence of bits like that…</p>
+<pre><code>| class | subnet | host |</code></pre>
+<p>So for instance, if you have…</p>
+<pre><code>       IP Address: 192     .168     .1       .15
+Binary IP Address: 11000000.10101000.00000001.00001111
+
+             CIDR: 24 
+                   &lt;-------- 24 bits -------&gt;
+   Binary Netmask: 11111111.11111111.11111111.00000000
+          Netmask: 255     .255     .255     .0
+
+   Bynary Network: 11000000.10101000.00000001.00001111 (IP Address AND Netmask)
+          Network: 192     .168     .1       .0</code></pre>
+<h3 id="ip-broadcast"><a href="#ip-broadcast">IP Broadcast</a></h3>
+<p>IP broadcasting refers to a method of transferring a message to all IPs of the subnet.</p>
+<p>The all-ones host address of each subnet is that subnet’s broadcast address.</p>
+<pre><code>Binary IP Address: 11000000.10101000.00000001.00001111
+   Binary Netmask: 11111111.11111111.11111111.00000000</code></pre>
+<p>BinaryBroadcast Address: 11000000.10101000.00000001.11111111 (IP Address OR NOT(Netmask)) Broadcast Address: 192 .168 .1 .255</p>
+<p>A special definition exists for the IP broadcast address 255.255.255.255. It is the broadcast address of the zero network or 0.0.0.0, which in Internet Protocol standards stands for this network, i.e. the local network.</p>
+<h3 id="ip-multicast"><a href="#ip-multicast">IP Multicast</a></h3>
+<p>IP multi-casting is a communication mechanism in which data is communicated from server to a set of clients who are interested in receiving that data.</p>
+<h4 id="multicast-address"><a href="#multicast-address">Multicast Address</a></h4>
+<pre><code>|1|1|1|0| 28 bit |</code></pre>
+<p>So range is from…</p>
+<pre><code>[1110][0000 00000000 00000000 00000000] =&gt; 224.0.0.0</code></pre>
+<p>To…</p>
+<pre><code>[1110][1111 11111111 11111111 11111111] =&gt; 239.255.255.255</code></pre>
+<h4 id="multicast-group"><a href="#multicast-group">Multicast Group</a></h4>
+<p>The 28 remaining bits are the “group”</p>
+<pre><code>|1|1|1|0| &lt;group&gt; |</code></pre>
+<h5 id="well-known-multicast-groups"><a href="#well-known-multicast-groups">Well Known Multicast Groups</a></h5>
+<p>There are some special multicast groups, say “well known multicast groups”, that should not be uses in your particular applications due the special purpose they are destined to.</p>
+<ul>
+<li>224.0.0.1 is the all-hosts group.
+<ul>
+<li>If you ping that group, all multicast capable hosts on the network should answer, as every multicast capable host must join that group at start-up on all it’s multicast capable interfaces.</li>
+</ul></li>
+<li>224.0.0.2 is the all-routers group.
+<ul>
+<li>All multicast routers must join that group on all it’s multicast capable interfaces.</li>
+</ul></li>
+<li>224.0.0.4 is the all DVMRP routers,</li>
+<li>224.0.0.5 the all OSPF routers,</li>
+<li>224.0.013 the all PIM routers</li>
+<li>…</li>
+</ul>
+<h3 id="level-of-conformance"><a href="#level-of-conformance">Level Of Conformance</a></h3>
+<p>Hosts can be in three different levels of conformance with the Multicast specification, according to the requirements they meet.</p>
+<ul>
+<li>Level 0 is the “no support for IP Multicasting” level. Lots of hosts and routers in the Internet are in this state, as multicast support is not mandatory in IPv4 (it is, however, in IPv6). Hosts in this level can neither send nor receive multicast packets. They must ignore the ones sent by other multicast capable hosts.</li>
+<li>Level 1 is the “support for sending but not receiving multicast IP datagrams” level. Thus, note that it is not necessary to join a multicast group to be able to send datagrams to it. Very few additions are needed in the IP module to make a “Level 0” host “Level 1-compliant”.</li>
+<li>Level 2 is the “full support for IP multicasting” level. Level 2 hosts must be able to both send and receive multicast traffic. They must know the way to join and leave multicast groups and to propagate this information to multicast routers. Thus, they must include an Internet Group Management Protocol (IGMP) implementation in their TCP/IP stack.</li>
+</ul>
+<h3 id="functioning"><a href="#functioning">Functioning</a></h3>
+<p>Sending</p>
+<p>In principle, an application just needs to open a UDP socket and fill with a class D multicast address the destination address where it wants to send data to. However, there are some operations that a sending process must be able to control.</p>
+<p>TTL</p>
+<pre><code>TTL     Scope
+----------------------------------------------------------------------
+   0    Restricted to the same host. Won&#39;t be output by any interface.
+   1    Restricted to the same subnet. Won&#39;t be forwarded by a router.
+ &lt;32    Restricted to the same site, organization or department.
+ &lt;64    Restricted to the same region.
+&lt;128    Restricted to the same continent.
+&lt;255    Unrestricted in scope. Global.</code></pre>
+<p>Loopback.</p>
+<p>When the sending host is Level 2 conformant and is also a member of the group datagrams are being sent to, a copy is looped back by default. This can be turned on or off.</p>
+<p>Interface selection.</p>
+<p>Hosts attached to more than one network should provide a way for applications to decide which network interface will be used to output the transmissions.</p>
+<p>Receiving Multicast Datagrams</p>
+<p>With multicast, it is necessary to advise the kernel which multicast groups we are interested in. That is, we have to ask the kernel to “join” those multicast groups. Depending on the underlying hardware, multicast datagrams are filtered by the hardware or by the IP layer (and, in some cases, by both). Only those datagram with a destination group previously registered via a join are accepted.</p>
+<p>Finally, consider that for a process to receive multicast datagrams it has to ask the kernel to join the group and bind the port those datagrams were being sent to. The UDP layer uses both the destination address and port to demultiplex the packets and decide which socket(s) deliver them to.</p>
+<p>Leaving a Multicast Group.</p>
+<p>When a process is no longer interested in a multicast group, it informs the kernel that it wants to leave that group.</p>
+<h3 id="ip-broadcast-1"><a href="#ip-broadcast-1">IP Broadcast</a></h3>
+<p>A transmission to all interface cards on the network.</p>
+<p>Two types of Broadcast depending on the reached hosts: * Limited Broadcast * Sent to all NICs on the some network segment as the source NIC. It is represented with the 255.255.255.255 TCP/IP address. This broadcast is not forwarded by routers so will only appear on one network segment. * Direct broadcast * Sent to all hosts on a network. Routers may be configured to forward directed broadcasts on large networks. For network 192.168.0.0, the broadcast is 192.168.255.255.</p>
+<h2 id="http"><a href="#http">Http</a></h2>
+<h3 id="multipart"><a href="#multipart">Multipart</a></h3>
+<ul>
+<li>HTTP multipart request
+<ul>
+<li>HTTP request that
+<ul>
+<li>HTTP clients construct to
+<ul>
+<li>send files and data over to a HTTP Server</li>
+<li>commonly used by browsers and HTTP clients to upload files to the server.</li>
+</ul></li>
+</ul></li>
+</ul></li>
+</ul>
+<p>Shape of a multipart request</p>
+<pre><code>POST /cgi-bin/qtest HTTP/1.1
+Host: aram
+User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.0.10) Gecko/2009042316   Firefox/3.0.10
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+Accept-Language: en-us,en;q=0.5
+Accept-Encoding: gzip,deflate
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7
+Keep-Alive: 300
+Connection: keep-alive
+Referer: http://aram/~martind/banner.htm
+Content-Type: multipart/form-data; boundary=---------------------------287032381131322
+Content-Length: 582
+
+-----------------------------287032381131322
+Content-Disposition: form-data; name=&quot;datafile1&quot;; filename=&quot;r.gif&quot;
+Content-Type: image/gif
+
+GIF87a.............,...........D..;
+-----------------------------287032381131322
+Content-Disposition: form-data; name=&quot;datafile2&quot;; filename=&quot;g.gif&quot;
+Content-Type: image/gif
+
+GIF87a.............,...........D..;
+-----------------------------287032381131322
+Content-Disposition: form-data; name=&quot;datafile3&quot;; filename=&quot;b.gif&quot;
+Content-Type: image/gif
+
+GIF87a.............,...........D..;
+-----------------------------287032381131322--</code></pre>
+<h2 id="dns"><a href="#dns">DNS</a></h2>
+<ul>
+<li>translates domain names (i.e. google.com)</li>
+<li>to a corresponding numerical IP addresses</li>
+</ul>
+<p>DNS * distributes the responsibility * designating authoritative name servers for each domain</p>
+<h3 id="resource-record"><a href="#resource-record">Resource Record</a></h3>
+<ul>
+<li>Resource Record Fields</li>
+<li><strong>NAME</strong> fully qualified domain name of the node in the tree</li>
+<li><strong>TYPE</strong> gives a hint of its intended use
+<ul>
+<li><strong>A</strong> translate from a domain name to an IPv4 address</li>
+<li><strong>NS</strong> lists which name servers can answer lookups on a DNS zone</li>
+<li><strong>MX</strong> specifies the mail server used to handle mail for a domain specified in an e-mail address</li>
+</ul></li>
+<li><strong>RDATA</strong> is data of type-specific relevance
+<ul>
+<li>If <strong>TYPE=A</strong> the IP address</li>
+<li>If <strong>TYPE=MX</strong> priority and hostname for MX records</li>
+</ul></li>
+<li><strong>CLASS</strong> set to IN (Internet) for common DNS records involving Internet</li>
+</ul>
+<h3 id="a-record"><a href="#a-record">A Record</a></h3>
+<ul>
+<li>A (Address)</li>
+<li>host address (A record)</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th align="left">NAME</th>
+<th align="left">TYPE</th>
+<th align="left">RDATA</th>
+<th align="left">CLASS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">host</td>
+<td align="left">A</td>
+<td align="left">IP</td>
+<td align="left">the amount of time your record will stay in cache on systems requesting your record in sec</td>
+</tr>
+</tbody>
+</table>
+<p>example</p>
+<pre><code>NAME           TTL  TYPE  DATA
+www.example.com. 1800 A    192.168.1.2</code></pre>
+<h3 id="mx-record"><a href="#mx-record">MX Record</a></h3>
+<ul>
+<li>mail exchanger record (MX record)
+<ul>
+<li>resource record in the Domain Name System</li>
+<li>specifies
+<ul>
+<li>a mail server responsible for accepting email messages on behalf of a recipient’s domain * preference value used to prioritize mail delivery if multiple mail servers are available</li>
+</ul></li>
+<li>Use
+<ul>
+<li>set of MX records of a domain name specifies how email should be routed with the Simple Mail Transfer Protocol (SMTP)</li>
+<li>used by mail servers to determine where to deliver email.</li>
+<li>MX records should only map to A records (not CNAME records).</li>
+<li>If an MX record is missing for the domain the mail for the domain will normally be attempted to be delivered to the matching A record.</li>
+</ul></li>
+</ul></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th align="left">NAME</th>
+<th align="left">TYPE</th>
+<th align="left">RDATA</th>
+<th align="left">CLASS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Host or blank</td>
+<td align="left">MX</td>
+<td align="left">The mail server</td>
+<td align="left">???</td>
+</tr>
+</tbody>
+</table>
+<p>Example</p>
+<pre><code>NAME          TTL   TYPE  DATA
+Blank or @      10       MX       xASPMX2.GOOGLEMAIL.COM.</code></pre>
+<h3 id="txt-record"><a href="#txt-record">TXT Record</a></h3>
+<ul>
+<li>TXT Record (Text Record)
+<ul>
+<li>holds free form text of any type</li>
+<li>a domain name may have many TXT records</li>
+<li>usage
+<ul>
+<li>Sender Policy Framework (SPF)</li>
+<li>DomainKeys (DK)</li>
+<li>DomainKeys Identified E-mail (DKIM)</li>
+</ul></li>
+</ul></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th align="left">NAME</th>
+<th align="left">TYPE</th>
+<th align="left">RDATA</th>
+<th align="left">CLASS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Host</td>
+<td align="left">TXT</td>
+<td align="left">some text</td>
+<td align="left">IN</td>
+</tr>
+</tbody>
+</table>
+<h4 id="references-1"><a href="#references-1">References</a></h4>
+<p><a href="http://tools.ietf.org/html/rfc1035">http://tools.ietf.org/html/rfc1035</a> <a href="http://en.wikipedia.org/wiki/List_of_DNS_record_types">http://en.wikipedia.org/wiki/List_of_DNS_record_types</a></p>
 <h1 id="docker"><a href="#docker">Docker</a></h1>
-<h2 id="big-picture-1"><a href="#big-picture-1">Big Picture</a></h2>
+<h2 id="big-picture-2"><a href="#big-picture-2">Big Picture</a></h2>
 <ul>
 <li>Docker is
 <ul>
@@ -1476,7 +1880,7 @@ HOME=/root</code></pre>
 <pre><code>$ docker run --rm --name=&quot;itemsapp&quot; --link itemsapp_db:db &quot;myself/mytomcat:0.1&quot; cat /etc/hosts</code></pre>
 <p>Creates an app container</p>
 <pre><code>$ docker run -d -P --name=&quot;itemsapp&quot; --link itemsapp_db:db &quot;myself/mytomcat:0.1&quot;</code></pre>
-<h2 id="references"><a href="#references">References</a></h2>
+<h2 id="references-2"><a href="#references-2">References</a></h2>
 <p><a href="https://docs.docker.com/installation/ubuntulinux/">https://docs.docker.com/installation/ubuntulinux/</a></p>
 <p><a href="https://docs.docker.com/userguide/dockerimages/">https://docs.docker.com/userguide/dockerimages/</a></p>
 <p><a href="https://docs.docker.com/reference/builder/">https://docs.docker.com/reference/builder/</a></p>
@@ -1491,7 +1895,7 @@ HOME=/root</code></pre>
 <p><a href="http://www.tech-d.net/2014/11/18/data-only-container-madness/">http://www.tech-d.net/2014/11/18/data-only-container-madness/</a></p>
 <p><a href="https://www.martinvanbeurden.nl/blog/cleaning-up-after-docker/">https://www.martinvanbeurden.nl/blog/cleaning-up-after-docker/</a></p>
 <h1 id="packer"><a href="#packer">Packer</a></h1>
-<h2 id="big-picture-2"><a href="#big-picture-2">Big Picture</a></h2>
+<h2 id="big-picture-3"><a href="#big-picture-3">Big Picture</a></h2>
 <ul>
 <li>Packer is a tool for
 <ul>
@@ -1606,5 +2010,921 @@ Stopping VirtualBox kernel modules ...done.
 Uninstalling old VirtualBox DKMS kernel modules ...done.
 Trying to register the VirtualBox kernel modules using DKMS ...done.
 Starting VirtualBox kernel modules ...done.</code></pre>
+<h1 id="maven-cheat-sheet"><a href="#maven-cheat-sheet">Maven Cheat Sheet</a></h1>
+<h1 id="command-line"><a href="#command-line">Command Line</a></h1>
+<pre><code>$ mvn --help
+usage: mvn [options] [&lt;goal(s)&gt;] [&lt;phase(s)&gt;]</code></pre>
+<ul>
+<li>-am,–also-make
+<ul>
+<li>If project list is specified, also build projects required by the list</li>
+</ul></li>
+<li>-amd,–also-make-dependents
+<ul>
+<li>If project list is specified, also build projects that depend on projects on the list</li>
+</ul></li>
+<li>-B,–batch-mode
+<ul>
+<li>Run in non-interactive (batch) mode</li>
+</ul></li>
+<li>-b,–builder <arg>
+<ul>
+<li>The id of the build strategy to use.</li>
+</ul></li>
+<li>-C,–strict-checksums
+<ul>
+<li>Fail the build if checksums don’t match</li>
+</ul></li>
+<li>-c,–lax-checksums
+<ul>
+<li>Warn if checksums don’t match</li>
+</ul></li>
+<li>-cpu,–check-plugin-updates
+<ul>
+<li>Ineffective, only kept for backward compatibility</li>
+</ul></li>
+<li>-D,–define <arg>
+<ul>
+<li>Define a system property</li>
+<li>Needed every time a system property like test.skip should pe passed along</li>
+</ul></li>
+<li>-e,–errors
+<ul>
+<li>Produce execution error messages</li>
+</ul></li>
+<li>-emp,–encrypt-master-password <arg>
+<ul>
+<li>Encrypt master security password</li>
+</ul></li>
+<li>-ep,–encrypt-password <arg>
+<ul>
+<li>Encrypt server password</li>
+</ul></li>
+<li>-f,–file
+<ul>
+<li>Force the use of an alternate POM file (or directory with pom.xml).</li>
+</ul></li>
+<li>-fae,–fail-at-end
+<ul>
+<li>Only fail the build afterwards; allow all non-impacted builds to continue</li>
+</ul></li>
+<li>-ff,–fail-fast
+<ul>
+<li>Stop at first failure in reactorized builds</li>
+</ul></li>
+<li>-fn,–fail-never
+<ul>
+<li>NEVER fail the build, regardless of project result</li>
+</ul></li>
+<li>-gs,–global-settings <arg>
+<ul>
+<li>Alternate path for the global settings file</li>
+</ul></li>
+<li>-h,–help
+<ul>
+<li>Display help information</li>
+</ul></li>
+<li>-l,–log-file <arg>
+<ul>
+<li>Log file to where all build output will go.</li>
+</ul></li>
+<li>-llr,–legacy-local-repository
+<ul>
+<li>Use Maven 2 Legacy Local Repository behaviour, ie no use of _remote.repositories. Can also be activated by using -Dmaven.legacyLocalRepo=true
+</td></li>
+</ul></li>
+<li>-N,–non-recursive
+<ul>
+<li>Do not recurse into sub-projects</li>
+</ul></li>
+<li>-npr,–no-plugin-registry
+<ul>
+<li>Ineffective, only kept for backward compatibility</li>
+</ul></li>
+<li>-npu,–no-plugin-updates
+<ul>
+<li>Ineffective, only kept for backward compatibility</li>
+</ul></li>
+<li>-nsu,–no-snapshot-updates
+<ul>
+<li>Suppress SNAPSHOT updates</li>
+</ul></li>
+<li>-o,–offline
+<ul>
+<li>Work offline</li>
+</ul></li>
+<li>-P,–activate-profiles <arg>
+<ul>
+<li>Comma-delimited list of profiles to activate</li>
+</ul></li>
+<li>-pl,–projects <arg>
+<ul>
+<li>Comma-delimited list of specified reactor projects to build instead of all projects. A project can be specified by [groupId]:artifactId or by its relative path.</li>
+</ul></li>
+<li>-q,–quiet
+<ul>
+<li>Quiet output - only show errors</li>
+</ul></li>
+<li>-rf,–resume-from <arg>
+<ul>
+<li>Resume reactor from specified project</li>
+</ul></li>
+<li>-s,–settings <arg>
+<ul>
+<li>Alternate path for the user settings file</li>
+</ul></li>
+<li>-T,–threads <arg>
+<ul>
+<li>Thread count, for instance 2.0C where C is core multiplied</li>
+</ul></li>
+<li>-t,–toolchains <arg>
+<ul>
+<li>Alternate path for the user toolchains file</li>
+</ul></li>
+<li>-U,–update-snapshots
+<ul>
+<li>Forces a check for missing releases and updated snapshots on remote repositories</li>
+</ul></li>
+<li>-up,–update-plugins
+<ul>
+<li>Ineffective, only kept for backward compatibility</li>
+</ul></li>
+<li>-V,–show-version
+<ul>
+<li>Display version information WITHOUT stopping build</li>
+</ul></li>
+<li>-v,–version
+<ul>
+<li>Display version information</li>
+</ul></li>
+<li>-X,–debug
+<ul>
+<li>Produce execution debug output</li>
+</ul></li>
+</ul>
+<h1 id="maven-cheat-sheet-1"><a href="#maven-cheat-sheet-1">Maven Cheat Sheet</a></h1>
+<h2 id="standard-layout"><a href="#standard-layout">Standard Layout</a></h2>
+<pre><code>src/main/java       Application/Library sources
+src/main/resources  Application/Library resources
+src/main/filters    Resource filter files
+src/main/config     Configuration files
+src/main/scripts    Application/Library scripts
+src/main/webapp     Web application sources
+src/test/java       Test sources
+src/test/resources  Test resources
+src/test/filters    Test resource filter files
+src/it              Integration Tests (primarily for plugins)
+src/assembly        Assembly descriptors
+src/site            Site
+LICENSE.txt         Project&#39;s license
+NOTICE.txt          Notices and attributions required by libraries that the project depends on
+README.txt          Project&#39;s readme</code></pre>
+<h2 id="meta-inf"><a href="#meta-inf">META-INF</a></h2>
+<p>For jars, <code>META-INF</code> should be usually put under <code>src/main/resources</code> For wars, <code>META-INF</code> should be usually put under <code>src/main/webapp</code></p>
+<h2 id="phases"><a href="#phases">Phases</a></h2>
+<h3 id="clean-lifecycle"><a href="#clean-lifecycle">Clean Lifecycle</a></h3>
+<table>
+  <tr>
+    <td>
+pre-clean
+</td>
+    <td>
+executes processes needed prior to the actual project cleaning
+</td>
+  </tr>
+  <tr>
+    <td>
+clean
+</td>
+    <td>
+remove all files generated by the previous build
+</td>
+  </tr>
+  <tr>
+    <td>
+post-clean
+</td>
+    <td>
+executes processes needed to finalize the project cleaning
+</td>
+  </tr>
+</table>
+
+
+<h3 id="default-lifecycle"><a href="#default-lifecycle">Default Lifecycle</a></h3>
+<table>
+  <tr>
+    <td>
+validate
+</td>
+    <td>
+validate the project is correct and all necessary information is available.
+</td>
+  </tr>
+  <tr>
+    <td>
+initialize
+</td>
+    <td>
+initialize build state, e.g. set properties or create directories.
+</td>
+  </tr>
+  <tr>
+    <td>
+generate-sources
+</td>
+    <td>
+generate any source code for inclusion in compilation.
+</td>
+  </tr>
+  <tr>
+    <td>
+process-sources
+</td>
+    <td>
+process the source code, for example to filter any values.
+</td>
+  </tr>
+  <tr>
+    <td>
+generate-resources
+</td>
+    <td>
+generate resources for inclusion in the package.
+</td>
+  </tr>
+  <tr>
+    <td>
+process-resources
+</td>
+    <td>
+copy and process the resources into the destination directory, ready for packaging.
+</td>
+  </tr>
+  <tr>
+    <td>
+compile
+</td>
+    <td>
+compile the source code of the project.
+</td>
+  </tr>
+  <tr>
+    <td>
+process-classes
+</td>
+    <td>
+post-process the generated files from compilation, for example to do bytecode enhancement on Java classes.
+</td>
+  </tr>
+  <tr>
+    <td>
+generate-test-sources
+</td>
+    <td>
+generate any test source code for inclusion in compilation.
+</td>
+  </tr>
+  <tr>
+    <td>
+process-test-sources
+</td>
+    <td>
+process the test source code, for example to filter any values.
+</td>
+  </tr>
+  <tr>
+    <td>
+generate-test-resources
+</td>
+    <td>
+create resources for testing.
+</td>
+  </tr>
+  <tr>
+    <td>
+process-test-resources
+</td>
+    <td>
+copy and process the resources into the test destination directory.
+</td>
+  </tr>
+  <tr>
+    <td>
+test-compile
+</td>
+    <td>
+compile the test source code into the test destination directory
+</td>
+  </tr>
+  <tr>
+    <td>
+process-test-classes
+</td>
+    <td>
+post-process the generated files from test compilation, for example to do bytecode enhancement on Java classes. For Maven 2.0.5 and above.
+</td>
+  </tr>
+  <tr>
+    <td>
+test
+</td>
+    <td>
+run tests using a suitable unit testing framework. These tests should not require the code be packaged or deployed.
+</td>
+  </tr>
+  <tr>
+    <td>
+prepare-package
+</td>
+    <td>
+perform any operations necessary to prepare a package before the actual packaging. This often results in an unpacked, processed version of the package. (Maven 2.1 and above)
+</td>
+  </tr>
+  <tr>
+    <td>
+package
+</td>
+    <td>
+take the compiled code and package it in its distributable format, such as a JAR.
+</td>
+  </tr>
+  <tr>
+    <td>
+pre-integration-test
+</td>
+    <td>
+perform actions required before integration tests are executed. This may involve things such as setting up the required environment.
+</td>
+  </tr>
+  <tr>
+    <td>
+integration-test
+</td>
+    <td>
+process and deploy the package if necessary into an environment where integration tests can be run.
+</td>
+  </tr>
+  <tr>
+    <td>
+post-integration-test
+</td>
+    <td>
+perform actions required after integration tests have been executed. This may including cleaning up the environment.
+</td>
+  </tr>
+  <tr>
+    <td>
+verify
+</td>
+    <td>
+run any checks to verify the package is valid and meets quality criteria.
+</td>
+  </tr>
+  <tr>
+    <td>
+install
+</td>
+    <td>
+install the package into the local repository, for use as a dependency in other projects locally.
+</td>
+  </tr>
+  <tr>
+    <td>
+deploy
+</td>
+    <td>
+done in an integration or release environment, copies the final package to the remote repository for sharing with other developers and projects.
+</td>
+  </tr>
+</table>
+
+
+<h3 id="site-lifecycle"><a href="#site-lifecycle">Site Lifecycle</a></h3>
+<table>
+  <tr>
+    <td>
+pre-site
+</td>
+    <td>
+executes processes needed prior to the actual project site generation
+</td>
+  </tr>
+  <tr>
+    <td>
+site
+</td>
+    <td>
+generates the project’s site documentation
+</td>
+  </tr>
+  <tr>
+    <td>
+post-site
+</td>
+    <td>
+executes processes needed to finalize the site generation, and to prepare for site deployment
+</td>
+  </tr>
+  <tr>
+    <td>
+site-deploy
+</td>
+    <td>
+deploys the generated site documentation to the specified web server
+</td>
+  </tr>
+</table>
+
+
+
+
+<h2 id="dependencies"><a href="#dependencies">Dependencies</a></h2>
+<h3 id="package-versions"><a href="#package-versions">Package Versions</a></h3>
+<p>The exact version</p>
+<pre><code>&lt;version&gt;&lt;major&gt;.&lt;minor&gt;.&lt;incremental&gt;&lt;/version&gt;</code></pre>
+<p>The latest snapshot of the given version</p>
+<pre><code>&lt;version&gt;&lt;major&gt;.&lt;minor&gt;.&lt;incremental&gt;-SNAPSHOT&lt;/version&gt;
+    </code></pre>
+<p>Declare an exact version.</p>
+<pre><code>&lt;version&gt;[1.0.1]&lt;/version&gt;</code></pre>
+<p>Declare an explicit version, will always resolve to 1.0.1 unless a collision occurs, when Maven will select a matching version.</p>
+<pre><code>&lt;version&gt;1.0.1&lt;/version&gt;</code></pre>
+<p>Use any version that 1.0.0 &lt;= version &lt; 2.0.0, i.e: 1.9.9</p>
+<pre><code>&lt;version&gt;[1.0.0,2.0.0)&lt;/version&gt;</code></pre>
+<p>Declare an open-ended version, i.e: 4.3.2, but not 0.4.4</p>
+<pre><code>&lt;version&gt;[1.0.0,)&lt;/version&gt;</code></pre>
+<h3 id="available-up-to-maven-2.x"><a href="#available-up-to-maven-2.x">Available up to Maven 2.x</a></h3>
+<p>LATEST refers to the latest released or snapshot version of a particular artifact, the most recently deployed artifact in a particular repository.</p>
+<pre><code>&lt;version&gt;LATEST&lt;/version&gt;</code></pre>
+<p>RELEASE refers to the last non-snapshot release in the repository.</p>
+<pre><code>&lt;version&gt;RELEASE&lt;/version&gt;  </code></pre>
+<h3 id="declare"><a href="#declare">Declare</a></h3>
+<p><dependencies> <dependency> <groupId>{groupId}</groupId> <artifactId>{artifactId}</artifactId> <version>{version}</version> <exclusions> <exclusion> <groupId>{excludedGroupId}</groupId> <artifactId>{excludedArtifactId}</artifactId> </exclusion> </exclusions> </dependency> </dependencies></p>
+<p>excludedGroupId:excludedArtifactId won’t be brough in by groupId:artifactId regardless of its deep in the dependnecy tree.</p>
+<h3 id="list-all"><a href="#list-all">List All</a></h3>
+<p><a href="http://maven.apache.org/plugins/maven-dependency-plugin/list-mojo.html">http://maven.apache.org/plugins/maven-dependency-plugin/list-mojo.html</a></p>
+<pre><code>$ mvn dependency:list</code></pre>
+<h2 id="list-tree"><a href="#list-tree">List Tree</a></h2>
+<p><a href="http://maven.apache.org/plugins/maven-dependency-plugin/examples/resolving-conflicts-using-the-dependency-tree.html">http://maven.apache.org/plugins/maven-dependency-plugin/examples/resolving-conflicts-using-the-dependency-tree.html</a></p>
+<pre><code>$ mvn dependency:tree -Dverbose -Dincludes=commons-collections</code></pre>
+<h1 id="configurations"><a href="#configurations">Configurations</a></h1>
+<h2 id="network-timeouts"><a href="#network-timeouts">Network Timeouts</a></h2>
+<p><a href="http://maven.apache.org/guides/mini/guide-http-settings.html">http://maven.apache.org/guides/mini/guide-http-settings.html</a></p>
+<p><a href="http://stackoverflow.com/questions/23510525/maven-dependency-timeout-settings/27015320#27015320">http://stackoverflow.com/questions/23510525/maven-dependency-timeout-settings/27015320#27015320</a></p>
+<p>Network timeout can be set on a per server basis.</p>
+<pre><code>&lt;server&gt;
+
+&lt;id&gt;ask-3rdparties&lt;/id&gt;
+
+    &lt;configuration&gt;
+
+        &lt;httpConfiguration&gt;
+
+            &lt;all&gt;&lt;!-- all | put | get | head --&gt;
+
+                &lt;connectionTimeout&gt;5000&lt;/connectionTimeout&gt;
+
+                &lt;readTimeout&gt;5000&lt;/readTimeout&gt;
+
+            &lt;/all&gt;
+
+        &lt;/httpConfiguration&gt;
+
+    &lt;/configuration&gt;
+
+&lt;/server&gt;</code></pre>
+<h2 id="plugins"><a href="#plugins">Plugins</a></h2>
+<h3 id="general-properties"><a href="#general-properties">General Properties</a></h3>
+<p>Lot of plugins share the same properties.</p>
+<h3 id="project.build.sourceencoding"><a href="#project.build.sourceencoding">project.build.sourceEncoding</a></h3>
+<p>Encodign for sources and resources.</p>
+<p><properties></p>
+<p><project.build.sourceEncoding>UTF-8</project.build.sourceEncoding></p>
+<p></properties></p>
+<h3 id="compiler-plugin"><a href="#compiler-plugin">Compiler Plugin</a></h3>
+<pre><code>&lt;plugin&gt;
+
+   &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+
+   &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+
+   &lt;version&gt;2.3.1&lt;/version&gt;
+
+   &lt;configuration&gt;
+
+       &lt;source&gt;1.6&lt;/source&gt;
+
+       &lt;target&gt;1.6&lt;/target&gt;
+
+   &lt;/configuration&gt;
+
+   &lt;/plugin&gt;</code></pre>
+<h3 id="archetype-plugin"><a href="#archetype-plugin">Archetype Plugin</a></h3>
+<p><a href="http://maven.apache.org/guides/introduction/introduction-to-archetypes.html">http://maven.apache.org/guides/introduction/introduction-to-archetypes.html</a></p>
+<p>Scaffold a project based on a “template” called archetype.</p>
+<p>archetype:generate &gt; /tmp/archetype.txt</p>
+<p>Store the list of available archetypes in a file, there are 1200+ of them.</p>
+<p>archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart</p>
+<p>Generate a quickstart maven project</p>
+<h4 id="useful-archetypes"><a href="#useful-archetypes">Useful Archetypes</a></h4>
+<p>org.apache.maven.archetypes:maven-archetype-quickstart: An archetype which contains a sample Maven project.</p>
+<h3 id="help-plugin"><a href="#help-plugin">Help Plugin</a></h3>
+<p><a href="http://maven.apache.org/plugins/maven-help-plugin/">http://maven.apache.org/plugins/maven-help-plugin/</a></p>
+<p>help:effective-pom</p>
+<p>The effective pom, with dependencies from parent among other things.</p>
+<p>help:describe</p>
+<p>Describe a plugin, a mvn command, etc…</p>
+<p>mvn help:describe -Dcmd=deploy</p>
+<p>mvn help:describe -Dplugin=archetype (here “org.apache.” is probably added automatically as usual)</p>
+<h3 id="versions-plugin"><a href="#versions-plugin">Versions Plugin</a></h3>
+<p>versions:set</p>
+<p>Sets the current projects version, updating the details of any child modules as necessary.</p>
+<p>versions:commit</p>
+<p>If all goes well</p>
+<p>versions:rollback</p>
+<p>To return to the latest versions</p>
+<h4 id="references-3"><a href="#references-3">References</a></h4>
+<p><a href="http://mojo.codehaus.org/versions-maven-plugin">http://mojo.codehaus.org/versions-maven-plugin</a></p>
+<h3 id="assembly-plugin"><a href="#assembly-plugin">Assembly Plugin</a></h3>
+<pre><code>&lt;plugin&gt;
+
+&lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
+
+&lt;version&gt;2.5.2&lt;/version&gt;
+
+&lt;executions&gt;
+
+    &lt;execution&gt;
+
+        &lt;id&gt;targz-assembly&lt;/id&gt;
+
+        &lt;phase&gt;package&lt;/phase&gt;
+
+        &lt;goals&gt;
+
+            &lt;goal&gt;single&lt;/goal&gt;
+
+        &lt;/goals&gt;
+
+        &lt;configuration&gt;
+
+            &lt;descriptors&gt;
+
+                &lt;descriptor&gt;src/assembly/assembly.xml&lt;/descriptor&gt;
+
+            &lt;/descriptors&gt;
+
+        &lt;/configuration&gt;                        
+
+    &lt;/execution&gt;
+
+&lt;/executions&gt;
+
+&lt;/plugin&gt;</code></pre>
+<p>binds the building of the assembly to the package phase, so…</p>
+<pre><code>$ mvn package</code></pre>
+<p>…should be enough to build the distributable havin the project itself in the libraries.</p>
+<h3 id="descriptor"><a href="#descriptor">Descriptor</a></h3>
+<pre><code>&lt;assembly 
+
+    xmlns=&quot;http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2&quot; 
+
+    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+
+    xsi:schemaLocation=&quot;
+
+        http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 
+
+        [http://maven.apache.org/xsd/assembly-1.1.2.xsd](http://maven.apache.org/xsd/assembly-1.1.2.xsd)&quot;&gt;
+
+    &lt;id&gt;default&lt;/id&gt;    
+
+    &lt;formats&gt;
+
+        &lt;format&gt;tar.gz&lt;/format&gt;
+
+    &lt;/formats&gt;
+
+    &lt;!-- name of the folder the archive will be expanded to --&gt;
+
+    &lt;baseDirectory&gt;Oracle.GFP&lt;/baseDirectory&gt;
+
+    
+
+    &lt;moduleSets&gt;
+
+        &lt;!-- where project jar will be copied to --&gt;    
+
+        &lt;moduleSet&gt;
+
+            &lt;binaries&gt;
+
+                &lt;outputDirectory&gt;lib&lt;/outputDirectory&gt;
+
+            &lt;/binaries&gt;
+
+        &lt;/moduleSet&gt;
+
+    &lt;/moduleSets&gt;
+
+    
+
+    &lt;dependencySets&gt;
+
+        &lt;!-- where dependencies will be copied to --&gt;
+
+        &lt;dependencySet&gt;
+
+            &lt;useProjectArtifact&gt;true&lt;/useProjectArtifact&gt;
+
+            &lt;outputDirectory&gt;lib&lt;/outputDirectory&gt;
+
+        &lt;/dependencySet&gt;
+
+    &lt;/dependencySets&gt;
+
+    
+
+    &lt;fileSets&gt;
+
+        &lt;!-- copies scritps --&gt;
+
+        &lt;fileSet&gt;
+
+            &lt;directory&gt;src/main/scripts&lt;/directory&gt;
+
+            &lt;outputDirectory&gt;/&lt;/outputDirectory&gt;
+
+            &lt;fileMode&gt;0744&lt;/fileMode&gt;
+
+        &lt;/fileSet&gt;
+
+        
+
+        &lt;!-- copy the environmental configuration files --&gt;
+
+        &lt;fileSet&gt;
+
+            &lt;directory&gt;${basedir}/env/${my.environment}&lt;/directory&gt;
+
+            &lt;outputDirectory&gt;/conf&lt;/outputDirectory&gt;
+
+            &lt;includes&gt;
+
+                &lt;include&gt;*.xml&lt;/include&gt;
+
+            &lt;/includes&gt;         
+
+        &lt;/fileSet&gt;
+
+        &lt;!-- This is just a trick to create an empty ‘log’ folder --&gt;
+
+        &lt;!-- assembly.xml can only create folders if you copy something →
+
+&lt;!-- existing in them --&gt;
+
+        &lt;fileSet&gt;
+
+            &lt;directory&gt;${basedir}/src/main/resources&lt;/directory&gt;
+
+            &lt;outputDirectory&gt;/log&lt;/outputDirectory&gt;
+
+            &lt;excludes&gt;
+
+                &lt;exclude&gt;*/**&lt;/exclude&gt;
+
+            &lt;/excludes&gt;
+
+        &lt;/fileSet&gt;
+
+    &lt;/fileSets&gt;
+
+&lt;/assembly&gt;</code></pre>
+<h4 id="references-4"><a href="#references-4">References</a></h4>
+<ul>
+<li><p><a href="http://stackoverflow.com/questions/14276453/maven-assembly-include-the-current-project-jar-in-the-final-zip-tar">http://stackoverflow.com/questions/14276453/maven-assembly-include-the-current-project-jar-in-the-final-zip-tar</a></p></li>
+<li><p><a href="http://maven.apache.org/plugins/maven-assembly-plugin/assembly.html#class_fileSet">http://maven.apache.org/plugins/maven-assembly-plugin/assembly.html#class_fileSet</a></p></li>
+</ul>
+<h3 id="site-plugin"><a href="#site-plugin">Site Plugin</a></h3>
+<ul>
+<li><p>site:site</p>
+<ul>
+<li>is used generate a site for a <strong>single project</strong>. Note that links between module sites in a multi module build will not work, since local build directory structure doesn’t match deployed site.</li>
+</ul></li>
+<li><p>site:deploy</p>
+<ul>
+<li>is used to deploy the generated site using Wagon supported protocol to the site URL specified in the <distributionManagement> section of the POM.</li>
+</ul></li>
+<li><p>site:run</p>
+<ul>
+<li>starts the site up, rendering documents as requested for faster editing. It uses Jetty as the web server.</li>
+</ul></li>
+<li><p>site:stage</p>
+<ul>
+<li>generates a site in a local staging or mock directory based on the site URL specified in the <distributionManagement> section of the POM. It can be used to test that links between module sites in a multi module build works. To preview the whole tree of a multi-module site, you can use the<a href="http://maven.apache.org/plugins/maven-site-plugin/stage-mojo.html">site:stage</a> goal. This will copy individual sites to their proper place at the staging location.</li>
+</ul></li>
+<li><p>site:stage-deploy</p>
+<ul>
+<li>deploys the generated site to a staging or mock directory to the site URL specified in the <distributionManagement> section of the POM.</li>
+</ul></li>
+<li><p>site:attach-descriptor</p>
+<ul>
+<li>adds the site descriptor (site.xml) to the list of files to be installed/deployed. For more references of the site descriptor, here’s a link.</li>
+</ul></li>
+<li><p>site:jar</p>
+<ul>
+<li>bundles the site output into a JAR so that it can be deployed to a repository.</li>
+</ul></li>
+<li><p>site:effective-site</p>
+<ul>
+<li>calculates the effective site descriptor, after inheritance and interpolation.</li>
+</ul></li>
+</ul>
+<h3 id="javadoc-plugin"><a href="#javadoc-plugin">Javadoc Plugin</a></h3>
+<pre><code>&lt;project&gt;
+
+  ...
+
+  &lt;reporting&gt;
+
+    &lt;plugins&gt;
+
+      &lt;plugin&gt;
+
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+
+        &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
+
+        &lt;version&gt;2.10.1&lt;/version&gt;
+
+        &lt;configuration&gt;
+
+          ...
+
+        &lt;/configuration&gt;
+
+      &lt;/plugin&gt;
+
+    &lt;/plugins&gt;
+
+    ...
+
+  &lt;/reporting&gt;
+
+  ...
+
+&lt;/project&gt;</code></pre>
+<h3 id="jdk-8-old-projects"><a href="#jdk-8-old-projects">JDK 8, old projects</a></h3>
+<p>Old projects have probably javadoc comments that are not very well accepted by JDK8’s javadoc tool, namely ‘doclint’.</p>
+<p>If you keep on receiving ERRORs about javadoc comments during the build process, try to disable ‘doclint’</p>
+<p>Setting a property…</p>
+<pre><code>&lt;properties&gt;
+
+&lt;additionalparam&gt;-Xdoclint:none&lt;/additionalparam&gt;
+
+&lt;/properties&gt;
+
+or add it to the maven-javadoc-plugin:
+
+&lt;plugins&gt;
+
+    &lt;plugin&gt;
+
+      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+
+      &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
+
+      &lt;configuration&gt;
+
+        &lt;additionalparam&gt;-Xdoclint:none&lt;/additionalparam&gt;
+
+      &lt;/configuration&gt;
+
+    &lt;/plugin&gt;
+
+  &lt;/plugins&gt;</code></pre>
+<h2 id="profiles"><a href="#profiles">Profiles</a></h2>
+<h3 id="active-profile"><a href="#active-profile">Active Profile</a></h3>
+<p>which profile is active</p>
+<pre><code>$ mvn help:active-profiles</code></pre>
+<h2 id="default-profile-and-resources"><a href="#default-profile-and-resources">Default Profile And Resources</a></h2>
+<p>The ‘default’ profile is active by default. It means that Eclipse will use that, and will include files from env/development in the classpath (see the profile’s resource section).</p>
+<p>When you want to build the project for a specific environment, through a given profile, remember to provide -Dspecific to disable development. So for instance…</p>
+<pre><code>$ mvn assembly:single -Popenshift -Dspecific</code></pre>
+<p>…will disable this profile during build.</p>
+<pre><code>&lt;profiles&gt;
+    &lt;profile&gt;
+    &lt;id&gt;dev&lt;/id&gt;
+    &lt;!-- This profile is active by default. It means that Eclipse will us
+            that, and will include files from env/development in the classpath (see this
+            profile&#39;s resource section). When you want to build the project for a specific
+            environment, through a given profile, remember to provide -Dspecific to disable
+            development. So for instance... mvn assembly:single -Popenshift -Dspecific
+            ...will disable this profile during build. --&gt;
+    &lt;activation&gt;
+        &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
+        &lt;property&gt;
+            &lt;name&gt;!specific&lt;/name&gt;
+        &lt;/property&gt;
+    &lt;/activation&gt;
+    &lt;properties&gt;
+        &lt;my.environment&gt;dev&lt;/my.environment&gt;
+    &lt;/properties&gt;
+    &lt;build&gt;
+        &lt;resources&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;src/main/resources&lt;/directory&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*&lt;/include&gt;
+                &lt;/includes&gt;
+                &lt;filtering&gt;true&lt;/filtering&gt;
+            &lt;/resource&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;env/${my.environment}&lt;/directory&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*&lt;/include&gt;
+                &lt;/includes&gt;
+                &lt;filtering&gt;true&lt;/filtering&gt;
+            &lt;/resource&gt;
+        &lt;/resources&gt;
+    &lt;/build&gt;
+    &lt;/profile&gt;
+    &lt;profile&gt;
+    &lt;id&gt;dockerized&lt;/id&gt;
+    &lt;activation&gt;
+        &lt;activeByDefault&gt;false&lt;/activeByDefault&gt;
+    &lt;/activation&gt;
+    &lt;properties&gt;
+        &lt;my.environment&gt;dockerized&lt;/my.environment&gt;
+    &lt;/properties&gt;
+    &lt;/profile&gt;
+&lt;/profiles&gt;</code></pre>
+<p>To build…</p>
+<pre><code>$ mvn build install =&gt; uses resources in env/dev
+
+$ mvn build install -Dspecific -Pdockerized uses resources in /env/dockerized</code></pre>
+<h2 id="references-5"><a href="#references-5">References</a></h2>
+<p><a href="http://ruleoftech.com/2014/distribute-projects-artifacts-in-maven-central-with-ossrh">http://ruleoftech.com/2014/distribute-projects-artifacts-in-maven-central-with-ossrh</a> <a href="http://central.sonatype.org/pages/apache-maven.html">http://central.sonatype.org/pages/apache-maven.html</a></p>
+<pre><code>    Tomcat Cheat Sheet
+    ==================</code></pre>
+<h2 id="xpath"><a href="#xpath">XPath</a></h2>
+<h3 id="expressions"><a href="#expressions">Expressions</a></h3>
+<ul>
+<li><code>nodename</code>
+<ul>
+<li>Selects all nodes with the name “nodename”</li>
+</ul></li>
+<li><code>/</code>
+<ul>
+<li>Selects from the root node</li>
+</ul></li>
+<li><code>//</code>
+<ul>
+<li>Selects nodes in the document from the current node that match the selection no matter where they are</li>
+</ul></li>
+<li><code>.</code>
+<ul>
+<li>Selects the current node</li>
+</ul></li>
+<li><code>..</code>
+<ul>
+<li>Selects the parent of the current node</li>
+</ul></li>
+<li><code>@</code>
+<ul>
+<li>Selects attributes</li>
+</ul></li>
+<li><code>*</code>
+<ul>
+<li>Matches any element node</li>
+</ul></li>
+<li><code>@*</code>
+<ul>
+<li>Matches any attribute node</li>
+</ul></li>
+<li>node()
+<ul>
+<li>Matches any node of any kind</li>
+</ul></li>
+<li><expression1>|<expression2>
+<ul>
+<li>Selects the nodes that match expression1 and the ones that match expression2</li>
+</ul></li>
+</ul>
+<h3 id="predicates"><a href="#predicates">Predicates</a></h3>
+<ul>
+<li>/bookstore/book[1]</li>
+<li>/bookstore/book[last()]</li>
+<li>/bookstore/book[last()-1]</li>
+<li>/bookstore/book[position()&lt;3]</li>
+<li>//title<span class="citation">[@lang]</span>
+<ul>
+<li>Selects all the title elements that have an attribute named lang</li>
+</ul></li>
+<li>//title<span class="citation">[@lang='en']</span></li>
+<li>/bookstore/book[price&gt;35.00]</li>
+<li>/bookstore/book[price&gt;35.00]/title</li>
+</ul>
 </body>
 </html>
