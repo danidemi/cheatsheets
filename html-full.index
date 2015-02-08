@@ -3,7 +3,11 @@
 ./src/spring_social/spring-social.md
 ./src/webdev/html5.md
 ./src/webdev/css.md
+./src/webdev/responsive.md
 ./src/networking/networking_cheat_sheet.md
+./src/networking/ip.md
+./src/networking/http.md
+./src/networking/dns.md
 ./src/docker/docker.md
 ./src/docker/docker-big-picture.md
 ./src/docker/docker-closer-look.md
@@ -30,3 +34,5 @@
 ./src/maven/maven-profile.md
 ./src/maven/maven-releasing-on-sossrh.m
 ./src/maven/maven-references.md
+./src/tomcat/tomcat_cheat_sheet.md
+./src/xml/xpath.md
