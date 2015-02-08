@@ -19,3 +19,14 @@
 ./src/docker/docker-example-dockerizing-my-own-java-webapp.md
 ./src/docker/docker-references.md
 ./src/packer/packer.md
+./src/maven/maven-cheat-sheet.md
+./src/maven/maven-command-line.md
+./src/maven/maven-layout.md
+./src/maven/maven-meta-inf.md
+./src/maven/maven-phases.md
+./src/maven/maven-dependencies.md
+./src/maven/maven-configuration.md
+./src/maven/maven-plugins.md
+./src/maven/maven-profile.md
+./src/maven/maven-releasing-on-sossrh.m
+./src/maven/maven-references.md
