@@ -17,22 +17,14 @@ Encodign for sources and resources.
 ### Compiler Plugin
 
 	<plugin>
-	
-	   <groupId>org.apache.maven.plugins</groupId>
-	
-	   <artifactId>maven-compiler-plugin</artifactId>
-	
-	   <version>2.3.1</version>
-	
-	   <configuration>
-	
-	       <source>1.6</source>
-	
-	       <target>1.6</target>
-	
-	   </configuration>
-	
-	   </plugin>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>2.3.1</version>
+		<configuration>
+			<source>1.6</source>
+			<target>1.6</target>
+		</configuration>
+	</plugin>
 
 ### Archetype Plugin
 
@@ -89,39 +81,22 @@ To return to the latest versions
 ### Assembly Plugin
 
 	<plugin>
-
 	<artifactId>maven-assembly-plugin</artifactId>
-
 	<version>2.5.2</version>
-
 	<executions>
-
 		<execution>
-
 			<id>targz-assembly</id>
-
 			<phase>package</phase>
-
 			<goals>
-
 				<goal>single</goal>
-
 			</goals>
-
 			<configuration>
-
 				<descriptors>
-
 					<descriptor>src/assembly/assembly.xml</descriptor>
-
 				</descriptors>
-
 			</configuration>						
-
 		</execution>
-
 	</executions>
-
 	</plugin>
 
 binds the building of the assembly to the package phase, so...
@@ -133,101 +108,58 @@ binds the building of the assembly to the package phase, so...
 ### Descriptor
 
 	<assembly 
-	
 		xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2" 
-	
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	
 	  	xsi:schemaLocation="
-	
 	  		http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 
-	
 	  		[http://maven.apache.org/xsd/assembly-1.1.2.xsd](http://maven.apache.org/xsd/assembly-1.1.2.xsd)">
-	
 		<id>default</id>	
-	
 		<formats>
-	
 			<format>tar.gz</format>
-	
 		</formats>
-	
 		<!-- name of the folder the archive will be expanded to -->
-	
 		<baseDirectory>Oracle.GFP</baseDirectory>
-	
-		
-	
 		<moduleSets>
-	
 			<!-- where project jar will be copied to -->	
-	
 			<moduleSet>
-	
 				<binaries>
-	
 					<outputDirectory>lib</outputDirectory>
-	
 				</binaries>
-	
 			</moduleSet>
-	
 		</moduleSets>
 	
 		
 	
-		<dependencySets>
-	
+		<dependencySets>	
 			<!-- where dependencies will be copied to -->
-	
 			<dependencySet>
-	
 				<useProjectArtifact>true</useProjectArtifact>
-	
 				<outputDirectory>lib</outputDirectory>
-	
 			</dependencySet>
-	
 		</dependencySets>
 	
 		
 	
 		<fileSets>
-	
 			<!-- copies scritps -->
-	
 			<fileSet>
-	
 				<directory>src/main/scripts</directory>
-	
 				<outputDirectory>/</outputDirectory>
-	
 				<fileMode>0744</fileMode>
-	
 			</fileSet>
 	
 			
 	
 			<!-- copy the environmental configuration files -->
-	
 			<fileSet>
-	
 				<directory>${basedir}/env/${my.environment}</directory>
-	
 				<outputDirectory>/conf</outputDirectory>
-	
 				<includes>
-	
 					<include>*.xml</include>
-	
 				</includes>			
-	
 			</fileSet>
-	
 			<!-- This is just a trick to create an empty ‘log’ folder -->
-	
 			<!-- assembly.xml can only create folders if you copy something →
-	
 	<!-- existing in them -->
 	
 			<fileSet>
@@ -330,6 +262,8 @@ Old projects have probably javadoc comments that are not very well accepted by J
 
 If you keep on receiving ERRORs about javadoc comments during the build process, try to disable ‘doclint’
 
+#### Base Approach
+
 Setting a property...
 
 	<properties>
@@ -338,23 +272,52 @@ Setting a property...
 	
 	</properties>
 	
-	or add it to the maven-javadoc-plugin:
+or add it to the maven-javadoc-plugin:
 	
+	<?xml version="1.0" encoding="UTF-8"?>
 	<plugins>
-	
-	    <plugin>
-	
-	      <groupId>org.apache.maven.plugins</groupId>
-	
-	      <artifactId>maven-javadoc-plugin</artifactId>
-	
-	      <configuration>
-	
-	        <additionalparam>-Xdoclint:none</additionalparam>
-	
-	      </configuration>
-	
-	    </plugin>
-	
-	  </plugins>
+	  <plugin>
+	    <groupId>org.apache.maven.plugins</groupId>
+	    <artifactId>maven-javadoc-plugin</artifactId>
+	    <configuration>
+	      <additionalparam>-Xdoclint:none</additionalparam>
+	    </configuration>
+	  </plugin>
+	</plugins>
 
+#### Profile Apporach based on profiles
+
+This seems a better approach. Define a profile that will disable the strict checks from doclint on JDK >= 1.8
+
+	<profiles>
+	  <profile>
+	    <id>doclint-java8-disable</id>
+	    <activation>
+	      <jdk>[1.8,)</jdk>
+	    </activation>
+	    <properties>
+	      <javadoc.opts>-Xdoclint:none</javadoc.opts>
+	    </properties>
+	  </profile>
+	</profiles>
+
+And then twaek the plugin to pass the parameter.
+
+	<build>
+	  <plugins>
+	    <plugin>
+	      <groupId>org.apache.maven.plugins</groupId>
+	      <artifactId>maven-javadoc-plugin</artifactId>
+	      <version>2.9.1</version>
+	      <executions>
+		<execution>
+		  <id>attach-javadocs</id>
+		  <configuration>
+		    <additionalparam>${javadoc.opts}</additionalparam>
+		  </configuration>
+		</execution>
+	      </executions>
+	    </plugin>
+	    ...
+	  </plugins>
+	</build>

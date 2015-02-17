@@ -39,7 +39,8 @@ example
 * mail exchanger record (MX record)
 	* resource record in the Domain Name System 
 	* specifies 
-		* a mail server responsible for accepting email messages on behalf of a recipient's domain 			* preference value used to prioritize mail delivery if multiple mail servers are available 
+		* a mail server responsible for accepting email messages on behalf of a recipient's domain 			
+		* preference value used to prioritize mail delivery if multiple mail servers are available 
 	* Use
 		* set of MX records of a domain name specifies how email should be routed with the Simple Mail Transfer Protocol (SMTP)
 		* used by mail servers to determine where to deliver email. 
@@ -52,8 +53,17 @@ example
 
 Example
 
-	NAME          TTL	TYPE  DATA
-	Blank or @      10       MX       xASPMX2.GOOGLEMAIL.COM.
+	NAME         TTL   TYPE   DATA
+	Blank or @   10    MX     xASPMX2.GOOGLEMAIL.COM.
+
+#### Mail Delivery
+
+1. User send a mail from `a.eng.sun.com` to `b.ucsb.edu`.
+2. The MTA on `a.eng.sun.com` looks up the MX record for `b.ucsb.edu`
+3. MX record tells to route the message to `venus.sun.com`. 
+4. The MTA on `venus.sun.com` looks up the MX record for `b.ucsb.edu`, which tells it to route the message to `hub.ucsb.edu`. 
+5. The MTA on `hub.ucsb.edu` looks up the MX record for `b.ucsb.edu`, which tells it to route the message directly to `b.ucsb.edu`. 
+6. The MTA on `b.ucsb.edu` recognizes that the message has arrived at its intended destination and processes the message for local delivery.
 
 ### TXT Record
 
@@ -69,8 +79,14 @@ Example
 |-----|-----|------|------|
 |Host  |TXT  |some text   |IN   |
 
+### Tools
+
+DIG
+
 #### References
 <http://tools.ietf.org/html/rfc1035>
 <http://en.wikipedia.org/wiki/List_of_DNS_record_types>
+<http://support.name.com/entries/21077306-What-is-an-MX-record->
+<http://www.google.com/support/enterprise/static/postini/docs/admin/en/activate/mx_faq.html>
 
 
