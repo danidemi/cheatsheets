@@ -24,3 +24,16 @@ Install Felix this way
 
 	cd felix-framework-4.6.0/
 	java -jar bin/felix.jar
+	
+### Basic commands
+
+	* `lb`
+		* list bundles
+	* `help {command}`
+		* print the help for a command
+	* `start {n}`
+		* start bundle n
+	* `stop {n}`
+		* stop bundle n
+	* `stop 0`
+		* stop and exit Felix
