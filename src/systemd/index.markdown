@@ -23,7 +23,7 @@ systemctl: check the status of currentunits
    * inactive
    * maintenance => error
    
-  ~# systemctl status ntpd.service
+    ~# systemctl status ntpd.service
     ntpd.service - Network Time Service
       Loaded: loaded (/etc/systemd/system/ntpd.service)
       Active: maintenance
