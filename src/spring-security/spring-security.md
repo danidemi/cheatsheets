@@ -3,9 +3,14 @@
 Spring Security provides security services for Java EE-based enterprise software applications. 
 
 * Security
-	* "Principal" generally means a user, device or some other system which can perform an action in your application
-	* "Authentication" is the process of establishing a principal is who they claim to be 
+	* "Principal" generally means a user, device or some other system which can perform an action in your application.
+		* "john@foo.baz", the user of an e-commerce website that can access the list of products he/she bought in the past.
+		* "cali@roo.naz", the owner of the web site, that loads new products.
+	* "Authentication" is the process of establishing a principal is who they claim to be.
+		* There is an entry in the db for "john@foo.baz", containing the hash of his password. To authenticate it the system checks whether the hash of the password provided by the user matches the one stored into the db.
+		* There is an entru in an internal LDAP for admins.
 	* "Authorization" (or "access-control") deciding whether a principal is allowed to perform an action.
+		* "john@foo.baz" tried to access the url of the page to load new products. It should not be allowed because he's not an administrator.
 * Supports
 	* HTTP BASIC authentication headers, IETF RFC-based standard
 	* HTTP Digest authentication headers, IETF RFC-based standard
