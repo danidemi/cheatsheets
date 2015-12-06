@@ -105,6 +105,17 @@ Will either throw an exception or return a fully populated Authentication object
 ##### DaoAuthenticationProvider -- extends --> AuthenticationProvider
 It leverages a UserDetailsService (as a DAO) in order to lookup the username, password and GrantedAuthoritys
 
+### Annotations
+
+* @EnableGlobalAuthentication
+	* Signals that the annotated class can be used to configure a global instance of AuthenticationManagerBuilder.
+* @EnableWebSecurity
+	* Add this annotation to an @Configuration class to have the Spring Security configuration defined in any WebSecurityConfigurer or more likely by extending the WebSecurityConfigurerAdapter base class and overriding individual methods. A WebSecurityConfigurer configures a WebSecurity that in turn creates the FilterChainProxy known as the Spring Security Filter Chain (springSecurityFilterChain).
+* @EnableGlobalMethodSecurity
+	* Enables Spring Security global method security similar to the <global-method-security> xml support.
+* @EnableWebMvcSecurity
+	* Deprecated. Use @EnableWebSecurity instead which will automatically add the Spring MVC related Security items.
+
 ### Actual Authentication Mechanism
 
 1. Configure a LoginUrlAuthenticationEntryPoint with the URL of the login page, just as we did above, and set it on the ExceptionTranslationFilter.
