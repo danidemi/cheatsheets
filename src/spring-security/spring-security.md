@@ -30,8 +30,19 @@ Spring Security provides security services for Java EE-based enterprise software
 #### Model.
 
 ##### Authentication
+Represents the token for an authentication request or for an authenticated principal. Please note that this is both used as an authentication request and for already authenticated pricipals!
 Contains the Principal.
 Contains the Principal’s GrantedAuthorities.
+
+##### AuthenticationManager
+The main interface which provides authentication services in Spring Security is the AuthenticationManager. Usually an instance of Spring Security’s ProviderManager class.
+
+* Authentication authenticate(Authentication authentication) throws AuthenticationException
+	* Attempts to authenticate the passed Authentication object, returning a fully populated Authentication object (including granted authorities) if successful. An AuthenticationManager must honour the following contract concerning exceptions:
+		* A DisabledException must be thrown if an account is disabled and the AuthenticationManager can test for this state.
+		* A LockedException must be thrown if an account is locked and the AuthenticationManager can test for account locking.
+		* A BadCredentialsException must be thrown if incorrect credentials are presented. Whilst the above exceptions are optional, an AuthenticationManager must always test credentials.
+		* Exceptions should be tested for and if applicable thrown in the order expressed above (i.e. if an account is disabled or locked, the authentication request is immediately rejected and the credentials testing process is not performed). This prevents credentials being tested against disabled or locked accounts.
 
 ##### GrantedAuthority
 Reflect the application-wide permissions granted to a Principal.
@@ -78,11 +89,6 @@ Keeps Principals and GrantedAuthorities in memory.
 ##### JdbcDaoImpl --extends--> UserDetailsService 
 [strategy]
 Retrieves user details from a DB with a schema definedby spring-security.
-
-
-
-##### AuthenticationManager
-???
 
 ##### ProviderManager -- extends --> AuthenticationManager
 Delegates to a list of configured AuthenticationProviders
