@@ -1,3 +1,6 @@
+## WARNING
+* If you require the user to have the role "BUYER" with .hasRole("BUYER") you should grant an authority called "ROLE_BUYER"!
+
 ## Big Picture
 
 Spring Security provides security services for Java EE-based enterprise software applications. 
