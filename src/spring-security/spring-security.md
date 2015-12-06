@@ -27,49 +27,71 @@ Spring Security provides security services for Java EE-based enterprise software
 
 ### Architecture
 
-Main Abstractions
+#### Model.
 
-#### SecurityContextHolder
-stores details of the present security context of the application
-includes details of the principal currently using the application.
-uses a ThreadLocal
+##### Authentication
+Contains the Principal.
+Contains the Principal’s GrantedAuthorities.
 
-#### SecurityContext
-holds all security related info
+##### GrantedAuthority
+Reflect the application-wide permissions granted to a Principal.
 
-#### GrantedAuthority
-reflect the application-wide permissions granted to a Principal.
+##### UserDetails
+Represents a Principal, but in an extensible and application-specific way.
+It's the adapter between your own user database and what Spring Security needs inside the SecurityContextHolder.
+Quite often you will cast the UserDetails to the original object that your application provides.
+Used to provide the necessary information to build an Authentication object from your application's DAOs or other source source of security data.
 
-#### Authentication
-contains the Principal
-contains the Principal’s GrantedAuthorities
+* Collection<? extends GrantedAuthority> getAuthorities()
+* String getPassword()
+* String getUsername()
+* isAccountNonExpired
+* boolean isAccountNonLocked()
+* boolean isCredentialsNonExpired()
+* boolean isEnabled()
 
-#### UserDetails
-represents a principal, but in an extensible and application-specific way
-the adapter between your own user database and what Spring Security needs inside the SecurityContextHolder
-quite often you will cast the UserDetails to the original object that your application provided
-to provide the necessary information to build an Authentication object from your application's DAOs or other source source of security data.
+#### Main internals.
 
-#### UserDetailsService 
-to create a UserDetails when passed in a String-based username (or certificate ID or the like).
-InMemoryUserDetailsManager < UserDetailsService 
-Keeps Principals and GrantedAuthorities in memory
+##### SecurityContext
+Interface defining the minimum security information associated with the current thread of execution.
+* Authentication getAuthentication() 
+        * Obtains the currently authenticated principal, or an authentication request token.
+* setAuthentication(Authentication authentication)
+	* Changes the currently authenticated principal, or removes the authentication information.
 
-#### JdbcDaoImpl < UserDetailsService 
-Stores info in db.
-Spring Security has a schema.
+##### SecurityContextHolder
+Stores details of the present security context of the application includes details of the principal currently using the application.
+Uses a ThreadLocal.
 
-#### AuthenticationManager
+Main spring-security extension points.
+
+##### UserDetailsService <interface> 
+[extension-point]
+To create a UserDetails when passed in a String-based username (or certificate ID or the like).
+Spring-security needs a way to get the details of user that is logging in regardless of how those details are stored in the system. So, one should implement this interface to specify how to retrieve the details of the user given its username. Or one can choose to use one of the implementations provided by spring-security. It's however not likely this could happen, because spring-security cannot know in advance which is the database schema you used to store users data.
+http://docs.spring.io/autorepo/docs/spring-security/4.0.3.RELEASE/apidocs/org/springframework/security/core/userdetails/UserDetailsService.html
+
+##### InMemoryUserDetailsManager --extends--> UserDetailsService 
+[strategy]
+Keeps Principals and GrantedAuthorities in memory.
+
+##### JdbcDaoImpl --extends--> UserDetailsService 
+[strategy]
+Retrieves user details from a DB with a schema definedby spring-security.
+
+
+
+##### AuthenticationManager
 ???
 
-#### ProviderManager < AuthenticationManager
-delegates to a list of configured AuthenticationProviders
+##### ProviderManager -- extends --> AuthenticationManager
+Delegates to a list of configured AuthenticationProviders
 
-#### AuthenticationProvider
-is queried in turn to see if it can perform the authentication
-will either throw an exception or return a fully populated Authentication object
+##### AuthenticationProvider
+Is queried in turn to see if it can perform the authentication.
+Will either throw an exception or return a fully populated Authentication object.
 
-#### DaoAuthenticationProvider < AuthenticationProvider
+##### DaoAuthenticationProvider -- extends --> AuthenticationProvider
 It leverages a UserDetailsService (as a DAO) in order to lookup the username, password and GrantedAuthoritys
 
 ### Actual Authentication Mechanism
