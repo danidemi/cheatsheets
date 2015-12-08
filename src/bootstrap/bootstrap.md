@@ -94,6 +94,12 @@ Classes for errors.
 `has-warning`
 `has-success`
 
+### Alerts
+
+	<div th:if="${param.containsKey('error')}" class="alert alert-warning fade in">
+		<strong>Attenzione!</strong> L'account non è stato trovato.
+	</div>
+
 ## Buttons
 
 `.btn-lg`, `.btn-sm`, or `.btn-xs`
