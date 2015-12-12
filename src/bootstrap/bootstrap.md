@@ -92,7 +92,17 @@ Classes for errors.
 
 `has-success`
 `has-warning`
-`has-success`
+`has-error`
+
+	<div class="form-group has-error has-feedback">
+		<label class="col-sm-2 control-label" for="inputError">
+			Input with error and icon
+		</label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="inputError">
+			<span class="glyphicon glyphicon-remove form-control-feedback"></span>
+		</div>
+	</div>
 
 ### Alerts
 

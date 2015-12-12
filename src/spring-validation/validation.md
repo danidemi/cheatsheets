@@ -13,7 +13,6 @@ Spring has come up with a `Validator` interface that is both basic and eminently
 
 The `Validator` and the `DataBinder` make up the validation package.
 
- 
 A `Validator` validates an object and store the outcome in an `Error` object.
 
 	org.springframework.validation.Validator
@@ -61,15 +60,36 @@ Validator for embedded complex properties.
 
 # JSR-303 Bean Validation API
 
-	public class PersonForm {
+You need a `JSR-303 Validator` to validate instances of this class, like...         
+
+	<dependency>
+		<groupId>org.hibernate</groupId>
+	    <artifactId>hibernate-validator</artifactId>
+	</dependency>
 	
-	    @NotNull
-	    @Size(max=64)
-	    private String name;
-	
-	    @Min(0)
-	    private int age;
-	
+# Custom Validator
+
+Custom validator in a @Controller
+
+	/**
+	* Attach the custom validator to the Spring context
+	*/
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.setValidator(addressValidator);
 	}
 	
-You need a `JSR-303 Validator` to validate instances of this class.
+# Message resolution
+
+Let's suppose the error code is `error.nomatch` on the bean called `locker` on its proprty `secretcode`.
+Let's suppose the locale of the application is `it_IT`.
+
+The resolution will happen like that:
+
+1. `error.nomatch.locker.secretcode` in bundle `it_IT`.
+1. `error.nomatch.locker.secretcode` in default bundle.
+1. `error.nomatch.locker` in bundle `it_IT`.
+1. `error.nomatch.locker` in default bundle.
+1. `error.nomatch` in bundle `it_IT`.
+1. `error.nomatch` in default bundle.
+1. Report a resolution failure.
