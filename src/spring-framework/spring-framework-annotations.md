@@ -66,31 +66,9 @@
 
 ## Spring MVC Annotations
 
-These annotations were introduced in Spring 2.5 to make it easier to create Spring MVC applications with minimal XML configuration and without extending one of the many implementations of the Controller interface.
+Please, see spring-mvc.md
 
-@Controller	
-Type	
-Stereotypes a component as a Spring MVC controller.
 
-@InitBinder	
-Method	
-Annotates a method that customizes data binding.
-
-@ModelAttribute	
-Parameter, Method	
-When applied to a method, used to preload the model with the value returned from the method. When applied to a parameter, binds a model attribute to the parameter. table
-
-@RequestMapping	
-Method, Type	
-Maps a URL pattern and/or HTTP method to a method or controller type.
-
-@RequestParam	
-Parameter	
-Binds a request parameter to a method parameter.
-
-@SessionAttributes	
-Type	
-Specifies that a model attribute should be stored in the session.
 
 ## Transaction Annotations
 The @Transactional annotation is used along with the <tx:annotation-driven> element to declare transactional boundaries and rules as class and method metadata in Java.
@@ -204,3 +182,4 @@ Configures test classes for transactions, specifying the transaction manager and
 
 # References
 <https://dzone.com/refcardz/spring-annotations>
+<http://forum.spring.io/forum/spring-projects/web/55552-why-does-initbinder-method-get-called-multiple-times>

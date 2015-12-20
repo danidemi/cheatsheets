@@ -8,11 +8,9 @@ Lot of plugins share the same properties.
 
 Encodign for sources and resources.
 
-<properties>
-
-<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-</properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
 
 ### Jar Plugin
@@ -48,11 +46,11 @@ You can change the name of the produced jar.
 
 Scaffold a project based on a "template" called archetype.
 
-archetype:generate > /tmp/archetype.txt
+	archetype:generate > /tmp/archetype.txt
 
 Store the list of available archetypes in a file, there are 1200+ of them.
 
-archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart
+	archetype:generate -DarchetypeArtifactId=maven-archetype-quickstart
 
 Generate a quickstart maven project
 
@@ -64,31 +62,35 @@ org.apache.maven.archetypes:maven-archetype-quickstart: An archetype which conta
 
 [http://maven.apache.org/plugins/maven-help-plugin/](http://maven.apache.org/plugins/maven-help-plugin/)
 
-help:effective-pom
+	help:effective-pom
 
 The effective pom, with dependencies from parent among other things.
 
-help:describe
+	help:describe
 
-Describe a plugin, a mvn command, etc...
+Describe a plugin, a mvn command, etc... 
+Here "org.apache." is probably added automatically as usual if not specified.
 
-mvn help:describe -Dcmd=deploy
+	mvn help:describe -Dcmd=deploy
 
-mvn help:describe -Dplugin=archetype (here "org.apache." is probably added automatically as usual)
+	mvn help:describe -Dplugin=archetype 
+	
+
 
 ### Versions Plugin
 
-versions:set
-
 Sets the current projects version, updating the details of any child modules as necessary.
 
-versions:commit
+	versions:set
 
-If all goes well
+If all goes well you have to "commit" the modifications...
 
-versions:rollback
+	versions:commit
 
-To return to the latest versions
+...or refuse them to return to the latest versions.
+
+	versions:rollback
+
 
 #### References
 
