@@ -232,3 +232,6 @@ The fragment that will populate the layout.
 
 ## References
 <http://www.thymeleaf.org/doc/html/Using-Thymeleaf.html#appendix-c-dom-selector-syntax>
+* How HEAD are merged
+    * <https://github.com/ultraq/thymeleaf-layout-dialect#decorators-and-fragments>
+    * <https://github.com/ultraq/thymeleaf-layout-dialect#head-element-merging>

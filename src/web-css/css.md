@@ -1,15 +1,42 @@
 # CSS Cheat Sheet
 
+* Cascading Style Sheets
+    * The latter style applied wins.
+    * It's importnat how the browser read the css.
+
+!important overrides a rule.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~ {#syntax}
+P {
+  p { color: red; !important}
+  p { color: black;} <-- this wins, it's the lastone.
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~ {#syntax}
+P {
+  p { color: red; !important} <-- this wins, it's !important.
+  p { color: black;}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## Syntax
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~ {#syntax}
+/* comment */
 <selector> {
   <property>:<value>;
-  <property>:<value>;
+  <property>:<value>; /* comment */
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ## Selectors
+
+Priorities of selectors.
+* 100 points for IDs
+* 10 points for classes and pseudo-classes
+* 1 point for tag selectors and pseudo-elements
+
 \.class     
 css 1
 \.intro => Selects all elements with class="intro"
@@ -138,4 +165,9 @@ div.image:before {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+## References
+* !important
+    * http://webdesign.about.com/od/css/f/blcssfaqimportn.htm
+* Rule priority
+    * http://stackoverflow.com/questions/20721248/best-way-to-override-bootstrap-css#27704409
 

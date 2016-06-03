@@ -38,3 +38,4 @@ Otherwise the zero arg constructor will be used. if there is more than one non-z
 ## References
 
 * [Java/MongoDB mappings](http://docs.spring.io/spring-data/mongodb/docs/current/reference/html/#mapping-conventions)
+* [Issue Tracking](https://jira.spring.io/browse/DATAMONGO/?selectedTab=com.atlassian.jira.jira-projects-plugin:summary-panel)
