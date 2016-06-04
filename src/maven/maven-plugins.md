@@ -136,7 +136,7 @@ binds the building of the assembly to the package phase, so...
 			<format>tar.gz</format>
 		</formats>
 		<!-- name of the folder the archive will be expanded to -->
-		<baseDirectory>Oracle.GFP</baseDirectory>
+		<baseDirectory>app-dir</baseDirectory>
 		<moduleSets>
 			<!-- where project jar will be copied to -->	
 			<moduleSet>
@@ -193,6 +193,14 @@ binds the building of the assembly to the package phase, so...
 				</excludes>
 	
 			</fileSet>
+
+            <!-- single file -->
+            <files>
+                <file>
+                    <source>src/main/common/server.xml</source>
+                    <outputDirectory>app1</outputDirectory>
+                </file>
+            </files>
 	
 		</fileSets>
 	
@@ -339,3 +347,14 @@ And then twaek the plugin to pass the parameter.
 	    ...
 	  </plugins>
 	</build>
+
+### Buildplan Plugin
+
+Prints out the list of phases and connected executions.
+
+    <plugin>
+        <!-- http://buildplan.jcgay.fr/usage.html -->
+        <groupId>fr.jcgay.maven.plugins</groupId>
+        <artifactId>buildplan-maven-plugin</artifactId>
+        <version>1.2</version>
+    </plugin>

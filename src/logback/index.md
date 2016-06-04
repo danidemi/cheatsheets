@@ -17,9 +17,27 @@
             </encoder>
         </appender>
 
+        <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/var/log/miserve.log</file>
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- daily rollover -->
+                <fileNamePattern>miserve.%d{yyyy-MM-dd}.%i.log.zip</fileNamePattern>
 
-        <root level="OFF">
-            <appender-ref ref="console" />
+                <!-- keep 30 days' worth of history capped at 3GB total size -->
+                <maxFileSize>100MB</maxFileSize>
+                <maxHistory>30</maxHistory>
+                <totalSizeCap>3GB</totalSizeCap>
+
+            </rollingPolicy>
+
+            <encoder>
+                <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+
+        <root level="ERROR">
+            <appender-ref ref="console, file" />
         </root>
 
         <logger name="org.apache.tomcat" level="WARN" />
@@ -87,6 +105,7 @@ Example
 Directly in logback.xml
 
     <property name="THE_VARIABLE_NAME" value="THE_VALUE" />
+    <variable name="THE_VARIABLE_NAME" value="THE_VALUE" />
 
 From the command line
 
