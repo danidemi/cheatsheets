@@ -2,16 +2,28 @@
 
 ## Installation
 
+### APT
+
+#### Install
+
+    sudo apt-get install ansible
+
+#### Uninstall
+
+    sudo apt-get purge ansible
+
 ### From Source
 
 First time build. Sources are several Mb.
 
-    $ sudo apt-get install python-setuptools
+    $ sudo apt-get -y install python-setuptools
+    $ sudo easy_install pip
+    $ sudo pip install paramiko PyYAML Jinja2 httplib2 six
     $ git clone git://github.com/ansible/ansible.git --recursive
     $ cd ./ansible
     $ source ./hacking/env-setup
-    $ sudo easy_install pip
-    $ sudo pip install paramiko PyYAML Jinja2 httplib2 six
+
+Append this line `source /opt/ansible/ansible/hacking/env-setup` to `~/.bashrc`
 
 Example...
 

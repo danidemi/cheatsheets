@@ -5,6 +5,7 @@ Concepts
 
 File /etc/ansible/hosts.
 
+    # comments too ?
     mail.example.com
     
     [webservers]
@@ -56,8 +57,21 @@ How to choose host to work with
         * group1:!group2
     * Intersection
         * group1:&group2
-        
+
+# Playbook
+
 * Playbook
     * made of plays
         * made of tasks
-            * that invoke modules
+            * that invoke _idempotent_ modules
+
+# Module & Handlers
+
+* Module
+    * Idempotent
+        * You can run them any number of times
+
+* Handlers
+
+    * React when an idempotent module actually applyed a modification
+    * Handlers are what notifiers notify
