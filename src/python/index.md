@@ -1,6 +1,14 @@
 Python
 ======
 
+Install
+-------
+
+### Win
+
+https://www.python.org/downloads/windows/
+
+
 Interpreter
 -----------
 
