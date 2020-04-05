@@ -1,0 +1,58 @@
+Minikube
+========
+
+Installation
+------------
+
+    minikube start --driver=<driver_name>
+
+*virtualbox*
+
+    minikube start --driver=virtualbox
+
+*vmwarefusion*    
+
+    minikube start --driver=vmwarefusion
+
+*docker*  
+
+    minikube start --driver=docker 
+
+EXPERIMENTAL
+
+*kvm2* 
+
+    minikube start --driver=kvm2 
+    
+requires driver installation
+
+*hyperkit*
+
+    minikube start --driver=hyperkit 
+    
+requires driver installation
+
+*hyperv*
+
+    minikube start --driver=hyperv 
+    
+Requires driver installation.
+Note that the IP below is dynamic and can change. It can be retrieved with `minikube ip`
+
+*vmware*
+
+    minikube start --driver=vmware 
+    
+requires driver installation (VMware unified driver).
+
+*parallels*
+
+    minikube start --driver=parallels 
+    
+requires driver installation
+
+*nonde*
+
+    minikube start --driver=none 
+    
+Runs the Kubernetes components on the host and not in a virtual machine. You need to be minikube start --driver=running Linux and to have Docker installed.

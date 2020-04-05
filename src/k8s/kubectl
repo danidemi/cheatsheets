@@ -1,0 +1,17 @@
+Kubectl
+=======
+
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+
+Configuration
+
+    $ ~/.kube/config
+    > $HOME/.kube/config
+
+Show Merged kubeconfig settings.
+
+    > kubectl config view
+
+Apply with Kustomize
+
+    > kustomize build ~/someApp | kubectl apply -f -
