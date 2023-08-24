@@ -1,0 +1,5 @@
+# Link
+
+https://advancedweb.hu/error-handling-in-appsync/
+
+https://stackoverflow.com/questions/53493889/how-to-send-custom-error-in-appsync-with-util-error
